@@ -75,7 +75,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     CallbackContext discoverCallback;
     private CallbackContext enableBluetoothCallback;
 
-    private static final String TAG = "BLEPlugin";
+    private static final String TAG = "BLECoachCare";
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
     BluetoothAdapter bluetoothAdapter;
@@ -453,14 +453,17 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     }
 
     private void findLowEnergyDevices(CallbackContext callbackContext, UUID[] serviceUUIDs, int scanSeconds) {
-
+        LOG.d(TAG, "findLowEnergyDevices ");
         if(!PermissionHelper.hasPermission(this, ACCESS_COARSE_LOCATION)) {
             // save info so we can call this method again after permissions are granted
+            LOG.d(TAG, "no permission ");
             permissionCallback = callbackContext;
             this.serviceUUIDs = serviceUUIDs;
             this.scanSeconds = scanSeconds;
             PermissionHelper.requestPermission(this, REQUEST_ACCESS_COARSE_LOCATION, ACCESS_COARSE_LOCATION);
             return;
+        } else {
+            LOG.d(TAG, "has permission ");
         }
 
         // ignore if currently scanning, alternately could return an error
