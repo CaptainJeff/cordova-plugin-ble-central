@@ -272,14 +272,21 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
         } else if (action.equals("activateVibration")) {
             String macAddress = args.getString(0);
-            byte[] data = args.getArrayBuffer(1);
+            // byte[] data = args.getArrayBuffer(1);
 
             UUID serviceUUID = uuidFromString("fff0");
             UUID characteristicUUID = uuidFromString("fff6");
 
             Byte commandCode1 = Helper.CommandCode.activateVibration;
 
+            Log.d("ACTION", "VIBRATE");
+            byte[] message = new byte[16];
+            data[0] = Helper.CommandCode.activateVibration;;
+            data[1] = (byte) (duration > 10 ? 10 : duration);
+            data[15] = Helper.calcCRC(data);
+
             LOG.e(TAG, "commandCode1: " + commandCode1.toString(), commandCode1);
+            LOG.e(TAG, "data: " + data.toString(), data);
             // Byte commandCode2 = Helper.CommandCode.action;
             // LOG.e(TAG, "commandCode2: " + commandCode2.toString(), commandCode2);
 
