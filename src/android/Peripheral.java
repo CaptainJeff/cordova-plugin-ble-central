@@ -537,6 +537,8 @@ public class Peripheral extends BluetoothGattCallback {
         if (characteristic == null) {
             callbackContext.error("Characteristic " + characteristicUUID + " not found.");
         } else {
+            LOG.d(TAG,"writeCharacteristic: data: " + data);
+            LOG.d(TAG,"writeCharacteristic: writeType " + writeType);
             characteristic.setValue(data);
             characteristic.setWriteType(writeType);
             writeCallback = callbackContext;
@@ -615,6 +617,8 @@ public class Peripheral extends BluetoothGattCallback {
 
         PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
         result.setKeepCallback(true);
+
+        LOG.d(TAG,"result " + result);
         command.getCallbackContext().sendPluginResult(result);
 
         if (!bleProcessing) {

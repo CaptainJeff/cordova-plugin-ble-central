@@ -188,9 +188,9 @@ module.exports = {
     //     cordova.exec(success, error, 'BLE', 'getUserPersonalInfo');
     // },
       
-    // getDetailedDayActivity: function (date, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getDetailedDayActivity', [date]);
-    // },
+    getDetailedDayActivity: function (device_id, date, success, error) {
+        cordova.exec(success, error, 'BLE', 'getDetailedDayActivity', [device_id, date]);
+    },
       
     //   /*
     //    * @param {info} object
@@ -439,11 +439,11 @@ module.exports.withPromises = {
     //     });
     // },
 
-    // getDetailedDayActivity: function(device_id, date) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getDetailedDayActivity(device_id, date, resolve, reject);
-    //     });
-    // },
+    getDetailedDayActivity: function(device_id, date) {
+        return new Promise(function(resolve, reject) {
+            module.exports.getDetailedDayActivity(device_id, date, resolve, reject);
+        });
+    },
 
     // getSummaryDaySleep: function(device_id, info) {
     //     return new Promise(function(resolve, reject) {
