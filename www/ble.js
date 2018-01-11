@@ -161,172 +161,172 @@ module.exports = {
         cordova.exec(success, failure, "BLE", "stopStateNotifications", []);
     },
 
-    setDeviceTime: function (date, success, error) {
-        cordova.exec(success, error, 'BLE', 'setDeviceTime', [date]);
+    // setDeviceTime: function (date, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setDeviceTime', [date]);
+    // },
+      
+    // getDeviceTime:function (success, error) {
+    //     console.log('getDeviceTime')
+    //     cordova.exec(success, error, 'BLE', 'getDeviceTime');
+    // },
+      
+    //   /*
+    //    * @param {info} object
+    //    * @example {
+    //    *   gender : string (male|female)
+    //    *   age : int (years)
+    //    *   height : int (cm)
+    //    *   weight : int (kg)
+    //    *   strideLength : int (cm)
+    //    * }
+    //    */
+    // setUserPersonalInfo: function (info, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setUserPersonalInfo', [info]);
+    // },
+      
+    // getUserPersonalInfo: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getUserPersonalInfo');
+    // },
+      
+    // getDetailedDayActivity: function (date, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getDetailedDayActivity', [date]);
+    // },
+      
+    //   /*
+    //    * @param {info} object
+    //    * @example {
+    //    *   date : {date} string yyyy-MM-dd
+    //    *   deviceDate : {date} string "yyyy-MM-dd'T'HH:mm:ss"
+    //    * }
+    //    */
+    // getSummaryDaySleep: function (info, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getSummaryDaySleep', [info]);
+    // },
+      
+    //   /*
+    //    * @param {info} object
+    //    * @example {
+    //    *   date : {date} string yyyy-MM-dd
+    //    *   deviceDate : {date} string "yyyy-MM-dd'T'HH:mm:ss"
+    //    * }
+    //    */
+    // getSummaryDayActivity: function (info, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getSummaryDayActivity', [info]);
+    // },
+      
+      
+    // getLastActivity: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getLastActivity');
+    // },
+      
+    // getLastSleepActivity: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getLastSleepActivity');
+    // },
+      
+    //   /*
+    //    * @param {dailySteps} int
+    //    */
+    // setTargetSteps: function (dailySteps, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setTargetSteps', [dailySteps]);
+    // },
+      
+    // getTargetSteps: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getTargetSteps');
+    // },
+      
+    //   /*
+    //    * @param {unit} string (mile|km)
+    //    */
+    // setDistanceUnit: function (unit, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setDistanceUnit', [unit]);
+    // },
+      
+    // getDistanceUnit: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getDistanceUnit');
+    // },
+      
+    // getDevicesBatteryStatus: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getDevicesBatteryStatus');
+    // },
+      
+    // getSoftwareVersion: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getSoftwareVersion');
+    // },
+      
+    //   /*
+    //    * @param {duration} int (1-10)
+    //    */
+    activateVibration: function (device_id, duration, success, error) {
+        cordova.exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
     },
       
-    getDeviceTime:function (success, error) {
-        console.log('getDeviceTime')
-        cordova.exec(success, error, 'BLE', 'getDeviceTime');
-    },
+    //   /*
+    //    * @param {format} string (12|24)
+    //    */
+    // setTimeFormat: function (format, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setTimeFormat', [format]);
+    // },
       
-      /*
-       * @param {info} object
-       * @example {
-       *   gender : string (male|female)
-       *   age : int (years)
-       *   height : int (cm)
-       *   weight : int (kg)
-       *   strideLength : int (cm)
-       * }
-       */
-    setUserPersonalInfo: function (info, success, error) {
-        cordova.exec(success, error, 'BLE', 'setUserPersonalInfo', [info]);
-    },
+    // getTimeFormat: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getTimeFormat');
+    // },
       
-    getUserPersonalInfo: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getUserPersonalInfo');
-    },
+    //   /*
+    //    * @param {name} string
+    //    */
+    // setDeviceName: function (name, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setDeviceName', [name]);
+    // },
       
-    getDetailedDayActivity: function (date, success, error) {
-        cordova.exec(success, error, 'BLE', 'getDetailedDayActivity', [date]);
-    },
+    // getDeviceName: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getDeviceName');
+    // },
       
-      /*
-       * @param {info} object
-       * @example {
-       *   date : {date} string yyyy-MM-dd
-       *   deviceDate : {date} string "yyyy-MM-dd'T'HH:mm:ss"
-       * }
-       */
-    getSummaryDaySleep: function (info, success, error) {
-        cordova.exec(success, error, 'BLE', 'getSummaryDaySleep', [info]);
-    },
+    //   /*
+    //    * @param {message} string
+    //    */
+    // showMessage = function (message, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'showMessage', [message]);
+    // },
       
-      /*
-       * @param {info} object
-       * @example {
-       *   date : {date} string yyyy-MM-dd
-       *   deviceDate : {date} string "yyyy-MM-dd'T'HH:mm:ss"
-       * }
-       */
-    getSummaryDayActivity: function (info, success, error) {
-        cordova.exec(success, error, 'BLE', 'getSummaryDayActivity', [info]);
-    },
+    //   /*
+    //    * @param {mode} string (activity|sleep)
+    //    */
+    // setMode: function (mode, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setMode', [mode]);
+    // },
       
+    // getMode: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getMode');
+    // },
       
-    getLastActivity: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getLastActivity');
-    },
+    // getDataFromScales: function (deviceId, userProfile, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getDataFromScales', [deviceId, userProfile]);
+    // },
       
-    getLastSleepActivity: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getLastSleepActivity');
-    },
+    //   /*
+    //    * @param {info} object
+    //    * @example {
+    //    *   gender : string (male|female)
+    //    *   age : int (years)
+    //    *   height : int (cm)
+    //    * }
+    //    */
+    // setUserProfileToScales: function (info, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setUserProfileToScales', [info]);
+    // },
       
-      /*
-       * @param {dailySteps} int
-       */
-    setTargetSteps: function (dailySteps, success, error) {
-        cordova.exec(success, error, 'BLE', 'setTargetSteps', [dailySteps]);
-    },
+    // setStopScales: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setStopScales');
+    // },
       
-    getTargetSteps: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getTargetSteps');
-    },
+    // startLoggingAndroid: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'StartLogging');
+    // },
       
-      /*
-       * @param {unit} string (mile|km)
-       */
-    setDistanceUnit: function (unit, success, error) {
-        cordova.exec(success, error, 'BLE', 'setDistanceUnit', [unit]);
-    },
-      
-    getDistanceUnit: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getDistanceUnit');
-    },
-      
-    getDevicesBatteryStatus: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getDevicesBatteryStatus');
-    },
-      
-    getSoftwareVersion: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getSoftwareVersion');
-    },
-      
-      /*
-       * @param {duration} int (1-10)
-       */
-    activateVibration: function (duration, success, error) {
-        cordova.exec(success, error, 'BLE', 'activateVibration', [duration]);
-    },
-      
-      /*
-       * @param {format} string (12|24)
-       */
-    setTimeFormat: function (format, success, error) {
-        cordova.exec(success, error, 'BLE', 'setTimeFormat', [format]);
-    },
-      
-    getTimeFormat: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getTimeFormat');
-    },
-      
-      /*
-       * @param {name} string
-       */
-    setDeviceName: function (name, success, error) {
-        cordova.exec(success, error, 'BLE', 'setDeviceName', [name]);
-    },
-      
-    getDeviceName: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getDeviceName');
-    },
-      
-      /*
-       * @param {message} string
-       */
-    showMessage = function (message, success, error) {
-        cordova.exec(success, error, 'BLE', 'showMessage', [message]);
-    },
-      
-      /*
-       * @param {mode} string (activity|sleep)
-       */
-    setMode: function (mode, success, error) {
-        cordova.exec(success, error, 'BLE', 'setMode', [mode]);
-    },
-      
-    getMode: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getMode');
-    },
-      
-    getDataFromScales: function (deviceId, userProfile, success, error) {
-        cordova.exec(success, error, 'BLE', 'getDataFromScales', [deviceId, userProfile]);
-    },
-      
-      /*
-       * @param {info} object
-       * @example {
-       *   gender : string (male|female)
-       *   age : int (years)
-       *   height : int (cm)
-       * }
-       */
-    setUserProfileToScales: function (info, success, error) {
-        cordova.exec(success, error, 'BLE', 'setUserProfileToScales', [info]);
-    },
-      
-    setStopScales: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'setStopScales');
-    },
-      
-    startLoggingAndroid: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'StartLogging');
-    },
-      
-    getLastSleepTime: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getLastSleepTime');
-    }
+    // getLastSleepTime: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getLastSleepTime');
+    // }
 
 };
 
@@ -411,142 +411,142 @@ module.exports.withPromises = {
     }, 
 
 
-    setDeviceTime: function(device_id, date) {
+    // setDeviceTime: function(device_id, date) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setDeviceTime(device_id, date, resolve, reject);
+    //     });
+    // },
+
+    // getDeviceTime: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getDeviceTime(device_id, resolve, reject);
+    //     });
+    // },
+
+    // setUserPersonalInfo: function(device_id, info) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setUserPersonalInfo(device_id, resolve, reject);
+    //     });
+    // },
+
+    // getUserPersonalInfo: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setDeviceTime(device_id, resolve, reject);
+    //     });
+    // },
+
+    // getDetailedDayActivity: function(device_id, date) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getDetailedDayActivity(device_id, date, resolve, reject);
+    //     });
+    // },
+
+    // getSummaryDaySleep: function(device_id, info) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getSummaryDaySleep(device_id, info, resolve, reject);
+    //     });
+    // },
+
+    // getSummaryDayActivity: function(device_id, info) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getSummaryDayActivity(device_id, resolve, reject);
+    //     });
+    // },
+
+    // getLastActivity: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getLastActivity(device_id, resolve, reject);
+    //     });
+    // },
+
+    // getLastSleepActivity: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getLastSleepActivity(device_id, resolve, reject);
+    //     });
+    // },
+
+    // setTargetSteps: function(device_id, data) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setDeviceTime(device_id, data, resolve, reject);
+    //     });
+    // },
+
+    // setDistanceUnit: function(device_id, data) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setDistanceUnit(device_id, data, resolve, reject);
+    //     });
+    // },
+
+    // getDistanceUnit: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getDistanceUnit(device_id, resolve, reject);
+    //     });
+    // },
+
+    // getDevicesBatteryStatus: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getDevicesBatteryStatus(device_id, resolve, reject);
+    //     });
+    // },
+
+    // getSoftwareVersion: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getSoftwareVersion(device_id, resolve, reject);
+    //     });
+    // },
+
+    activateVibration: function(device_id, data) {
         return new Promise(function(resolve, reject) {
-            module.exports.setDeviceTime(device_id, date, resolve, reject);
+            module.exports.activateVibration(device_id, data, resolve, reject);
         });
     },
 
-    getDeviceTime: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getDeviceTime(device_id, resolve, reject);
-        });
-    },
+    // setTimeFormat: function(device_id, data) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setTimeFormat(device_id, resolve, reject);
+    //     });
+    // },
 
-    setUserPersonalInfo: function(device_id, info) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setUserPersonalInfo(device_id, resolve, reject);
-        });
-    },
+    // showMessage: function(device_id, data) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.showMessage(device_id, data, resolve, reject);
+    //     });
+    // },
 
-    getUserPersonalInfo: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setDeviceTime(device_id, resolve, reject);
-        });
-    },
+    // setMode: function(device_id, data) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setMode(device_id, resolve, reject);
+    //     });
+    // },
 
-    getDetailedDayActivity: function(device_id, date) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getDetailedDayActivity(device_id, date, resolve, reject);
-        });
-    },
+    // getMode: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getMode(device_id, resolve, reject);
+    //     });
+    // },
 
-    getSummaryDaySleep: function(device_id, info) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getSummaryDaySleep(device_id, info, resolve, reject);
-        });
-    },
+    // getDataFromScales: function(device_id, data) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getDataFromScales(device_id, data, resolve, reject);
+    //     });
+    // },
 
-    getSummaryDayActivity: function(device_id, info) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getSummaryDayActivity(device_id, resolve, reject);
-        });
-    },
+    // setUserProfileToScales: function(device_id, info) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setUserProfileToScales(device_id, info, resolve, reject);
+    //     });
+    // },
 
-    getLastActivity: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getLastActivity(device_id, resolve, reject);
-        });
-    },
+    // setStopScales: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.setStopScales(device_id, resolve, reject);
+    //     });
+    // },
 
-    getLastSleepActivity: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getLastSleepActivity(device_id, resolve, reject);
-        });
-    },
-
-    setTargetSteps: function(device_id, data) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setDeviceTime(device_id, data, resolve, reject);
-        });
-    },
-
-    setDistanceUnit: function(device_id, data) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setDistanceUnit(device_id, data, resolve, reject);
-        });
-    },
-
-    getDistanceUnit: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getDistanceUnit(device_id, resolve, reject);
-        });
-    },
-
-    getDevicesBatteryStatus: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getDevicesBatteryStatus(device_id, resolve, reject);
-        });
-    },
-
-    getSoftwareVersion: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getSoftwareVersion(device_id, resolve, reject);
-        });
-    },
-
-    activateVibration: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.activateVibration(device_id, resolve, reject);
-        });
-    },
-
-    setTimeFormat: function(device_id, data) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setTimeFormat(device_id, resolve, reject);
-        });
-    },
-
-    showMessage: function(device_id, data) {
-        return new Promise(function(resolve, reject) {
-            module.exports.showMessage(device_id, data, resolve, reject);
-        });
-    },
-
-    setMode: function(device_id, data) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setMode(device_id, resolve, reject);
-        });
-    },
-
-    getMode: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getMode(device_id, resolve, reject);
-        });
-    },
-
-    getDataFromScales: function(device_id, data) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getDataFromScales(device_id, data, resolve, reject);
-        });
-    },
-
-    setUserProfileToScales: function(device_id, info) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setUserProfileToScales(device_id, info, resolve, reject);
-        });
-    },
-
-    setStopScales: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setStopScales(device_id, resolve, reject);
-        });
-    },
-
-    getLastSleepTime: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getLastSleepTime(device_id, resolve, reject);
-        });
-    },
+    // getLastSleepTime: function(device_id) {
+    //     return new Promise(function(resolve, reject) {
+    //         module.exports.getLastSleepTime(device_id, resolve, reject);
+    //     });
+    // },
 
 };

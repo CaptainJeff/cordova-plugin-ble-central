@@ -269,7 +269,20 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             this.reportDuplicates = options.optBoolean("reportDuplicates", false);
             findLowEnergyDevices(callbackContext, serviceUUIDs, -1);
 
-        } else {
+        } else if (action.equals("activateVibration")) {
+
+            String macAddress = args.getString(0);
+            UUID serviceUUID = "fff0";
+            UUID characteristicUUID = "fff7";
+            byte[] data = args.getArrayBuffer(1);
+            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+
+            LOG.e(TAG, "activateVibration ", data);
+            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+
+        } 
+        
+        else {
 
             validAction = false;
 
