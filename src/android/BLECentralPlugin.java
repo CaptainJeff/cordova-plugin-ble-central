@@ -93,9 +93,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private CallbackContext permissionCallback;
     private UUID[] serviceUUIDs;
     private int scanSeconds;
-
-    private UUID serviceUUID = uuidFromString("fff0");
-    private UUID characteristicUUID = uuidFromString("fff6");
+    
 
     // Bluetooth state notification
     CallbackContext stateCallback;
@@ -275,6 +273,9 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         } else if (action.equals("activateVibration")) {
             String macAddress = args.getString(0);
             byte[] data = args.getArrayBuffer(1);
+
+            UUID serviceUUID = uuidFromString("fff0");
+            UUID characteristicUUID = uuidFromString("fff6");
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
             write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
