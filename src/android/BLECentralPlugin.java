@@ -94,6 +94,9 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private UUID[] serviceUUIDs;
     private int scanSeconds;
 
+    private UUID serviceUUID = uuidFromString("fff0");
+    private UUID characteristicUUID = uuidFromString("fff6");
+
     // Bluetooth state notification
     CallbackContext stateCallback;
     BroadcastReceiver stateReceiver;
@@ -270,25 +273,11 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             findLowEnergyDevices(callbackContext, serviceUUIDs, -1);
 
         } else if (action.equals("activateVibration")) {
-
-            // String macAddress = args.getString(0);
-            // String serviceUUID = "fff0";
-            // String characteristicUUID = "fff7";
-            // byte[] data = args.getArrayBuffer(1);
-            // int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-
             String macAddress = args.getString(0);
-            UUID serviceUUID = uuidFromString("fff0");
-            UUID characteristicUUID = uuidFromString("fff6");
             byte[] data = args.getArrayBuffer(1);
+            
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
             write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
-
-            LOG.e(TAG, "activateVibration 1", macAddress.toString());
-            LOG.e(TAG, "activateVibration 2", serviceUUID.toString());
-            LOG.e(TAG, "activateVibration 3", characteristicUUID.toString());
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
-
         } 
         
         else {
@@ -431,6 +420,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         LOG.d(TAG, "serviceUUID = ", serviceUUID.toString());
         LOG.d(TAG, "characteristicUUID = ", characteristicUUID.toString());
         LOG.d(TAG, "data = ", data.toString());
+
+        LOG.d(TAG, "~~~~~~~~~~~");
 
         //peripheral.writeCharacteristic(callbackContext, serviceUUID, characteristicUUID, data, writeType);
         peripheral.queueWrite(callbackContext, serviceUUID, characteristicUUID, data, writeType);
