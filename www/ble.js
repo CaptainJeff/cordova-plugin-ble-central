@@ -260,8 +260,8 @@ module.exports = {
     //     cordova.exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
     // },
 
-    activateVibration: function (device_id, service_uuid, characteristic_uuid, value, success, failure) {
-        cordova.exec(success, failure, 'BLE', 'activateVibration', [device_id, service_uuid, characteristic_uuid, value]);
+    activateVibration: function (device_id, value, success, failure) {
+        cordova.exec(success, failure, 'BLE', 'activateVibration', [device_id, value]);
     },
 
       
@@ -506,9 +506,9 @@ module.exports.withPromises = {
     //     });
     // },
 
-    activateVibration: function(device_id, service_uuid, characteristic_uuid, value) {
+    activateVibration: function(device_id, value) {
         return new Promise(function(resolve, reject) {
-            module.exports.activateVibration(device_id, service_uuid, characteristic_uuid, value, resolve, reject);
+            module.exports.activateVibration(device_id, value, resolve, reject);
         });
     },
 
