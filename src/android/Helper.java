@@ -243,6 +243,10 @@ public class Helper {
         static final byte weightWithResistor = (byte)0xFC;
 
         static final byte measurementResponse = (byte)0xff;
+
+    //=============== Other ==============
+        static final String trackerCharacteristicWriteUuid = "fff6";
+        static final String trackerServiceUuid = "fff0";
     }
 
     public static byte calcCRC(byte[] message) {

@@ -272,10 +272,9 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
         } else if (action.equals("activateVibration")) {
             String macAddress = args.getString(0);
-            // byte[] data = args.getArrayBuffer(1);
 
-            UUID serviceUUID = uuidFromString("fff0");
-            UUID characteristicUUID = uuidFromString("fff6");
+            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
+            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
 
             Byte commandCode1 = Helper.CommandCode.activateVibration;
 
@@ -289,15 +288,6 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
             LOG.e(TAG, "commandCode1: " + commandCode1.toString(), commandCode1);
             LOG.e(TAG, "data: " + data.toString(), data);
-            // Byte commandCode2 = Helper.CommandCode.action;
-            // LOG.e(TAG, "commandCode2: " + commandCode2.toString(), commandCode2);
-
-            
-            // commandCode3 = commandLists(action);
-            // LOG.e(TAG, "commandCode3: " + commandCode3.toString(), commandCode3);
-
-            // commandCode4 = commandLists(action.toString());
-            // LOG.e(TAG, "commandCode4: " + commandCode4.toString(), commandCode4);
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
             write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
