@@ -161,9 +161,9 @@ module.exports = {
         cordova.exec(success, failure, "BLE", "stopStateNotifications", []);
     },
 
-    // setDeviceTime: function (date, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'setDeviceTime', [date]);
-    // },
+    setDeviceTime: function (device_id, date, success, error) {
+        cordova.exec(success, error, 'BLE', 'setDeviceTime', [device_id, date]);
+    },
       
     // getDeviceTime:function (success, error) {
     //     console.log('getDeviceTime')
@@ -260,17 +260,17 @@ module.exports = {
     //     cordova.exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
     // },
 
-    activateVibration: function (duration, success, failure) {
-        cordova.exec(success, failure, 'BLE', 'activateVibration', [duration]);
+    activateVibration: function (device_id, duration, success, failure) {
+        cordova.exec(success, failure, 'BLE', 'activateVibration', [device_id, duration]);
     },
 
       
     //   /*
     //    * @param {format} string (12|24)
     //    */
-    // setTimeFormat: function (format, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'setTimeFormat', [format]);
-    // },
+    setTimeFormat: function (device_id, data, success, error) {
+        cordova.exec(success, error, 'BLE', 'setTimeFormat', [device_id, data]);
+    },
       
     // getTimeFormat: function (success, error) {
     //     cordova.exec(success, error, 'BLE', 'getTimeFormat');
@@ -297,9 +297,9 @@ module.exports = {
     //   /*
     //    * @param {mode} string (activity|sleep)
     //    */
-    // setMode: function (mode, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'setMode', [mode]);
-    // },
+    setMode: function (device_id, mode, success, error) {
+        cordova.exec(success, error, 'BLE', 'setMode', [device_id, mode]);
+    },
       
     // getMode: function (success, error) {
     //     cordova.exec(success, error, 'BLE', 'getMode');
@@ -415,7 +415,6 @@ module.exports.withPromises = {
         });
     }, 
 
-
     setDeviceTime: function(device_id, date) {
         return new Promise(function(resolve, reject) {
             module.exports.setDeviceTime(device_id, date, resolve, reject);
@@ -500,23 +499,17 @@ module.exports.withPromises = {
     //     });
     // },
 
-    // activateVibration: function(device_id, data) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.activateVibration(device_id, data, resolve, reject);
-    //     });
-    // },
-
-    activateVibration: function(duration) {
+    activateVibration: function(device_id, duration) {
         return new Promise(function(resolve, reject) {
-            module.exports.activateVibration(duration, resolve, reject);
+            module.exports.activateVibration(device_id, duration, resolve, reject);
         });
     },
 
-    // setTimeFormat: function(device_id, data) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.setTimeFormat(device_id, resolve, reject);
-    //     });
-    // },
+    setTimeFormat: function(device_id, format) {
+        return new Promise(function(resolve, reject) {
+            module.exports.setTimeFormat(device_id, format, resolve, reject);
+        });
+    },
 
     // showMessage: function(device_id, data) {
     //     return new Promise(function(resolve, reject) {
@@ -524,11 +517,11 @@ module.exports.withPromises = {
     //     });
     // },
 
-    // setMode: function(device_id, data) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.setMode(device_id, resolve, reject);
-    //     });
-    // },
+    setMode: function(device_id, mode) {
+        return new Promise(function(resolve, reject) {
+            module.exports.setMode(device_id, mode, resolve, reject);
+        });
+    },
 
     // getMode: function(device_id) {
     //     return new Promise(function(resolve, reject) {

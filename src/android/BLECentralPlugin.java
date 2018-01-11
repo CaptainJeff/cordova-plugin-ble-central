@@ -71,7 +71,6 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private static final String START_STATE_NOTIFICATIONS = "startStateNotifications";
     private static final String STOP_STATE_NOTIFICATIONS = "stopStateNotifications";
 
-    private static String MAC_ADDRESS;
 
     // callbacks
     CallbackContext discoverCallback;
@@ -160,8 +159,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
         } else if (action.equals(CONNECT)) {
 
-            MAC_ADDRESS = args.getString(0);
-            connect(callbackContext, MAC_ADDRESS);
+            macAddress = args.getString(0);
+            connect(callbackContext, macAddress);
 
         } else if (action.equals(DISCONNECT)) {
 
@@ -273,24 +272,64 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             findLowEnergyDevices(callbackContext, serviceUUIDs, -1);
 
         } else if (action.equals("activateVibration")) {
-            // String macAddress = args.getString(0);
+            String macAddress = args.getString(0);
 
             UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
             UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
-
-            Byte commandCode1 = Helper.CommandCode.activateVibration;
-            int duration = args.getInt(0);
+            int duration = args.getInt(1);
 
             byte[] data = new byte[16];
             data[0] = Helper.CommandCode.activateVibration;;
             data[1] = (byte) (duration > 10 ? 10 : duration);
             data[15] = Helper.calcCRC(data);
             
-            LOG.e(TAG, "macAddress: " + MAC_ADDRESS);
-
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
-        } 
+            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+        } else if (action.equals("setTimeFormat")) {
+            String macAddress = args.getString(0);
+            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
+            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
+            String timeFormat = args.getString(1);
+
+            byte[] data = new byte[16];
+            data[0] = Helper.CommandCode.setTimeFormat;
+            data[1] = (byte) (timeFormat == "12" ? 0x00 : 0x01);
+            data[15] = Helper.calcCRC(data);
+            
+            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+        } else if (action.equals("setMode")) {
+            String macAddress = args.getString(0);
+            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
+            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
+            String mode = args.getString(1);
+
+            final byte[] data = new byte[16];
+            data[0] = Helper.CommandCode.setMode;
+            data[1] = (mode.equalsIgnoreCase("sleep") ? (byte) 0x01 : (byte) 0x02);
+            data[15] = Helper.calcCRC(data);
+            
+            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+        } else if (action.equals("setDeviceTime")) {
+            String macAddress = args.getString(0);
+            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
+            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
+            String mode = args.getString(1);
+    
+            final byte[] data = new byte[16];
+            data[0] = Helper.CommandCode.setDeviceTime;
+            data[1] = Byte.parseByte(timeStamp.substring(2,4), 16);
+            data[2] = Byte.parseByte(timeStamp.substring(5,7), 16);
+            data[3] = Byte.parseByte(timeStamp.substring(8,10), 16);
+            data[4] = Byte.parseByte(timeStamp.substring(11,13), 16);
+            data[5] = Byte.parseByte(timeStamp.substring(14,16), 16);
+            data[6] = Byte.parseByte(timeStamp.substring(17,18), 16);
+            data[15] = Helper.calcCRC(data);
+            
+            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+        }
         
         else {
 
