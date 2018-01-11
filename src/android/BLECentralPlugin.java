@@ -284,9 +284,9 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
             write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
 
-            LOG.e(TAG, "activateVibration 1", macAddress);
-            LOG.e(TAG, "activateVibration 2", serviceUUID);
-            LOG.e(TAG, "activateVibration 3", characteristicUUID);
+            LOG.e(TAG, "activateVibration 1", macAddress.toString());
+            LOG.e(TAG, "activateVibration 2", serviceUUID.toString());
+            LOG.e(TAG, "activateVibration 3", characteristicUUID.toString());
             write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
 
         } 
@@ -428,9 +428,9 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             return;
         }
 
-        LOG.d(TAG, "serviceUUID = ", serviceUUID);
-        LOG.d(TAG, "characteristicUUID = ", characteristicUUID);
-        LOG.d(TAG, "data = ", data);
+        LOG.d(TAG, "serviceUUID = ", serviceUUID.toString());
+        LOG.d(TAG, "characteristicUUID = ", characteristicUUID.toString());
+        LOG.d(TAG, "data = ", data.toString());
 
         //peripheral.writeCharacteristic(callbackContext, serviceUUID, characteristicUUID, data, writeType);
         peripheral.queueWrite(callbackContext, serviceUUID, characteristicUUID, data, writeType);
