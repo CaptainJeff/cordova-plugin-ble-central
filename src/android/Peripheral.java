@@ -46,7 +46,7 @@ public class Peripheral extends BluetoothGattCallback {
     private boolean connecting = false;
     private ConcurrentLinkedQueue<BLECommand> commandQueue = new ConcurrentLinkedQueue<BLECommand>();
     private boolean bleProcessing;
-    private UUID optionalCharacteristic = null;
+    private UUID optionalCharacteristic = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     BluetoothGatt gatt;
 
@@ -588,7 +588,7 @@ public class Peripheral extends BluetoothGattCallback {
 
     public void queueRead(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID) {
         BLECommand command = new BLECommand(callbackContext, serviceUUID, characteristicUUID, BLECommand.READ);
-        queueCommand(command);
+        queueCommand(command, "00000000-0000-0000-0000-000000000000");
     }
 
     public void queueWrite(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID, byte[] data, int writeType) {
@@ -598,18 +598,18 @@ public class Peripheral extends BluetoothGattCallback {
 
     public void queueRegisterNotifyCallback(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID) {
         BLECommand command = new BLECommand(callbackContext, serviceUUID, characteristicUUID, BLECommand.REGISTER_NOTIFY);
-        queueCommand(command);
+        queueCommand(command, "00000000-0000-0000-0000-000000000000");
     }
 
     public void queueRemoveNotifyCallback(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID) {
         BLECommand command = new BLECommand(callbackContext, serviceUUID, characteristicUUID, BLECommand.REMOVE_NOTIFY);
-        queueCommand(command);
+        queueCommand(command, "00000000-0000-0000-0000-000000000000");
     }
 
 
     public void queueReadRSSI(CallbackContext callbackContext) {
         BLECommand command = new BLECommand(callbackContext, null, null, BLECommand.READ_RSSI);
-        queueCommand(command);
+        queueCommand(command, "00000000-0000-0000-0000-000000000000");
     }
 
     // add a new command to the queue
@@ -617,7 +617,7 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG,"Queuing Command " + command);
         commandQueue.add(command);
 
-        if (optionalCharacteristic == null) {
+        if (optionalCharacteristic == "00000000-0000-0000-0000-000000000000") {
             PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
         } else {
             PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
