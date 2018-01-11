@@ -280,8 +280,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             Byte commandCode1 = Helper.CommandCode.activateVibration;
 
             LOG.e(TAG, "commandCode1: " + commandCode1.toString(), commandCode1);
-            Byte commandCode2 = Helper.CommandCode.action;
-            LOG.e(TAG, "commandCode2: " + commandCode2.toString(), commandCode2);
+            // Byte commandCode2 = Helper.CommandCode.action;
+            // LOG.e(TAG, "commandCode2: " + commandCode2.toString(), commandCode2);
 
             
             // commandCode3 = commandLists(action);
