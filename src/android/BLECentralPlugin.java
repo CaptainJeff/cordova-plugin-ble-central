@@ -161,7 +161,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         } else if (action.equals(CONNECT)) {
 
             MAC_ADDRESS = args.getString(0);
-            connect(callbackContext, macAddress);
+            connect(callbackContext, MAC_ADDRESS);
 
         } else if (action.equals(DISCONNECT)) {
 
