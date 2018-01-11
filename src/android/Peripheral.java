@@ -46,7 +46,7 @@ public class Peripheral extends BluetoothGattCallback {
     private boolean connecting = false;
     private ConcurrentLinkedQueue<BLECommand> commandQueue = new ConcurrentLinkedQueue<BLECommand>();
     private boolean bleProcessing;
-    private String optionalCharacteristic = null;
+    private UUID optionalCharacteristic = null;
 
     BluetoothGatt gatt;
 
@@ -613,11 +613,11 @@ public class Peripheral extends BluetoothGattCallback {
     }
 
     // add a new command to the queue
-    private void queueCommand(BLECommand command, String optionalCharacteristic) {
+    private void queueCommand(BLECommand command, UUID optionalCharacteristic) {
         LOG.d(TAG,"Queuing Command " + command);
         commandQueue.add(command);
 
-        if (optionalParam == null) {
+        if (optionalCharacteristic == null) {
             PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
         } else {
             PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
