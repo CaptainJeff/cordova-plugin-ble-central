@@ -418,12 +418,6 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             return;
         }
 
-        LOG.d(TAG, "serviceUUID = ", serviceUUID.toString());
-        LOG.d(TAG, "characteristicUUID = ", characteristicUUID.toString());
-        LOG.d(TAG, "data = ", data.toString());
-
-        LOG.d(TAG, "~~~~~~~~~~~");
-
         //peripheral.writeCharacteristic(callbackContext, serviceUUID, characteristicUUID, data, writeType);
         peripheral.queueWrite(callbackContext, serviceUUID, characteristicUUID, data, writeType);
 
