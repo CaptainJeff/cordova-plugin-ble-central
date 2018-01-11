@@ -162,11 +162,12 @@ module.exports = {
     },
 
     setDeviceTime: function (date, success, error) {
-        exec(success, error, 'BLE', 'setDeviceTime', [date]);
+        cordova.exec(success, error, 'BLE', 'setDeviceTime', [date]);
     },
       
     getDeviceTime:function (success, error) {
-        exec(success, error, 'BLE', 'getDeviceTime');
+        console.log('getDeviceTime')
+        cordova.exec(success, error, 'BLE', 'getDeviceTime');
     },
       
       /*
@@ -180,15 +181,15 @@ module.exports = {
        * }
        */
     setUserPersonalInfo: function (info, success, error) {
-        exec(success, error, 'BLE', 'setUserPersonalInfo', [info]);
+        cordova.exec(success, error, 'BLE', 'setUserPersonalInfo', [info]);
     },
       
     getUserPersonalInfo: function (success, error) {
-        exec(success, error, 'BLE', 'getUserPersonalInfo');
+        cordova.exec(success, error, 'BLE', 'getUserPersonalInfo');
     },
       
     getDetailedDayActivity: function (date, success, error) {
-        exec(success, error, 'BLE', 'getDetailedDayActivity', [date]);
+        cordova.exec(success, error, 'BLE', 'getDetailedDayActivity', [date]);
     },
       
       /*
@@ -199,7 +200,7 @@ module.exports = {
        * }
        */
     getSummaryDaySleep: function (info, success, error) {
-        exec(success, error, 'BLE', 'getSummaryDaySleep', [info]);
+        cordova.exec(success, error, 'BLE', 'getSummaryDaySleep', [info]);
     },
       
       /*
@@ -210,97 +211,97 @@ module.exports = {
        * }
        */
     getSummaryDayActivity: function (info, success, error) {
-        exec(success, error, 'BLE', 'getSummaryDayActivity', [info]);
+        cordova.exec(success, error, 'BLE', 'getSummaryDayActivity', [info]);
     },
       
       
     getLastActivity: function (success, error) {
-        exec(success, error, 'BLE', 'getLastActivity');
+        cordova.exec(success, error, 'BLE', 'getLastActivity');
     },
       
     getLastSleepActivity: function (success, error) {
-        exec(success, error, 'BLE', 'getLastSleepActivity');
+        cordova.exec(success, error, 'BLE', 'getLastSleepActivity');
     },
       
       /*
        * @param {dailySteps} int
        */
     setTargetSteps: function (dailySteps, success, error) {
-        exec(success, error, 'BLE', 'setTargetSteps', [dailySteps]);
+        cordova.exec(success, error, 'BLE', 'setTargetSteps', [dailySteps]);
     },
       
     getTargetSteps: function (success, error) {
-        exec(success, error, 'BLE', 'getTargetSteps');
+        cordova.exec(success, error, 'BLE', 'getTargetSteps');
     },
       
       /*
        * @param {unit} string (mile|km)
        */
     setDistanceUnit: function (unit, success, error) {
-        exec(success, error, 'BLE', 'setDistanceUnit', [unit]);
+        cordova.exec(success, error, 'BLE', 'setDistanceUnit', [unit]);
     },
       
     getDistanceUnit: function (success, error) {
-        exec(success, error, 'BLE', 'getDistanceUnit');
+        cordova.exec(success, error, 'BLE', 'getDistanceUnit');
     },
       
     getDevicesBatteryStatus: function (success, error) {
-        exec(success, error, 'BLE', 'getDevicesBatteryStatus');
+        cordova.exec(success, error, 'BLE', 'getDevicesBatteryStatus');
     },
       
     getSoftwareVersion: function (success, error) {
-        exec(success, error, 'BLE', 'getSoftwareVersion');
+        cordova.exec(success, error, 'BLE', 'getSoftwareVersion');
     },
       
       /*
        * @param {duration} int (1-10)
        */
     activateVibration: function (duration, success, error) {
-        exec(success, error, 'BLE', 'activateVibration', [duration]);
+        cordova.exec(success, error, 'BLE', 'activateVibration', [duration]);
     },
       
       /*
        * @param {format} string (12|24)
        */
     setTimeFormat: function (format, success, error) {
-        exec(success, error, 'BLE', 'setTimeFormat', [format]);
+        cordova.exec(success, error, 'BLE', 'setTimeFormat', [format]);
     },
       
     getTimeFormat: function (success, error) {
-        exec(success, error, 'BLE', 'getTimeFormat');
+        cordova.exec(success, error, 'BLE', 'getTimeFormat');
     },
       
       /*
        * @param {name} string
        */
     setDeviceName: function (name, success, error) {
-        exec(success, error, 'BLE', 'setDeviceName', [name]);
+        cordova.exec(success, error, 'BLE', 'setDeviceName', [name]);
     },
       
     getDeviceName: function (success, error) {
-        exec(success, error, 'BLE', 'getDeviceName');
+        cordova.exec(success, error, 'BLE', 'getDeviceName');
     },
       
       /*
        * @param {message} string
        */
     showMessage = function (message, success, error) {
-        exec(success, error, 'BLE', 'showMessage', [message]);
+        cordova.exec(success, error, 'BLE', 'showMessage', [message]);
     },
       
       /*
        * @param {mode} string (activity|sleep)
        */
     setMode: function (mode, success, error) {
-        exec(success, error, 'BLE', 'setMode', [mode]);
+        cordova.exec(success, error, 'BLE', 'setMode', [mode]);
     },
       
     getMode: function (success, error) {
-        exec(success, error, 'BLE', 'getMode');
+        cordova.exec(success, error, 'BLE', 'getMode');
     },
       
     getDataFromScales: function (deviceId, userProfile, success, error) {
-        exec(success, error, 'BLE', 'getDataFromScales', [deviceId, userProfile]);
+        cordova.exec(success, error, 'BLE', 'getDataFromScales', [deviceId, userProfile]);
     },
       
       /*
@@ -312,19 +313,19 @@ module.exports = {
        * }
        */
     setUserProfileToScales: function (info, success, error) {
-        exec(success, error, 'BLE', 'setUserProfileToScales', [info]);
+        cordova.exec(success, error, 'BLE', 'setUserProfileToScales', [info]);
     },
       
     setStopScales: function (success, error) {
-        exec(success, error, 'BLE', 'setStopScales');
+        cordova.exec(success, error, 'BLE', 'setStopScales');
     },
       
     startLoggingAndroid: function (success, error) {
-        exec(success, error, 'BLE', 'StartLogging');
+        cordova.exec(success, error, 'BLE', 'StartLogging');
     },
       
     getLastSleepTime: function (success, error) {
-        exec(success, error, 'BLE', 'getLastSleepTime');
+        cordova.exec(success, error, 'BLE', 'getLastSleepTime');
     }
 
 };
