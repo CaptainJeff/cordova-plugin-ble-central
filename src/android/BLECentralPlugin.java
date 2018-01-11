@@ -71,6 +71,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private static final String START_STATE_NOTIFICATIONS = "startStateNotifications";
     private static final String STOP_STATE_NOTIFICATIONS = "stopStateNotifications";
 
+    private static String MAC_ADDRESS;
+
     // callbacks
     CallbackContext discoverCallback;
     private CallbackContext enableBluetoothCallback;
@@ -158,7 +160,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
         } else if (action.equals(CONNECT)) {
 
-            String macAddress = args.getString(0);
+            MAC_ADDRESS = args.getString(0);
             connect(callbackContext, macAddress);
 
         } else if (action.equals(DISCONNECT)) {
@@ -271,25 +273,23 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             findLowEnergyDevices(callbackContext, serviceUUIDs, -1);
 
         } else if (action.equals("activateVibration")) {
-            String macAddress = args.getString(0);
+            // String macAddress = args.getString(0);
 
             UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
             UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
 
             Byte commandCode1 = Helper.CommandCode.activateVibration;
-
-            int duration = 4;
+            int duration = args.getInt(0);
 
             byte[] data = new byte[16];
             data[0] = Helper.CommandCode.activateVibration;;
             data[1] = (byte) (duration > 10 ? 10 : duration);
             data[15] = Helper.calcCRC(data);
-
-            LOG.e(TAG, "commandCode1: " + commandCode1.toString(), commandCode1);
-            LOG.e(TAG, "data: " + data.toString(), data);
             
+            LOG.e(TAG, "macAddress: " + MAC_ADDRESS);
+
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
         } 
         
         else {
