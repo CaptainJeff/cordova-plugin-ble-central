@@ -249,9 +249,9 @@ module.exports = {
     //     cordova.exec(success, error, 'BLE', 'getDevicesBatteryStatus');
     // },
       
-    // getSoftwareVersion: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getSoftwareVersion');
-    // },
+    getSoftwareVersion: function (device_id, success, error) {
+        cordova.exec(success, error, 'BLE', 'getSoftwareVersion', [device_id]);
+    },
       
     //   /*
     //    * @param {duration} int (1-10)
@@ -493,11 +493,11 @@ module.exports.withPromises = {
     //     });
     // },
 
-    // getSoftwareVersion: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getSoftwareVersion(device_id, resolve, reject);
-    //     });
-    // },
+    getSoftwareVersion: function(device_id) {
+        return new Promise(function(resolve, reject) {
+            module.exports.getSoftwareVersion(device_id, resolve, reject);
+        });
+    },
 
     activateVibration: function(device_id, duration) {
         return new Promise(function(resolve, reject) {

@@ -329,6 +329,17 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
             write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+        } else if (action.equals("getSoftwareVersion")) {
+            String macAddress = args.getString(0);
+            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
+            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
+
+            byte[] data = new byte[16];
+            data[0] = Helper.CommandCode.getSoftwareVersion;
+            data[15] = Helper.calcCRC(data);
+            
+            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
         }
         
         else {
