@@ -159,7 +159,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
         } else if (action.equals(CONNECT)) {
 
-            macAddress = args.getString(0);
+            String macAddress = args.getString(0);
             connect(callbackContext, macAddress);
 
         } else if (action.equals(DISCONNECT)) {
@@ -315,7 +315,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             String macAddress = args.getString(0);
             UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
             UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
-            String mode = args.getString(1);
+            String timeStamp = args.getString(1);
     
             final byte[] data = new byte[16];
             data[0] = Helper.CommandCode.setDeviceTime;
