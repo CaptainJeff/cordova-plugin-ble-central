@@ -272,8 +272,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         } else if (action.equals("activateVibration")) {
 
             String macAddress = args.getString(0);
-            UUID serviceUUID = "fff0";
-            UUID characteristicUUID = "fff7";
+            String serviceUUID = "fff0";
+            String characteristicUUID = "fff7";
             byte[] data = args.getArrayBuffer(1);
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
