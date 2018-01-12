@@ -612,10 +612,11 @@ public class Peripheral extends BluetoothGattCallback {
         } else {
             LOG.d(TAG,"writeCharacteristic: data: " + data);
             LOG.d(TAG,"writeCharacteristic: writeType " + writeType);
+            String key = generateHashKey(serviceUUID, characteristic);
             characteristic.setValue(data);
             characteristic.setWriteType(writeType);
             writeCallback = callbackContext;
-            writeProperCallback.put(callbackContext);
+            writeProperCallback.put(key, callbackContext);
 
             if (gatt.writeCharacteristic(characteristic)) {
                 success = true;
