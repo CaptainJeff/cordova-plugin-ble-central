@@ -242,10 +242,11 @@ public class Peripheral extends BluetoothGattCallback {
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
 
         if (callback != null) {
-            writeCallback.success();
+        
             PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
+            writeCallback.success(result);
         }
     }
 
