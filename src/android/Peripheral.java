@@ -243,7 +243,7 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG, "onCharacteristicChanged " + characteristic);
         LOG.d(TAG, "lastCommand " + lastCommand);
 
-        lastCommandCharacteristic = lastCommand.getCharacteristicUUID();
+        BluetoothGattCharacteristic lastCommandCharacteristic = lastCommand.getCharacteristicUUID();
 
         
 
