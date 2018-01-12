@@ -252,6 +252,11 @@ public class Peripheral extends BluetoothGattCallback {
             LOG.d(TAG, "onCharacteristicChanged " + result);
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
+
+            
+
+            LOG.d(TAG,"result1111 " + result);
+            lastCommand.getCallbackContext().sendPluginResult(result);
         }
     }
 
@@ -629,17 +634,18 @@ public class Peripheral extends BluetoothGattCallback {
         // } else {
         //     PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
         // }
-        PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
+        // PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
         // if (optionalCharacteristic == UUIDHelper.uuidFromString("00000000-0000-0000-0000-000000000000")) {
         //     PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
         // } else {
         //     PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
         // }
-        
-        result.setKeepCallback(true);
 
-        LOG.d(TAG,"result " + result);
-        command.getCallbackContext().sendPluginResult(result);
+        // PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
+        // result.setKeepCallback(true);
+
+        // LOG.d(TAG,"result " + result);
+        // command.getCallbackContext().sendPluginResult(result);
 
         if (!bleProcessing) {
             processCommands();
