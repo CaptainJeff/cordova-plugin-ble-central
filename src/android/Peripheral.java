@@ -267,7 +267,7 @@ public class Peripheral extends BluetoothGattCallback {
             LOG.d(TAG, "onCharacteristicChanged " + result);
             result.setKeepCallback(true);
             LOG.d(TAG, "writeCallback 1:" + result);
-            writeCallback.sendPluginResult(result);
+            writeCallback.success(result.toString());
             LOG.d(TAG, "writeCallback 2:" + result);
             callback.sendPluginResult(result);
             
