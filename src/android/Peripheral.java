@@ -268,12 +268,6 @@ public class Peripheral extends BluetoothGattCallback {
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
 
-            
-
-            
-
-            LOG.d(TAG,"result1111 " + result);
-            lastCommand.sendPluginResult(result);
             // LOG.d(TAG,"result2222 " + result);
             // lastCallback.sendPluginResult(result);
         }
