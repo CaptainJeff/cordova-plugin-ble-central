@@ -245,18 +245,35 @@ public class Peripheral extends BluetoothGattCallback {
 
         
 
+        // CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
+
+        // if (callback != null) {
+        //     PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
+        //     LOG.d(TAG, "onCharacteristicChanged " + result);
+        //     result.setKeepCallback(true);
+        //     callback.sendPluginResult(result);
+
+
+        //     LOG.d(TAG,"result1111 " + result);
+        //     lastCommand.getCallbackContext().sendPluginResult(result);
+        // }
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
+        CallbackContext lastCallback = notificationCallbacks.get(generateHashKey(lastCommand));
 
         if (callback != null) {
             PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
             LOG.d(TAG, "onCharacteristicChanged " + result);
             result.setKeepCallback(true);
-            callback.sendPluginResult(result);
+            // callback.sendPluginResult(result);
+
+            
 
             
 
             LOG.d(TAG,"result1111 " + result);
             lastCommand.getCallbackContext().sendPluginResult(result);
+            LOG.d(TAG,"result2222 " + result);
+            lastCallback.sendPluginResult(result);
         }
     }
 
