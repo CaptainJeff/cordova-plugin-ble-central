@@ -266,14 +266,14 @@ public class Peripheral extends BluetoothGattCallback {
             PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
             LOG.d(TAG, "onCharacteristicChanged " + result);
             result.setKeepCallback(true);
-            // callback.sendPluginResult(result);
+            callback.sendPluginResult(result);
 
             
 
             
 
             LOG.d(TAG,"result1111 " + result);
-            lastCommand.getCallbackContext().sendPluginResult(result);
+            lastCommand.sendPluginResult(result);
             // LOG.d(TAG,"result2222 " + result);
             // lastCallback.sendPluginResult(result);
         }
@@ -307,7 +307,7 @@ public class Peripheral extends BluetoothGattCallback {
         if (writeCallback != null) {
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                writeCallback.success();
+                writeCallback.success("fdsfdsf");
             } else {
                 writeCallback.error(status);
             }
@@ -660,11 +660,13 @@ public class Peripheral extends BluetoothGattCallback {
         //     PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
         // }
 
-        // PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
-        // result.setKeepCallback(true);
+        PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
+        result.setKeepCallback(true);
 
-        // LOG.d(TAG,"result " + result);
-        // command.getCallbackContext().sendPluginResult(result);
+        LOG.d(TAG,"result " + result);
+        command.getCallbackContext().sendPluginResult(result);
+
+        command.getCallbackContext().sendPluginResult(3,5,6,7);
 
         if (!bleProcessing) {
             processCommands();
