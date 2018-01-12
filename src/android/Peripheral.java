@@ -56,6 +56,8 @@ public class Peripheral extends BluetoothGattCallback {
 
     private Map<String, CallbackContext> notificationCallbacks = new HashMap<String, CallbackContext>();
 
+    private CallbackContext writeProperCallback = new HashMap<String, CallbackContext>();
+
     BLECommand lastCommand;
 
     public Peripheral(BluetoothDevice device, int advertisingRSSI, byte[] scanRecord) {
@@ -243,7 +245,7 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG, "onCharacteristicChanged " + characteristic);
         LOG.d(TAG, "lastCommand " + lastCommand);
 
-        UUID lastCommandCharacteristic = lastCommand.getCharacteristicUUID();
+        // UUID lastCommandCharacteristic = lastCommand.getCharacteristicUUID();
 
         
 
@@ -260,15 +262,18 @@ public class Peripheral extends BluetoothGattCallback {
         //     lastCommand.getCallbackContext().sendPluginResult(result);
         // }
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
+        CallbackContext anotherCallback = writeProperCallback.get(generateHashKey(characteristic));
         // CallbackContext lastCallback = notificationCallbacks.get(generateHashKey(lastCommandCharacteristic));
 
         if (callback != null) {
             PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
             LOG.d(TAG, "onCharacteristicChanged " + result);
             result.setKeepCallback(true);
-            LOG.d(TAG, "writeCallback 1:" + result);
-            writeCallback.success(result.toString());
-            LOG.d(TAG, "writeCallback 2:" + result);
+            // LOG.d(TAG, "writeCallback 1:" + result);
+            // writeCallback.success(result.toString());
+            // LOG.d(TAG, "writeCallback 2:" + result);
+            LOG.d(TAG, "anotherCallback " + result);
+            anotherCallback.sendPluginResult(result);
             callback.sendPluginResult(result);
             
 
@@ -306,6 +311,8 @@ public class Peripheral extends BluetoothGattCallback {
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 LOG.d(TAG, "writeCallback.success " + characteristic);
+                writeCallback.success();
+           
                 
             } else {
                 writeCallback.error(status);
@@ -350,6 +357,41 @@ public class Peripheral extends BluetoothGattCallback {
     public void updateRssi(int rssi) {
         advertisingRSSI = rssi;
     }
+
+    // private void trackerReadConnection() {
+    //     try {
+    //       mBluetoothGatt.setupNotification(readConnection.getUuid())
+    //         .doOnNext(notificationObservable -> {
+    //         })
+    //         .flatMap(notificationObservable -> notificationObservable)
+    //         .subscribe(
+    //           bytes -> {
+    //             byte[] response = bytes;
+    //             if (response[0] == 0x43) {
+    //               if (response[1] == (byte) 0xff) {
+    //                 commandCount -= 95;
+    //               }
+    //             }
+    //             logging.lastCommandState = String.valueOf(response[0]) + " received";
+    //             communicationCallback.onMessage(response);
+    //             commandCount = commandCount > 0 ? commandCount-- : 0;
+    //             if (commandQueue.size() > 0 && commandCount == 0) {
+    //               send();
+    //             }
+    //             isSending = false;
+    //           },
+    //           throwable -> {
+    //             /*logging.errorMessage = throwable.getMessage();
+    //             Log.wtf("Exception", throwable.getMessage());
+    //             communicationCallback.sendLog(logging.generateLog());*/
+    //           }
+    //         );
+    //     } catch (Exception ex){
+    //       logging.errorMessage = ex.getMessage();
+    //       Log.wtf("Exception(tracker read)", ex.getMessage());
+    //       communicationCallback.sendLog(logging.generateLog());
+    //     }
+    //   }
 
     // This seems way too complicated
     private void registerNotifyCallback(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID) {
@@ -573,6 +615,7 @@ public class Peripheral extends BluetoothGattCallback {
             characteristic.setValue(data);
             characteristic.setWriteType(writeType);
             writeCallback = callbackContext;
+            writeProperCallback.put(callbackContext);
 
             if (gatt.writeCharacteristic(characteristic)) {
                 success = true;
