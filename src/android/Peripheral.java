@@ -267,6 +267,8 @@ public class Peripheral extends BluetoothGattCallback {
             LOG.d(TAG, "onCharacteristicChanged " + result);
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
+            LOG.d(TAG, "writeCallback " + result);
+            writeCallback.success(result);
 
             // LOG.d(TAG,"result2222 " + result);
             // lastCallback.sendPluginResult(result);
@@ -301,7 +303,8 @@ public class Peripheral extends BluetoothGattCallback {
         if (writeCallback != null) {
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                writeCallback.success("fdsfdsf");
+                LOG.d(TAG, "writeCallback.success " + characteristic);
+                
             } else {
                 writeCallback.error(status);
             }
