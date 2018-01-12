@@ -56,6 +56,8 @@ public class Peripheral extends BluetoothGattCallback {
 
     private Map<String, CallbackContext> notificationCallbacks = new HashMap<String, CallbackContext>();
 
+    BLECommand lastCommand;
+
     public Peripheral(BluetoothDevice device, int advertisingRSSI, byte[] scanRecord) {
 
         this.device = device;
@@ -239,6 +241,9 @@ public class Peripheral extends BluetoothGattCallback {
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         super.onCharacteristicChanged(gatt, characteristic);
         LOG.d(TAG, "onCharacteristicChanged " + characteristic);
+        LOG.d(TAG, "lastCommand " + lastCommand);
+
+        
 
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
 
@@ -588,40 +593,48 @@ public class Peripheral extends BluetoothGattCallback {
 
     public void queueRead(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID) {
         BLECommand command = new BLECommand(callbackContext, serviceUUID, characteristicUUID, BLECommand.READ);
-        queueCommand(command, "00000000-0000-0000-0000-000000000000");
+        queueCommand(command);
     }
 
     public void queueWrite(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID, byte[] data, int writeType) {
         BLECommand command = new BLECommand(callbackContext, serviceUUID, characteristicUUID, data, writeType);
-        queueCommand(command, characteristicUUID);
+        queueCommand(command);
     }
 
     public void queueRegisterNotifyCallback(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID) {
         BLECommand command = new BLECommand(callbackContext, serviceUUID, characteristicUUID, BLECommand.REGISTER_NOTIFY);
-        queueCommand(command, "00000000-0000-0000-0000-000000000000");
+        queueCommand(command);
     }
 
     public void queueRemoveNotifyCallback(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID) {
         BLECommand command = new BLECommand(callbackContext, serviceUUID, characteristicUUID, BLECommand.REMOVE_NOTIFY);
-        queueCommand(command, "00000000-0000-0000-0000-000000000000");
+        queueCommand(command);
     }
 
 
     public void queueReadRSSI(CallbackContext callbackContext) {
         BLECommand command = new BLECommand(callbackContext, null, null, BLECommand.READ_RSSI);
-        queueCommand(command, "00000000-0000-0000-0000-000000000000");
+        queueCommand(command);
     }
 
     // add a new command to the queue
-    private void queueCommand(BLECommand command, UUID optionalCharacteristic) {
+    private void queueCommand(BLECommand command) {
         LOG.d(TAG,"Queuing Command " + command);
         commandQueue.add(command);
 
-        if (optionalCharacteristic == "00000000-0000-0000-0000-000000000000") {
-            PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
-        } else {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
-        }
+        lastCommand = command;
+
+        // if (optionalCharacteristic == UUIDHelper.uuidFromString("00000000-0000-0000-0000-000000000000")) {
+        //     PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
+        // } else {
+        //     PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
+        // }
+        PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
+        // if (optionalCharacteristic == UUIDHelper.uuidFromString("00000000-0000-0000-0000-000000000000")) {
+        //     PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
+        // } else {
+        //     PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
+        // }
         
         result.setKeepCallback(true);
 
