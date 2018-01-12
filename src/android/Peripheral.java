@@ -46,7 +46,6 @@ public class Peripheral extends BluetoothGattCallback {
     private boolean connecting = false;
     private ConcurrentLinkedQueue<BLECommand> commandQueue = new ConcurrentLinkedQueue<BLECommand>();
     private boolean bleProcessing;
-    private UUID optionalCharacteristic = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     BluetoothGatt gatt;
 
@@ -55,10 +54,6 @@ public class Peripheral extends BluetoothGattCallback {
     private CallbackContext writeCallback;
 
     private Map<String, CallbackContext> notificationCallbacks = new HashMap<String, CallbackContext>();
-
-    private Map<String, CallbackContext> writeProperCallback = new HashMap<String, CallbackContext>();
-
-    BLECommand lastCommand;
 
     public Peripheral(BluetoothDevice device, int advertisingRSSI, byte[] scanRecord) {
 
@@ -243,42 +238,13 @@ public class Peripheral extends BluetoothGattCallback {
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         super.onCharacteristicChanged(gatt, characteristic);
         LOG.d(TAG, "onCharacteristicChanged " + characteristic);
-        LOG.d(TAG, "lastCommand " + lastCommand);
 
-        // UUID lastCommandCharacteristic = lastCommand.getCharacteristicUUID();
-
-        
-
-        // CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
-
-        // if (callback != null) {
-        //     PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
-        //     LOG.d(TAG, "onCharacteristicChanged " + result);
-        //     result.setKeepCallback(true);
-        //     callback.sendPluginResult(result);
-
-
-        //     LOG.d(TAG,"result1111 " + result);
-        //     lastCommand.getCallbackContext().sendPluginResult(result);
-        // }
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
-        CallbackContext anotherCallback = writeProperCallback.get(generateHashKey(characteristic));
-        // CallbackContext lastCallback = notificationCallbacks.get(generateHashKey(lastCommandCharacteristic));
 
         if (callback != null) {
             PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
-            LOG.d(TAG, "onCharacteristicChanged " + result);
             result.setKeepCallback(true);
-            // LOG.d(TAG, "writeCallback 1:" + result);
-            // writeCallback.success(result.toString());
-            // LOG.d(TAG, "writeCallback 2:" + result);
-            LOG.d(TAG, "anotherCallback " + result);
-            anotherCallback.sendPluginResult(result);
             callback.sendPluginResult(result);
-            
-
-            // LOG.d(TAG,"result2222 " + result);
-            // lastCallback.sendPluginResult(result);
         }
     }
 
@@ -310,10 +276,7 @@ public class Peripheral extends BluetoothGattCallback {
         if (writeCallback != null) {
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                LOG.d(TAG, "writeCallback.success " + characteristic);
                 writeCallback.success();
-           
-                
             } else {
                 writeCallback.error(status);
             }
@@ -357,41 +320,6 @@ public class Peripheral extends BluetoothGattCallback {
     public void updateRssi(int rssi) {
         advertisingRSSI = rssi;
     }
-
-    // private void trackerReadConnection() {
-    //     try {
-    //       mBluetoothGatt.setupNotification(readConnection.getUuid())
-    //         .doOnNext(notificationObservable -> {
-    //         })
-    //         .flatMap(notificationObservable -> notificationObservable)
-    //         .subscribe(
-    //           bytes -> {
-    //             byte[] response = bytes;
-    //             if (response[0] == 0x43) {
-    //               if (response[1] == (byte) 0xff) {
-    //                 commandCount -= 95;
-    //               }
-    //             }
-    //             logging.lastCommandState = String.valueOf(response[0]) + " received";
-    //             communicationCallback.onMessage(response);
-    //             commandCount = commandCount > 0 ? commandCount-- : 0;
-    //             if (commandQueue.size() > 0 && commandCount == 0) {
-    //               send();
-    //             }
-    //             isSending = false;
-    //           },
-    //           throwable -> {
-    //             /*logging.errorMessage = throwable.getMessage();
-    //             Log.wtf("Exception", throwable.getMessage());
-    //             communicationCallback.sendLog(logging.generateLog());*/
-    //           }
-    //         );
-    //     } catch (Exception ex){
-    //       logging.errorMessage = ex.getMessage();
-    //       Log.wtf("Exception(tracker read)", ex.getMessage());
-    //       communicationCallback.sendLog(logging.generateLog());
-    //     }
-    //   }
 
     // This seems way too complicated
     private void registerNotifyCallback(CallbackContext callbackContext, UUID serviceUUID, UUID characteristicUUID) {
@@ -470,7 +398,6 @@ public class Peripheral extends BluetoothGattCallback {
                     descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
                     gatt.writeDescriptor(descriptor);
                 }
-
                 callbackContext.success();
             } else {
                 // TODO we can probably ignore and return success anyway since we removed the notification callback
@@ -610,13 +537,9 @@ public class Peripheral extends BluetoothGattCallback {
         if (characteristic == null) {
             callbackContext.error("Characteristic " + characteristicUUID + " not found.");
         } else {
-            LOG.d(TAG,"writeCharacteristic: data: " + data);
-            LOG.d(TAG,"writeCharacteristic: writeType " + writeType);
-            String key = generateHashKey(serviceUUID, characteristic);
             characteristic.setValue(data);
             characteristic.setWriteType(writeType);
             writeCallback = callbackContext;
-            writeProperCallback.put(key, callbackContext);
 
             if (gatt.writeCharacteristic(characteristic)) {
                 success = true;
@@ -690,24 +613,8 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG,"Queuing Command " + command);
         commandQueue.add(command);
 
-        lastCommand = command;
-
-        // if (optionalCharacteristic == UUIDHelper.uuidFromString("00000000-0000-0000-0000-000000000000")) {
-        //     PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
-        // } else {
-        //     PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
-        // }
-        // PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
-        // if (optionalCharacteristic == UUIDHelper.uuidFromString("00000000-0000-0000-0000-000000000000")) {
-        //     PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
-        // } else {
-        //     PluginResult result = new PluginResult(PluginResult.Status.OK, optionalCharacteristic.getValue());
-        // }
-
-        PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT); 
+        PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
         result.setKeepCallback(true);
-
-        LOG.d(TAG,"result " + result);
         command.getCallbackContext().sendPluginResult(result);
 
         if (!bleProcessing) {
@@ -767,10 +674,6 @@ public class Peripheral extends BluetoothGattCallback {
     private String generateHashKey(BluetoothGattCharacteristic characteristic) {
         return generateHashKey(characteristic.getService().getUuid(), characteristic);
     }
-
-    // private String generateHashKey(UUID characteristic) {
-    //     return generateHashKey(characteristic.getService().getUuid(), characteristic);
-    // }
 
     private String generateHashKey(UUID serviceUUID, BluetoothGattCharacteristic characteristic) {
         return String.valueOf(serviceUUID) + "|" + characteristic.getUuid() + "|" + characteristic.getInstanceId();
