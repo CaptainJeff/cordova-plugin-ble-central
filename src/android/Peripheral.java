@@ -266,9 +266,11 @@ public class Peripheral extends BluetoothGattCallback {
             PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
             LOG.d(TAG, "onCharacteristicChanged " + result);
             result.setKeepCallback(true);
+            LOG.d(TAG, "writeCallback 1:" + result);
+            writeCallback.sendPluginResult(result);
+            LOG.d(TAG, "writeCallback 2:" + result);
             callback.sendPluginResult(result);
-            LOG.d(TAG, "writeCallback " + result);
-            writeCallback.success(result);
+            
 
             // LOG.d(TAG,"result2222 " + result);
             // lastCallback.sendPluginResult(result);
@@ -426,6 +428,7 @@ public class Peripheral extends BluetoothGattCallback {
                     descriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
                     gatt.writeDescriptor(descriptor);
                 }
+
                 callbackContext.success();
             } else {
                 // TODO we can probably ignore and return success anyway since we removed the notification callback
