@@ -56,7 +56,7 @@ public class Peripheral extends BluetoothGattCallback {
 
     private Map<String, CallbackContext> notificationCallbacks = new HashMap<String, CallbackContext>();
 
-    private CallbackContext writeProperCallback = new HashMap<String, CallbackContext>();
+    private Map<String, CallbackContext> writeProperCallback = new HashMap<String, CallbackContext>();
 
     BLECommand lastCommand;
 
