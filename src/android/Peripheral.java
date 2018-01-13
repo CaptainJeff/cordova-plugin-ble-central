@@ -384,20 +384,8 @@ public class Peripheral extends BluetoothGattCallback {
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
             JSONObject response;
-            // writeCallback.sendPluginResult(result);
-            LOG.d(TAG, "onCharacteristicChangedResponse1 " + value);
-            // if (value[0] == 0x27) {
-            //   response = getSoftwareVersion(value);
-            //   LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
-            // } else {
 
-            //   response = onSuccessCall(value);
-            //   LOG.d(TAG, "onCharacteristicChangedResponse: else " + response);
-            // }
             response = parseResponse(value);
-            
-            
-            LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
             writeCallback.success(response);
         }
     }
@@ -405,9 +393,36 @@ public class Peripheral extends BluetoothGattCallback {
     public JSONObject parseResponse(byte[] value) {
       JSONObject response;
 
-      if (value[0] == 0x27) {
+      if (value[0] == Helper.CommandCode.getSoftwareVersion) {
         response = getSoftwareVersion(value);
         LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+      } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
+
+        response = onSuccessCall(value);
+      } else if (value[0] == Helper.CommandCode.getTargetSteps) {
+
+        response = onSuccessCall(value);
+      } else if (value[0] == Helper.CommandCode.getDeviceName) {
+
+        response = onSuccessCall(value);
+      } else if (value[0] == Helper.CommandCode.getTimeFormat) {
+
+        response = onSuccessCall(value);
+      } else if (value[0] == Helper.CommandCode.getDeviceTime) {
+
+        response = onSuccessCall(value);
+      } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
+
+        response = onSuccessCall(value);
+      } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
+
+        response = onSuccessCall(value);
+      } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
+
+        response = onSuccessCall(value);
+      } else if (value[0] == Helper.CommandCode.getMode) {
+
+        response = onSuccessCall(value);
       } else {
 
         response = onSuccessCall(value);
