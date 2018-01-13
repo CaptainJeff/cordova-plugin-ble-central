@@ -180,9 +180,10 @@ public class Peripheral extends BluetoothGattCallback {
     }
 
     static JSONObject byteArrayToJSON(byte[] bytes) throws JSONException {
+        JSONObject object = new JSONObject();
         try {
             LOG.e(TAG, "byteArrayToJSON" + bytes);
-            JSONObject object = new JSONObject();
+            
             object.put("CDVType", "ArrayBuffer");
             object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
             return object;
@@ -190,8 +191,9 @@ public class Peripheral extends BluetoothGattCallback {
         catch (JSONException e) { // TODO better error handling
             LOG.e(TAG, "JSONException" + e);
             e.printStackTrace();
+            
         }
-        
+        return object;
     }
 
     public boolean isConnected() {
@@ -246,6 +248,9 @@ public class Peripheral extends BluetoothGattCallback {
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         super.onCharacteristicChanged(gatt, characteristic);
         LOG.d(TAG, "onCharacteristicChanged " + characteristic);
+
+        LOG.d(TAG, "characteristic.getValue() " + characteristic.getValue());
+        LOG.d(TAG, "characteristic.getValue() " + characteristic.getValue().toString());
 
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
 
