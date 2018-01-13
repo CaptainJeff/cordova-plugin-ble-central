@@ -204,14 +204,13 @@ public class Peripheral extends BluetoothGattCallback {
             LOG.e(TAG, "onSuccessCall 2:" + bytes);
       
             object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
-
-
-            return object;
         }
         catch (JSONException e) { // this shouldn't happen
             LOG.e(TAG, "onSuccessCall: JSONException" + e);
             e.printStackTrace();
         }
+
+        return object;
     }
 
     public boolean isConnected() {
