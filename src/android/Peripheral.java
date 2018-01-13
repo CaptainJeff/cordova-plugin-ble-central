@@ -402,7 +402,7 @@ public class Peripheral extends BluetoothGattCallback {
     }
 
     @Override
-    public void parseResponse(byte[] value) {
+    public JSONObject parseResponse(byte[] value) {
       JSONObject response;
 
       if (value[0] == 0x27) {
