@@ -386,20 +386,38 @@ public class Peripheral extends BluetoothGattCallback {
             JSONObject response;
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + value);
-            if (value[0] == 0x27) {
-              response = getSoftwareVersion(value);
-              LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
-            } else {
+            // if (value[0] == 0x27) {
+            //   response = getSoftwareVersion(value);
+            //   LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+            // } else {
 
-              response = onSuccessCall(value);
-              LOG.d(TAG, "onCharacteristicChangedResponse: else " + response);
-            }
+            //   response = onSuccessCall(value);
+            //   LOG.d(TAG, "onCharacteristicChangedResponse: else " + response);
+            // }
             
             
             LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
             writeCallback.success(response);
         }
     }
+
+    @Override
+    public void parseResponse(byte[] value) {
+      JSONObject response;
+
+      if (value[0] == 0x27) {
+        response = getSoftwareVersion(value);
+        LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+      } else {
+
+        response = onSuccessCall(value);
+        LOG.d(TAG, "onCharacteristicChangedResponse: else " + response);
+      }
+
+      LOG.d(TAG, "parseResponse! " + response);
+      return response;
+    }
+    
 
     @Override
     public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
