@@ -227,7 +227,7 @@ public class Peripheral extends BluetoothGattCallback {
           e.printStackTrace();
       }
 
-      writeCallback.success(reponse);
+      writeCallback.success(response);
       return response;
   }
 
