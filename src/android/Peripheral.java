@@ -351,6 +351,7 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
+    @Override
     static JSONObject getSoftVersionResponse(byte[] response) {
         JSONObject object = new JSONObject();
         try {
@@ -426,8 +427,8 @@ public class Peripheral extends BluetoothGattCallback {
             callback.sendPluginResult(result);
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
-            // JSONObject response = onSuccessCall(characteristic.getValue());
-            JSONObject response = getSoftVersionResponse(characteristic.getValue());
+            JSONObject response = onSuccessCall(characteristic.getValue());
+            // JSONObject response = getSoftVersionResponse(characteristic.getValue());
 
 
             
