@@ -304,10 +304,12 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG, "getSoftwareVersion" + Helper.CommandCode.getSoftwareVersion);
         switch (response[0]) {
           case Helper.CommandCode.getDevicesBatteryStatus:
-            batteryResponse(response);
+            // batteryResponse(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getTargetSteps:
-            getTargetStepsResponse(response);
+            // getTargetStepsResponse(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getSoftwareVersion:
             LOG.d(TAG, "getSoftwareVersionsuccess");
@@ -315,28 +317,36 @@ public class Peripheral extends BluetoothGattCallback {
             // getSoftVersionResponse(response);
             break;
           case Helper.CommandCode.getDeviceName:
-            getDeviceNameResponce(response);
+            // getDeviceNameResponce(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getTimeFormat:
-            getTimeFormatResponse(response);
+            // getTimeFormatResponse(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getDeviceTime:
-            getCurrentTimeResponse(response);
+            // getCurrentTimeResponse(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getUserPersonalInfo:
-            getUserPersonalInfoResponse(response);
+            // getUserPersonalInfoResponse(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getDetailedCurrentDayActivityData:
-            dayActivityResponse(response);
+            // dayActivityResponse(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getDistanceUnit:
-            getDistanceUnitResponse(response);
+            // getDistanceUnitResponse(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getMode:
-            getActivityOrSleepModeResponce(response);
+            // getActivityOrSleepModeResponce(response);
+            writeCallback.success(response);
             break;
           default:
-            writeCallback.success("true");
+            LOG.d(TAG, "default!! " + response[0]);
+            writeCallback.success(response);
         }
       }
 
