@@ -208,10 +208,9 @@ public class Peripheral extends BluetoothGattCallback {
 
             return object;
         }
-        catch (JSONException e) { // TODO better error handling
-            LOG.e(TAG, "JSONException" + e);
+        catch (JSONException e) { // this shouldn't happen
+            LOG.e(TAG, "onSuccessCall: JSONException" + e);
             e.printStackTrace();
-            throw new JSONException(e.toString());
         }
     }
 
