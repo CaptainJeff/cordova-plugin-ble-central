@@ -316,14 +316,15 @@ public class Peripheral extends BluetoothGattCallback {
             PluginResult result = new PluginResult(PluginResult.Status.OK, value);
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
+            JSONObject response;
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + value);
             if (value[0] == 0x27) {
-              JSONObject response = onSuccessCall(value);
+              response = onSuccessCall(value);
               LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
             } else {
 
-              JSONObject response = onSuccessCall(value);
+              response = onSuccessCall(value);
               LOG.d(TAG, "onCharacteristicChangedResponse: else " + response);
             }
             
