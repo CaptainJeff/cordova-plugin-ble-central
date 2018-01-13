@@ -180,10 +180,18 @@ public class Peripheral extends BluetoothGattCallback {
     }
 
     static JSONObject byteArrayToJSON(byte[] bytes) throws JSONException {
-        JSONObject object = new JSONObject();
-        object.put("CDVType", "ArrayBuffer");
-        object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
-        return object;
+        try {
+            LOG.e(TAG, "byteArrayToJSON" + bytes);
+            JSONObject object = new JSONObject();
+            object.put("CDVType", "ArrayBuffer");
+            object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
+            return object;
+        }
+        catch (JSONException e) { // TODO better error handling
+            LOG.e(TAG, "JSONException" + e);
+            e.printStackTrace();
+        }
+        
     }
 
     public boolean isConnected() {
