@@ -255,12 +255,6 @@ public class Peripheral extends BluetoothGattCallback {
       LOG.e(TAG, "getSoftwareVersion 1:" + bytes);
       JSONObject response = new JSONObject();
       try {
-          LOG.e(TAG, "getSoftwareVersion 2:" + bytes);
-          LOG.e(TAG, "getSoftwareVersion 3:" + bytes[0]);
-    
-          // object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
-          // object.put("data2", bytes);
-
           byte[] version = new byte[14];
           for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
             version[i - 1] = bytes[i];
@@ -273,37 +267,13 @@ public class Peripheral extends BluetoothGattCallback {
           catch(JSONException e) {
             e.printStackTrace();
           }
-
-
-
-          // JSONObject student2 = new JSONObject();
-          // try {
-          //     student2.put("id", "2");
-          //     student2.put("name", "NAME OF STUDENT2");
-          //     student2.put("year", "4rd");
-          //     student2.put("curriculum", "scicence");
-          //     student2.put("birthday", "5/5/1993");
-
-          // } catch (JSONException e) {
-          //     // TODO Auto-generated catch block
-          //     e.printStackTrace();
-          // }
-
-
-          // JSONArray jsonArray = new JSONArray();
-
-          // jsonArray.put(student1);
-          // jsonArray.put(student2);
-
-          // JSONObject studentsObj = new JSONObject();
-          // object.put("Students", jsonArray);
       }
       catch (JSONException e) { // this shouldn't happen
           LOG.e(TAG, "onSuccessCall: JSONException" + e);
           e.printStackTrace();
       }
 
-      return object;
+      return response;
   }
 
     public boolean isConnected() {
