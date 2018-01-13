@@ -311,13 +311,22 @@ public class Peripheral extends BluetoothGattCallback {
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
 
         if (callback != null) {
-        
-            PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
+
+            byte value = characteristic.getValue();
+            PluginResult result = new PluginResult(PluginResult.Status.OK, value);
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
             // writeCallback.sendPluginResult(result);
-            LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
-            JSONObject response = onSuccessCall(characteristic.getValue());
+            LOG.d(TAG, "onCharacteristicChangedResponse1 " + value);
+            if (value[0] == 0x27) {
+              JSONObject response = onSuccessCall(value);
+              LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+            } else {
+
+              JSONObject response = onSuccessCall(value);
+              LOG.d(TAG, "onCharacteristicChangedResponse: else " + response);
+            }
+            
             
             LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
             writeCallback.success(response);
