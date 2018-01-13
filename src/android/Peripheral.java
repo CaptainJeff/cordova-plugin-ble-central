@@ -401,7 +401,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
     }
 
-    @Override
     public JSONObject parseResponse(byte[] value) {
       JSONObject response;
 
