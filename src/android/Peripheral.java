@@ -302,52 +302,52 @@ public class Peripheral extends BluetoothGattCallback {
     void parseDataResponse(final byte[] response) {
         LOG.d(TAG, "parseDataResponse" + response[0]);
         LOG.d(TAG, "getSoftwareVersion" + Helper.CommandCode.getSoftwareVersion);
-        JSONObject object = new JSONObject();
+        
         switch (response[0]) {
           case Helper.CommandCode.getDevicesBatteryStatus:
             // batteryResponse(response);
-            return object;
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getTargetSteps:
             // getTargetStepsResponse(response);
-            return object;
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getSoftwareVersion:
             LOG.d(TAG, "getSoftwareVersionsuccess" + response[0]);
-            
+
             getSoftVersionResponse(response);
             break;
           case Helper.CommandCode.getDeviceName:
-            return object;
             // getDeviceNameResponce(response);
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getTimeFormat:
             // getTimeFormatResponse(response);
-            return object;
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getDeviceTime:
             // getCurrentTimeResponse(response);
-            return object;
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getUserPersonalInfo:
             // getUserPersonalInfoResponse(response);
-            return object;
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getDetailedCurrentDayActivityData:
             // dayActivityResponse(response);
-            return object;
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getDistanceUnit:
             // getDistanceUnitResponse(response);
-            return object;
+            writeCallback.success(response);
             break;
           case Helper.CommandCode.getMode:
             // getActivityOrSleepModeResponce(response);
-            return object;
+            writeCallback.success(response);
             break;
           default:
             LOG.d(TAG, "default!! " + response[0]);
-            return object;
+            writeCallback.success(response);
         }
       }
 
@@ -400,12 +400,12 @@ public class Peripheral extends BluetoothGattCallback {
             JSONObject studentsObj = new JSONObject();
             object.put("Students", jsonArray);
             // writeCallback.success(versionNumber);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             LOG.e(TAG, "onSuccessCall: JSONException" + e);
             e.printStackTrace();
         }
 
-        return object;
+        writeCallback.success(object);
     }
 
     @Override
@@ -426,10 +426,10 @@ public class Peripheral extends BluetoothGattCallback {
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
             // JSONObject response = onSuccessCall(characteristic.getValue());
-            JSONObject response = parseDataResponse(characteristic.getValue());
+            parseDataResponse(characteristic.getValue());
             
-            LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
-            writeCallback.success(response);
+            // LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
+            // writeCallback.success(response);
         }
     }
 
