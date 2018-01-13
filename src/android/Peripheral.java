@@ -298,116 +298,7 @@ public class Peripheral extends BluetoothGattCallback {
         }
 
     }
-
-    void parseDataResponse(final byte[] response) {
-        LOG.d(TAG, "parseDataResponse" + response[0]);
-        LOG.d(TAG, "getSoftwareVersion" + Helper.CommandCode.getSoftwareVersion);
-        
-        switch (response[0]) {
-          case Helper.CommandCode.getDevicesBatteryStatus:
-            // batteryResponse(response);
-            writeCallback.success(response);
-            break;
-          case Helper.CommandCode.getTargetSteps:
-            // getTargetStepsResponse(response);
-            writeCallback.success(response);
-            break;
-          case Helper.CommandCode.getSoftwareVersion:
-            LOG.d(TAG, "getSoftwareVersionsuccess" + response[0]);
-
-            getSoftVersionResponse(response);
-            break;
-          case Helper.CommandCode.getDeviceName:
-            // getDeviceNameResponce(response);
-            writeCallback.success(response);
-            break;
-          case Helper.CommandCode.getTimeFormat:
-            // getTimeFormatResponse(response);
-            writeCallback.success(response);
-            break;
-          case Helper.CommandCode.getDeviceTime:
-            // getCurrentTimeResponse(response);
-            writeCallback.success(response);
-            break;
-          case Helper.CommandCode.getUserPersonalInfo:
-            // getUserPersonalInfoResponse(response);
-            writeCallback.success(response);
-            break;
-          case Helper.CommandCode.getDetailedCurrentDayActivityData:
-            // dayActivityResponse(response);
-            writeCallback.success(response);
-            break;
-          case Helper.CommandCode.getDistanceUnit:
-            // getDistanceUnitResponse(response);
-            writeCallback.success(response);
-            break;
-          case Helper.CommandCode.getMode:
-            // getActivityOrSleepModeResponce(response);
-            writeCallback.success(response);
-            break;
-          default:
-            LOG.d(TAG, "default!! " + response[0]);
-            writeCallback.success(response);
-        }
-      }
-
-    static JSONObject getSoftVersionResponse(byte[] response) {
-        JSONObject object = new JSONObject();
-        try {
-            LOG.d(TAG, "getSoftVersionResponseFunction");
-            byte[] version = new byte[14];
-            for (int i = 1; response[i] != 0x00 && i < 6; i++) {
-                version[i - 1] = response[i];
-            }
-            String versionNumber = new String(version, "UTF-8").trim();
-
-            LOG.d(TAG, "=======SOFT VERSION=====response" + response[0]);
-            LOG.d(TAG, "=======SOFT VERSION=======" + versionNumber);
-
-
-            JSONObject student1 = new JSONObject();
-            try {
-                student1.put("id", "3");
-                student1.put("name", "NAME OF STUDENT");
-                student1.put("year", "3rd");
-                student1.put("curriculum", "Arts");
-                student1.put("birthday", "5/5/1993");
-
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            JSONObject student2 = new JSONObject();
-            try {
-                student2.put("id", "2");
-                student2.put("name", "NAME OF STUDENT2");
-                student2.put("year", "4rd");
-                student2.put("curriculum", "scicence");
-                student2.put("birthday", "5/5/1993");
-
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-
-            JSONArray jsonArray = new JSONArray();
-
-            jsonArray.put(student1);
-            jsonArray.put(student2);
-
-            JSONObject studentsObj = new JSONObject();
-            object.put("Students", jsonArray);
-            // writeCallback.success(versionNumber);
-        } catch (Exception e) {
-            LOG.e(TAG, "onSuccessCall: JSONException" + e);
-            e.printStackTrace();
-        }
-
-        return object;
-        // writeCallback.success(object);
-    }
+    
 
     @Override
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
@@ -427,9 +318,6 @@ public class Peripheral extends BluetoothGattCallback {
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
             JSONObject response = onSuccessCall(characteristic.getValue());
-            // JSONObject response = getSoftVersionResponse(characteristic.getValue());
-
-
             
             LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
             writeCallback.success(response);
