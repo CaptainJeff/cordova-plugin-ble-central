@@ -262,8 +262,8 @@ public class Peripheral extends BluetoothGattCallback {
           // object.put("data2", bytes);
 
           byte[] version = new byte[14];
-          for (int i = 1; response[i] != 0x00 && i < 6; i++) {
-            version[i - 1] = response[i];
+          for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
+            version[i - 1] = bytes[i];
           }
           String versionNumber = new String(version, "UTF-8").trim();
 
