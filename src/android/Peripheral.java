@@ -312,9 +312,9 @@ public class Peripheral extends BluetoothGattCallback {
             writeCallback.success(response);
             break;
           case Helper.CommandCode.getSoftwareVersion:
-            LOG.d(TAG, "getSoftwareVersionsuccess");
-            writeCallback.success(response);
-            // getSoftVersionResponse(response);
+            LOG.d(TAG, "getSoftwareVersionsuccess", response[0]);
+
+            getSoftVersionResponse(response);
             break;
           case Helper.CommandCode.getDeviceName:
             // getDeviceNameResponce(response);
@@ -349,6 +349,22 @@ public class Peripheral extends BluetoothGattCallback {
             writeCallback.success(response);
         }
       }
+
+    void getSoftVersionResponse(byte[] response) {
+        try {
+            LOG.d(TAG, "getSoftVersionResponseFunction");
+            byte[] version = new byte[14];
+            for (int i = 1; response[i] != 0x00 && i < 6; i++) {
+                version[i - 1] = response[i];
+            }
+            String versionNumber = new String(version, "UTF-8").trim();
+
+            LOG.d(TAG, "=======SOFT VERSION=======", versionNumber);
+            writeCallback.success(versionNumber);
+        } catch (Exception ex) {
+            writeCallback.success("false");
+        }
+    }
 
     @Override
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
