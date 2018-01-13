@@ -303,38 +303,40 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG, "parseDataResponse" + response[0]);
         LOG.d(TAG, "getSoftwareVersion" + Helper.CommandCode.getSoftwareVersion);
         switch (response[0]) {
-        //   case getDevicesBatteryStatus:
-        //     batteryResponse(response);
-        //     break;
-        //   case getTargetSteps:
-        //     getTargetStepsResponse(response);
-        //     break;
+          case Helper.CommandCode.getDevicesBatteryStatus:
+            batteryResponse(response);
+            break;
+          case Helper.CommandCode.getTargetSteps:
+            getTargetStepsResponse(response);
+            break;
           case Helper.CommandCode.getSoftwareVersion:
             LOG.d(TAG, "getSoftwareVersionsuccess");
             writeCallback.success(response);
             // getSoftVersionResponse(response);
             break;
-        //   case getDeviceName:
-        //     getDeviceNameResponce(response);
-        //     break;
-        //   case getTimeFormat:
-        //     getTimeFormatResponse(response);
-        //     break;
-        //   case getDeviceTime:
-        //     getCurrentTimeResponse(response);
-        //     break;
-        //   case getUserPersonalInfo:
-        //     getUserPersonalInfoResponse(response);
-        //     break;
-        //   case getDetailedCurrentDayActivityData:
-        //     dayActivityResponse(response);
-        //     break;
-        //   case getDistanceUnit:
-        //     getDistanceUnitResponse(response);
-        //     break;
-        //   case getMode:
-        //     getActivityOrSleepModeResponce(response);
-        //     break;
+          case Helper.CommandCode.getDeviceName:
+            getDeviceNameResponce(response);
+            break;
+          case Helper.CommandCode.getTimeFormat:
+            getTimeFormatResponse(response);
+            break;
+          case Helper.CommandCode.getDeviceTime:
+            getCurrentTimeResponse(response);
+            break;
+          case Helper.CommandCode.getUserPersonalInfo:
+            getUserPersonalInfoResponse(response);
+            break;
+          case Helper.CommandCode.getDetailedCurrentDayActivityData:
+            dayActivityResponse(response);
+            break;
+          case Helper.CommandCode.getDistanceUnit:
+            getDistanceUnitResponse(response);
+            break;
+          case Helper.CommandCode.getMode:
+            getActivityOrSleepModeResponce(response);
+            break;
+          default:
+            writeCallback.success("true");
         }
       }
 
