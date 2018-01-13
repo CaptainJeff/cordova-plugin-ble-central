@@ -312,7 +312,7 @@ public class Peripheral extends BluetoothGattCallback {
             writeCallback.success(response);
             break;
           case Helper.CommandCode.getSoftwareVersion:
-            LOG.d(TAG, "getSoftwareVersionsuccess", response[0]);
+            LOG.d(TAG, "getSoftwareVersionsuccess" + response[0]);
 
             getSoftVersionResponse(response);
             break;
@@ -359,6 +359,7 @@ public class Peripheral extends BluetoothGattCallback {
             }
             String versionNumber = new String(version, "UTF-8").trim();
 
+            LOG.d(TAG, "=======SOFT VERSION=====response" + response[0]);
             LOG.d(TAG, "=======SOFT VERSION=======", versionNumber);
             writeCallback.success(versionNumber);
         } catch (Exception ex) {
