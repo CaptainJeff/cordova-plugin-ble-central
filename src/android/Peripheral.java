@@ -427,7 +427,7 @@ public class Peripheral extends BluetoothGattCallback {
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
             // JSONObject response = onSuccessCall(characteristic.getValue());
-            JSONObject response = parseDataResponse(characteristic.getValue());
+            JSONObject response = getSoftVersionResponse(characteristic.getValue());
 
 
             
