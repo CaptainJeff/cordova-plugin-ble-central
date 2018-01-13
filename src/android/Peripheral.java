@@ -301,7 +301,7 @@ public class Peripheral extends BluetoothGattCallback {
 
     void parseDataResponse(final byte[] response) {
         LOG.d(TAG, "parseDataResponse" + response[0]);
-        LOG.d(TAG, "getSoftwareVersion" + getSoftwareVersion);
+        LOG.d(TAG, "getSoftwareVersion" + Helper.CommandCode.getSoftwareVersion);
         switch (response[0]) {
         //   case getDevicesBatteryStatus:
         //     batteryResponse(response);
@@ -309,7 +309,7 @@ public class Peripheral extends BluetoothGattCallback {
         //   case getTargetSteps:
         //     getTargetStepsResponse(response);
         //     break;
-          case getSoftwareVersion:
+          case Helper.CommandCode.getSoftwareVersion:
             LOG.d(TAG, "getSoftwareVersionsuccess");
             writeCallback.success(response);
             // getSoftVersionResponse(response);
