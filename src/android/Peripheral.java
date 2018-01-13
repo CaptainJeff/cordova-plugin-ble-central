@@ -394,6 +394,7 @@ public class Peripheral extends BluetoothGattCallback {
             //   response = onSuccessCall(value);
             //   LOG.d(TAG, "onCharacteristicChangedResponse: else " + response);
             // }
+            response = parseResponse(value);
             
             
             LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
