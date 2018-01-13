@@ -312,7 +312,7 @@ public class Peripheral extends BluetoothGattCallback {
 
         if (callback != null) {
 
-            byte value = characteristic.getValue();
+            byte[] value = characteristic.getValue();
             PluginResult result = new PluginResult(PluginResult.Status.OK, value);
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
