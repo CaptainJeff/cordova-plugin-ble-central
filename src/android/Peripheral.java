@@ -351,7 +351,7 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-    void getSoftVersionResponse(byte[] response) {
+    static JSONObject getSoftVersionResponse(byte[] response) {
         JSONObject object = new JSONObject();
         try {
             LOG.d(TAG, "getSoftVersionResponseFunction");
@@ -405,7 +405,8 @@ public class Peripheral extends BluetoothGattCallback {
             e.printStackTrace();
         }
 
-        writeCallback.success(object);
+        return object;
+        // writeCallback.success(object);
     }
 
     @Override
@@ -426,10 +427,12 @@ public class Peripheral extends BluetoothGattCallback {
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
             // JSONObject response = onSuccessCall(characteristic.getValue());
-            parseDataResponse(characteristic.getValue());
+            JSONObject response = parseDataResponse(characteristic.getValue());
+
+
             
-            // LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
-            // writeCallback.success(response);
+            LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
+            writeCallback.success(response);
         }
     }
 
