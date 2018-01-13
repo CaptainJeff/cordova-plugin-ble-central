@@ -351,7 +351,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-    @Override
     static JSONObject getSoftVersionResponse(byte[] response) {
         JSONObject object = new JSONObject();
         try {
