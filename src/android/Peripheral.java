@@ -198,9 +198,10 @@ public class Peripheral extends BluetoothGattCallback {
     }
 
     static JSONObject onSuccessCall(byte[] bytes) {
+        LOG.e(TAG, "onSuccessCall 1:" + bytes);
         JSONObject object = new JSONObject();
         try {
-            LOG.e(TAG, "onSuccessCall" + bytes);
+            LOG.e(TAG, "onSuccessCall 2:" + bytes);
       
             object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
 
@@ -279,7 +280,7 @@ public class Peripheral extends BluetoothGattCallback {
             callback.sendPluginResult(result);
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
-            JSObject response = onSuccessCall(characteristic.getValue());
+            JSONObject response = onSuccessCall(characteristic.getValue());
             
             LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
             writeCallback.success(response.toString());
