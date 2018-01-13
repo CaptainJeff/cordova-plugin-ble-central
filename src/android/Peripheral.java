@@ -204,7 +204,7 @@ public class Peripheral extends BluetoothGattCallback {
         return response;
     }
 
-    static JSONObject getSoftwareVersion(byte[] bytes) {
+    public JSONObject getSoftwareVersion(byte[] bytes) {
       JSONObject response = new JSONObject();
       try {
           byte[] version = new byte[14];
@@ -227,6 +227,7 @@ public class Peripheral extends BluetoothGattCallback {
           e.printStackTrace();
       }
 
+      writeCallback.success(reponse);
       return response;
   }
 
@@ -298,7 +299,13 @@ public class Peripheral extends BluetoothGattCallback {
             JSONObject response;
 
             response = parseResponse(value);
-            writeCallback.success(response);
+            if (value[0] == Helper.CommandCode.getSoftwareVersion) {
+              // response = getSoftwareVersion(value);
+              // LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+            } else {
+              writeCallback.success(response);
+            }
+            
         }
     }
 
@@ -338,7 +345,6 @@ public class Peripheral extends BluetoothGattCallback {
       } else {
 
         response = onSuccessCall(value);
-        LOG.d(TAG, "onCharacteristicChangedResponse: else " + response);
       }
 
       LOG.d(TAG, "parseResponse! " + response);
@@ -768,6 +774,28 @@ public class Peripheral extends BluetoothGattCallback {
         }
 
     }
+
+    // public void getUserPersonalInfoResponse(final byte[] response) {
+    //   String[] result = new String[5];
+    //   result[0] = "gender: " + (response[1] == 0x00 ? "female" : "male");
+    //   result[1] = "age: " + String.valueOf(response[5] < 0 ? response[5] & 0xff : response[5]);
+    //   result[2] = "height: " + String.valueOf(response[3] < 0 ? response[3] & 0xff : response[3]);
+    //   result[3] = "weight: " + String.valueOf(response[4] < 0 ? response[4] & 0xff : response[4]);
+    //   result[4] = "stride length: " + String.valueOf(response[5] < 0 ? response[5] & 0xff : response[5]);
+    //   try {
+    //     JSONArray array = new JSONArray();
+    //     array.put(result[0]);
+    //     array.put(result[1]);
+    //     array.put(result[2]);
+    //     array.put(result[3]);
+    //     array.put(result[4]);
+    //     return array;
+        
+    //   } catch (Exception ex) {
+    //   }
+
+
+    // }
 
     private String generateHashKey(BluetoothGattCharacteristic characteristic) {
         return generateHashKey(characteristic.getService().getUuid(), characteristic);
