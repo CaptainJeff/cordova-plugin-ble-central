@@ -255,18 +255,24 @@ public class Peripheral extends BluetoothGattCallback {
       LOG.e(TAG, "getSoftwareVersion 1:" + bytes);
       JSONObject response = new JSONObject();
       try {
+          LOG.e(TAG, "getSoftwareVersion 2:" + bytes);
+          LOG.e(TAG, "getSoftwareVersion 3:" + bytes[0]);
+    
+       
           byte[] version = new byte[14];
           for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
             version[i - 1] = bytes[i];
           }
           String versionNumber = "0.0.0";
+
           try {
             versionNumber = new String(version, "UTF-8").trim();
-            response.put("version", versionNumber);
           }
-          catch(JSONException e) {
-            e.printStackTrace();
+          catch(Exception ex) {
+            versionNumber = "0.0.0";
           }
+
+          response.put("version", versionNumber);
       }
       catch (JSONException e) { // this shouldn't happen
           LOG.e(TAG, "onSuccessCall: JSONException" + e);
