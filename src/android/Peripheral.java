@@ -299,6 +299,45 @@ public class Peripheral extends BluetoothGattCallback {
 
     }
 
+    void parseDataResponse(final byte[] response) {
+        LOG.d(TAG, "parseDataResponse" + response[0]);
+        LOG.d(TAG, "getSoftwareVersion" + getSoftwareVersion);
+        switch (response[0]) {
+        //   case getDevicesBatteryStatus:
+        //     batteryResponse(response);
+        //     break;
+        //   case getTargetSteps:
+        //     getTargetStepsResponse(response);
+        //     break;
+          case getSoftwareVersion:
+            LOG.d(TAG, "getSoftwareVersionsuccess");
+            writeCallback.success(response);
+            // getSoftVersionResponse(response);
+            break;
+        //   case getDeviceName:
+        //     getDeviceNameResponce(response);
+        //     break;
+        //   case getTimeFormat:
+        //     getTimeFormatResponse(response);
+        //     break;
+        //   case getDeviceTime:
+        //     getCurrentTimeResponse(response);
+        //     break;
+        //   case getUserPersonalInfo:
+        //     getUserPersonalInfoResponse(response);
+        //     break;
+        //   case getDetailedCurrentDayActivityData:
+        //     dayActivityResponse(response);
+        //     break;
+        //   case getDistanceUnit:
+        //     getDistanceUnitResponse(response);
+        //     break;
+        //   case getMode:
+        //     getActivityOrSleepModeResponce(response);
+        //     break;
+        }
+      }
+
     @Override
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         super.onCharacteristicChanged(gatt, characteristic);
@@ -316,10 +355,11 @@ public class Peripheral extends BluetoothGattCallback {
             callback.sendPluginResult(result);
             // writeCallback.sendPluginResult(result);
             LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
-            JSONObject response = onSuccessCall(characteristic.getValue());
+            // JSONObject response = onSuccessCall(characteristic.getValue());
+            parseDataResponse(characteristic.getValue());
             
-            LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
-            writeCallback.success(response);
+            // LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
+            // writeCallback.success(response);
         }
     }
 
