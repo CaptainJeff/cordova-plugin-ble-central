@@ -204,8 +204,44 @@ public class Peripheral extends BluetoothGattCallback {
             LOG.e(TAG, "onSuccessCall 2:" + bytes);
             LOG.e(TAG, "onSuccessCall 3:" + bytes[0]);
       
-            object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
-            object.put("data2", bytes);
+            // object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
+            // object.put("data2", bytes);
+
+
+            JSONObject student1 = new JSONObject();
+            try {
+                student1.put("id", "3");
+                student1.put("name", "NAME OF STUDENT");
+                student1.put("year", "3rd");
+                student1.put("curriculum", "Arts");
+                student1.put("birthday", "5/5/1993");
+
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            JSONObject student2 = new JSONObject();
+            try {
+                student2.put("id", "2");
+                student2.put("name", "NAME OF STUDENT2");
+                student2.put("year", "4rd");
+                student2.put("curriculum", "scicence");
+                student2.put("birthday", "5/5/1993");
+
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+
+            JSONArray jsonArray = new JSONArray();
+
+            jsonArray.put(student1);
+            jsonArray.put(student2);
+
+            JSONObject studentsObj = new JSONObject();
+            object.put("Students", jsonArray);
         }
         catch (JSONException e) { // this shouldn't happen
             LOG.e(TAG, "onSuccessCall: JSONException" + e);
