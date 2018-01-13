@@ -202,8 +202,10 @@ public class Peripheral extends BluetoothGattCallback {
         JSONObject object = new JSONObject();
         try {
             LOG.e(TAG, "onSuccessCall 2:" + bytes);
+            LOG.e(TAG, "onSuccessCall 3:" + bytes[0]);
       
             object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
+            object.put("data2", bytes);
         }
         catch (JSONException e) { // this shouldn't happen
             LOG.e(TAG, "onSuccessCall: JSONException" + e);
