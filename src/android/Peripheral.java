@@ -19,6 +19,8 @@ import android.app.Activity;
 import android.bluetooth.*;
 import android.os.Build;
 import android.util.Base64;
+import jdk.nashorn.api.scripting.JSObject;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.LOG;
 import org.apache.cordova.PluginResult;
@@ -195,6 +197,23 @@ public class Peripheral extends BluetoothGattCallback {
         }
     }
 
+    static JSONObject onSuccessCall(byte[] bytes) {
+        JSONObject object = new JSONObject();
+        try {
+            LOG.e(TAG, "onSuccessCall" + bytes);
+      
+            object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
+
+
+            return object;
+        }
+        catch (JSONException e) { // TODO better error handling
+            LOG.e(TAG, "JSONException" + e);
+            e.printStackTrace();
+            throw new JSONException(e.toString());
+        }
+    }
+
     public boolean isConnected() {
         return connected;
     }
@@ -259,7 +278,11 @@ public class Peripheral extends BluetoothGattCallback {
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
             // writeCallback.sendPluginResult(result);
-            writeCallback.success(byteArrayToJSON(characteristic.getValue()));
+            LOG.d(TAG, "onCharacteristicChangedResponse1 " + characteristic.getValue());
+            JSObject response = onSuccessCall(characteristic.getValue());
+            
+            LOG.d(TAG, "onCharacteristicChangedResponse2 " + response);
+            writeCallback.success(response);
         }
     }
 
