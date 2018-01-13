@@ -265,14 +265,21 @@ public class Peripheral extends BluetoothGattCallback {
           for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
             version[i - 1] = bytes[i];
           }
-
+          String versionNumber;
+          try {
+            versionNumber = new String(version, "UTF-8").trim();
+          }
+          catch(Exception ex) {
+            versionNumber = "0.0.0";
+          }
+          
 
 
           JSONObject student1 = new JSONObject();
           try {
               student1.put("id", "3");
               student1.put("name", "Jaffrey");
-              student1.put("year", new String(version, "UTF-8").trim());
+              student1.put("year", versionNumber);
               student1.put("curriculum", "Arts");
               student1.put("birthday", "5/5/1993");
 
