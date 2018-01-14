@@ -194,6 +194,12 @@ public class Peripheral extends BluetoothGattCallback {
         return object;
     }
 
+    static JSONObject activityDataToObject(ArrayList[] array) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("data", array);
+        return object;
+    }
+
     public boolean isConnected() {
         return connected;
     }
@@ -392,14 +398,17 @@ public class Peripheral extends BluetoothGattCallback {
                 JSONArray list = new JSONArray();
                 try {
                     LOG.d(TAG, "exception ");
-                    list = new JSONArray(dayActivity.toArray(new ActivityData[dayActivity.size()]));
+                    list = new JSONArray(dayActivity);
                 } catch (Exception e) {
                     LOG.d(TAG, "exception " + list);
                     //TODO: handle exception
                 };
+                JSONObject object = new JSONObject();
+                object = activityDataToObject(dayActivity);
                 LOG.d(TAG, "mr list " + list);
+                LOG.d(TAG, "mr list - object" + object);
                 // LOG.d(TAG, "393 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
-                writeCallback.success(list);
+                writeCallback.success(object);
               break;
         //     case LATEST: {
         //       int totalSteps = 0;
