@@ -235,13 +235,51 @@ public class Peripheral extends BluetoothGattCallback {
     }
 
     // @Override
-    // public void parseResponse(byte[] response) {
-    //   super.parseResponse(response);
-    //   LOG.d(TAG, "response~~ " + response);
-    //   LOG.d(TAG, "response~~ " + response[0]);
-
+    public void parseResponse(byte[] value) {
+      LOG.d(TAG, "response~~ " + response);
+      LOG.d(TAG, "response~~ " + response[0]);
       
-    // }
+      if (value[0] == Helper.CommandCode.getSoftwareVersion) {
+        response = getSoftwareVersion(value);
+        LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+      } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.getTargetSteps) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.getDeviceName) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.getTimeFormat) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.getDeviceTime) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.getMode) {
+
+        writeCallback.success();
+      } else if (value[0] == Helper.CommandCode.activateVibrationResponse || value[0] == Helper.CommandCode.activateVibration ) {
+        LOG.d(TAG, "value!!! " + value[0]);
+        // response = onSuccessCall();
+        writeCallback.success();
+      }
+       else {
+
+        writeCallback.success();
+      }
+      
+    }
 
     @Override
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
@@ -255,11 +293,37 @@ public class Peripheral extends BluetoothGattCallback {
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
             // writeCallback.sendPluginResult(result);
-            writeCallback.success();
+            // writeCallback.success();
         }
-
         
-        // parseResponse(characteristic.getValue());
+        parseResponse(characteristic.getValue());
+    }
+
+    public JSONObject getSoftwareVersion(byte[] bytes) {
+      JSONObject response = new JSONObject();
+      try {
+          byte[] version = new byte[14];
+          for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
+            version[i - 1] = bytes[i];
+          }
+          String versionNumber = "0.0.0";
+
+          try {
+            versionNumber = new String(version, "UTF-8").trim();
+          }
+          catch(Exception ex) {
+            versionNumber = "0.0.0";
+          }
+
+          response.put("version", versionNumber);
+      }
+      catch (JSONException e) { // this shouldn't happen
+          LOG.e(TAG, "onSuccessCall: JSONException" + e);
+          e.printStackTrace();
+      }
+
+      writeCallback.success(response);
+      return response;
     }
 
     @Override
