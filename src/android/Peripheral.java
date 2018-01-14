@@ -236,12 +236,12 @@ public class Peripheral extends BluetoothGattCallback {
 
     // @Override
     public void parseResponse(byte[] value) {
-      LOG.d(TAG, "response~~ " + response);
-      LOG.d(TAG, "response~~ " + response[0]);
+      LOG.d(TAG, "response~~ " + value);
+      LOG.d(TAG, "response~~ " + value[0]);
       
       if (value[0] == Helper.CommandCode.getSoftwareVersion) {
-        response = getSoftwareVersion(value);
-        LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+        value = getSoftwareVersion(value);
+        LOG.d(TAG, "onCharacteristicChangedResponse: in " + value);
       } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
 
         writeCallback.success();
