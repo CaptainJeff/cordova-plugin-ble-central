@@ -240,8 +240,9 @@ public class Peripheral extends BluetoothGattCallback {
       LOG.d(TAG, "response~~ " + value[0]);
       
       if (value[0] == Helper.CommandCode.getSoftwareVersion) {
-        value = getSoftwareVersion(value);
-        LOG.d(TAG, "onCharacteristicChangedResponse: in " + value);
+
+        LOG.d(TAG, "getSoftwareVersion: in " + value[0]);
+        getSoftwareVersion(value);
       } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
 
         writeCallback.success();
@@ -299,31 +300,50 @@ public class Peripheral extends BluetoothGattCallback {
         parseResponse(characteristic.getValue());
     }
 
-    public JSONObject getSoftwareVersion(byte[] bytes) {
-      JSONObject response = new JSONObject();
+    // public JSONObject getSoftwareVersion(byte[] bytes) {
+    //   JSONObject response = new JSONObject();
+    //   try {
+    //       byte[] version = new byte[14];
+    //       for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
+    //         version[i - 1] = bytes[i];
+    //       }
+    //       String versionNumber = "0.0.0";
+
+    //       try {
+    //         versionNumber = new String(version, "UTF-8").trim();
+    //       }
+    //       catch(Exception ex) {
+    //         versionNumber = "0.0.0";
+    //       }
+
+    //       response.put("version", versionNumber);
+    //   }
+    //   catch (JSONException e) { // this shouldn't happen
+    //       LOG.e(TAG, "onSuccessCall: JSONException" + e);
+    //       e.printStackTrace();
+    //   }
+
+    //   writeCallback.success(response);
+    //   return response;
+    // }
+
+    void getSoftVersionResponse(byte[] response) {
       try {
-          byte[] version = new byte[14];
-          for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
-            version[i - 1] = bytes[i];
-          }
-          String versionNumber = "0.0.0";
+        byte[] version = new byte[14];
+        for (int i = 1; response[i] != 0x00 && i < 6; i++) {
+          version[i - 1] = response[i];
+        }
+        String versionNumber = "0.0.0";
+        versionNumber = new String(version, "UTF-8").trim();
 
-          try {
-            versionNumber = new String(version, "UTF-8").trim();
-          }
-          catch(Exception ex) {
-            versionNumber = "0.0.0";
-          }
-
-          response.put("version", versionNumber);
+        writeCallback.success(versionNumber);
+        // timeFromSync = 0;
+        // Log.wtf("=======SOFT VERSION=======", new String(version, "UTF-8").trim());
+        // trackerAPICallback.onConnect(true);
+        // isConnected = true;
+        // trackerAPICallback.onVersionNumber(true, new String(version, "UTF-8").trim());
+      } catch (Exception ex) {
       }
-      catch (JSONException e) { // this shouldn't happen
-          LOG.e(TAG, "onSuccessCall: JSONException" + e);
-          e.printStackTrace();
-      }
-
-      writeCallback.success(response);
-      return response;
     }
 
     @Override
