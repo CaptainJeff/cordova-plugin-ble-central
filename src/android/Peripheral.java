@@ -396,14 +396,17 @@ public class Peripheral extends BluetoothGattCallback {
                 LOG.d(TAG, "389 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
             //   trackerAPICallback.onDailyActivityResponse(true, dayActivity.toArray(new ActivityData[dayActivity.size()]));
                 JSONArray list = new JSONArray();
+                JSONObject object = new JSONObject();
                 try {
-                    LOG.d(TAG, "exception ");
-                    list = new JSONArray(dayActivity);
+                    LOG.d(TAG, "exception 1" + dayActivity[0]);
+                    // list = new JSONArray(dayActivity);
+
+                    object.put("data", dayActivity);
                 } catch (Exception e) {
-                    LOG.d(TAG, "exception " + list);
+                    LOG.d(TAG, "exception 2" + list);
                     //TODO: handle exception
                 };
-                JSONObject object = new JSONObject();
+                
                 // object = activityDataToObject(dayActivity);
                 LOG.d(TAG, "mr list " + list);
                 LOG.d(TAG, "mr list - object" + object);
