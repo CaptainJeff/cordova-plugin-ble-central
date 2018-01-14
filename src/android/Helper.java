@@ -168,6 +168,8 @@ public class Helper {
         static final byte getUserPersonalInfoError  = (byte)0xC2;
 
         static final byte getDetailedCurrentDayActivityData = 0x43;
+        static final byte getDetailedCurrentDayActivityDataResponse = 67;
+        static final byte getDetailedCurrentDayActivityDataResponseByte = (byte)0x43;
         static final byte getDetailedCurrentDayActivityDataError = (byte)0xC3;
 
         static final byte deleteActivityData = 0x04;

@@ -245,6 +245,9 @@ public class Peripheral extends BluetoothGattCallback {
     public void parseResponse(byte[] value) {
       LOG.d(TAG, "response~~ " + value);
       LOG.d(TAG, "response~~ " + value[0]);
+      LOG.d(TAG, "Helper.CommandCode.getDetailedCurrentDayActivityData~~ " + Helper.CommandCode.getDetailedCurrentDayActivityData);
+      LOG.d(TAG, "Helper.CommandCode.getDetailedCurrentDayActivityData~~ " + Helper.CommandCode.getDetailedCurrentDayActivityDataResponse);
+      LOG.d(TAG, "Helper.CommandCode.getDetailedCurrentDayActivityData~~ " + Helper.CommandCode.getDetailedCurrentDayActivityDataResponseByte);
       
       if (value[0] == Helper.CommandCode.getSoftwareVersion) {
         getSoftVersionResponse(value);
@@ -267,8 +270,8 @@ public class Peripheral extends BluetoothGattCallback {
 
         writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
-
-        writeCallback.success();
+        LOG.d(TAG, "dayActivityResponse " + value[0]);
+        dayActivityResponse(value);
       } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
 
         writeCallback.success();
