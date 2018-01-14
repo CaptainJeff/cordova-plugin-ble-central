@@ -1,4 +1,4 @@
-package com.selvera.bluetooth;
+package com.megster.cordova.ble.central;
 
 import android.util.Log;
 import java.text.SimpleDateFormat;
