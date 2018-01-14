@@ -254,37 +254,48 @@ public class Peripheral extends BluetoothGattCallback {
       } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
 
         writeCallback.success();
+        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getTargetSteps) {
 
         writeCallback.success();
+        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getDeviceName) {
 
         writeCallback.success();
+        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getTimeFormat) {
 
         writeCallback.success();
+        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getDeviceTime) {
 
         writeCallback.success();
+        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
 
         writeCallback.success();
+        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
         LOG.d(TAG, "dayActivityResponse " + value[0]);
         dayActivityResponse(value);
       } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
 
         writeCallback.success();
+        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getMode) {
 
         writeCallback.success();
+        commandCompleted();
       } else if (value[0] == Helper.CommandCode.activateVibrationResponse || value[0] == Helper.CommandCode.activateVibration ) {
         LOG.d(TAG, "value!!! " + value[0]);
         // response = onSuccessCall();
         writeCallback.success();
+        commandCompleted();
       }
        else {
+        LOG.d(TAG, "elllllse!!! " + value[0]);
         writeCallback.success();
+        commandCompleted();
       }
       
     }
@@ -316,6 +327,7 @@ public class Peripheral extends BluetoothGattCallback {
       if (response[6] != (byte) (0xff)) {
         LOG.d(TAG, "if " + response[6]);
         dayActivity.add(new ActivityData(response));
+        LOG.d(TAG, "dayActivity " + String.valueOf(dayActivity));
       } else {
         LOG.d(TAG, "else " + response[6]);
         daySleep.add(new SleepData(response));
@@ -453,6 +465,7 @@ public class Peripheral extends BluetoothGattCallback {
         versionNumber = new String(version, "UTF-8").trim();
 
         writeCallback.success(versionNumber);
+        commandCompleted();
         // timeFromSync = 0;
         // Log.wtf("=======SOFT VERSION=======", new String(version, "UTF-8").trim());
         // trackerAPICallback.onConnect(true);
@@ -475,6 +488,7 @@ public class Peripheral extends BluetoothGattCallback {
                 readCallback.error("Error reading " + characteristic.getUuid() + " status=" + status);
             }
 
+            LOG.d(TAG, "readCallback = null " + characteristic);
             readCallback = null;
 
         }
@@ -498,7 +512,7 @@ public class Peripheral extends BluetoothGattCallback {
         //     writeCallback = null;
         // }
 
-        commandCompleted();
+        // commandCompleted();
     }
 
     @Override
