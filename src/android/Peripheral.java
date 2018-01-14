@@ -234,14 +234,14 @@ public class Peripheral extends BluetoothGattCallback {
 
     }
 
-    @Override
-    public void parseResponse(byte[] response) {
-      super.parseResponse(response);
-      LOG.d(TAG, "response~~ " + response);
-      LOG.d(TAG, "response~~ " + response[0]);
+    // @Override
+    // public void parseResponse(byte[] response) {
+    //   super.parseResponse(response);
+    //   LOG.d(TAG, "response~~ " + response);
+    //   LOG.d(TAG, "response~~ " + response[0]);
 
       
-    }
+    // }
 
     @Override
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
@@ -254,9 +254,10 @@ public class Peripheral extends BluetoothGattCallback {
             PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
+            writeCallback.sendPluginResult(result);
         }
 
-        writeCallback.sendPluginResult(result);
+        
         // parseResponse(characteristic.getValue());
     }
 
