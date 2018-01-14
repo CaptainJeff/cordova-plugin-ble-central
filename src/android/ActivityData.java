@@ -15,7 +15,7 @@ public class ActivityData extends Object {
   float distance;
 
   public ActivityData(byte[] data){
-      Log.d("ActivityData " + data);
+    //   Log.d("ActivityData " + data);
       time =  "20" ;
       int year = Integer.valueOf(Integer.toString(data[2],16));
       int month = Integer.valueOf(Integer.toString(data[3],16));
@@ -47,10 +47,10 @@ public class ActivityData extends Object {
   }
 
   public void print(){
-        Log.d("ActivityData", "Time: (" + time
-              + ") calories: (" + String.valueOf(calories)
-              + ") steps: (" + String.valueOf(steps)
-              + ") distance: (" + String.valueOf(distance)+")");
+        // Log.d("ActivityData", "Time: (" + time
+        //       + ") calories: (" + String.valueOf(calories)
+        //       + ") steps: (" + String.valueOf(steps)
+        //       + ") distance: (" + String.valueOf(distance)+")");
   }
 
   public String getTime() {
