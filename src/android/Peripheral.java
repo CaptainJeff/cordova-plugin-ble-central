@@ -394,24 +394,9 @@ public class Peripheral extends BluetoothGattCallback {
             }
             case DAY:
                 LOG.d(TAG, "389 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
-            //   trackerAPICallback.onDailyActivityResponse(true, dayActivity.toArray(new ActivityData[dayActivity.size()]));
-                JSONArray list = new JSONArray();
-                JSONObject object = new JSONObject();
-                try {
-                    LOG.d(TAG, "exception 1");
-                    // list = new JSONArray(dayActivity);
-
-                    object.put("data", dayActivity.toArray(new ActivityData[dayActivity.size()]));
-                } catch (Exception e) {
-                    LOG.d(TAG, "exception 2" + list);
-                    //TODO: handle exception
-                };
-                
-                // object = activityDataToObject(dayActivity);
-                LOG.d(TAG, "mr list " + list);
-                LOG.d(TAG, "mr list - object" + object);
+                dayActivityToJSON(dayActivity.toArray(new ActivityData[dayActivity.size()]));
                 // LOG.d(TAG, "393 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
-                writeCallback.success(object);
+                LOG.d(TAG, "399 dayActivityToJSON");
               break;
         //     case LATEST: {
         //       int totalSteps = 0;
@@ -967,5 +952,22 @@ public class Peripheral extends BluetoothGattCallback {
     private String generateHashKey(UUID serviceUUID, BluetoothGattCharacteristic characteristic) {
         return String.valueOf(serviceUUID) + "|" + characteristic.getUuid() + "|" + characteristic.getInstanceId();
     }
+
+    void dayActivityToJSON(ActivityData[] activity) {
+        JSONArray jsonArray = new JSONArray();
+        try {
+          for (int i = 0; i < activity.length; i++) {
+            JSONObject activityObj = new JSONObject();
+            activityObj.put("time", activity[i].time);
+            activityObj.put("calories", activity[i].calories);
+            activityObj.put("steps", activity[i].steps);
+            activityObj.put("distance", activity[i].distance);
+            jsonArray.put(activityObj);
+          }
+          writeCallback.success(jsonArray.toString());
+        } catch (Exception ex) {
+            writeCallback.error(ex.getMessage());
+        }
+      }
 
 }
