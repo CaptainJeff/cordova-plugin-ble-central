@@ -389,7 +389,7 @@ public class Peripheral extends BluetoothGattCallback {
             case DAY:
                 LOG.d(TAG, "389 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
             //   trackerAPICallback.onDailyActivityResponse(true, dayActivity.toArray(new ActivityData[dayActivity.size()]));
-                JSONArray list = dayActivity.toArray(new ActivityData[dayActivity.size()]);
+                JSONArray list = new JSONArray(dayActivity.toArray(new ActivityData[dayActivity.size()]));
                 LOG.d(TAG, "393 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
               writeCallback.success(list);
               break;
