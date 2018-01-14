@@ -406,6 +406,7 @@ public class Peripheral extends BluetoothGattCallback {
       else {
         LOG.d(TAG, "388 " + response[0]);
         LOG.d(TAG, "389 " + String.valueOf(dayActivity.size()));
+        LOG.d(TAG, "390 " + String.valueOf(dayActivity));
         // switch (state) {
         //   case SUMMARY:
         //     trackerAPICallback.onSummaryResponse(true, summaryDay, 0, 0, 0);
@@ -430,6 +431,7 @@ public class Peripheral extends BluetoothGattCallback {
         //     break;
         // }
       }
+      commandCompleted();
     }
 
     // public JSONObject getSoftwareVersion(byte[] bytes) {
