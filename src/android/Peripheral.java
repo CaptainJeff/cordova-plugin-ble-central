@@ -310,7 +310,7 @@ public class Peripheral extends BluetoothGattCallback {
             
         }
         
-        commandCompleted();
+        
     }
 
     public JSONObject parseResponse(byte[] value) {
@@ -392,7 +392,7 @@ public class Peripheral extends BluetoothGattCallback {
             writeCallback = null;
         }
 
-        
+        commandCompleted();
     }
 
     @Override
