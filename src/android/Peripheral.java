@@ -315,7 +315,9 @@ public class Peripheral extends BluetoothGattCallback {
             // writeCallback.success();
         }
         
-        parseResponse(characteristic.getValue());
+        // parseResponse(characteristic.getValue());
+          writeCallback.success();
+          commandCompleted();
     }
 
     private void dayActivityResponse(byte[] response) {
