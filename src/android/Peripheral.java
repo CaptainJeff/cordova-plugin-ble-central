@@ -293,14 +293,14 @@ public class Peripheral extends BluetoothGattCallback {
         if (callback != null) {
 
             byte[] value = characteristic.getValue();
-            LOG.d(TAG, "value " + value[0]);
+            LOG.d(TAG, "value ~" + value[0]);
             PluginResult result = new PluginResult(PluginResult.Status.OK, value);
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
             JSONObject response;
 
             response = parseResponse(value);
-            if (value[0] == Helper.CommandCode.getSoftwareVersion) {
+            if (value[0] == Helper.CommandCode.getSoftwareVersion || value[0] == Helper.CommandCode.activateVibrationResponse) {
               LOG.d(TAG, "in here??" + value[0]);
               // response = getSoftwareVersion(value);
               // LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
@@ -346,11 +346,15 @@ public class Peripheral extends BluetoothGattCallback {
       } else if (value[0] == Helper.CommandCode.getMode) {
 
         response = onSuccessCall(value);
-      } else {
+      } else if (value[0] == Helper.CommandCode.activateVibrationResponse) {
+        LOG.d(TAG, "value! " + response[0]);
+        response = onSuccessCall();
+      }
+       else {
 
         response = onSuccessCall(value);
       }
-
+      LOG.d(TAG, "parseResponse! " + response[0]);
       LOG.d(TAG, "parseResponse! " + response);
       return response;
     }
