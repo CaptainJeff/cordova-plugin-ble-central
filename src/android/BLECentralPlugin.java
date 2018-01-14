@@ -350,7 +350,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             data[1] = (byte) 0;
             data[15] = Helper.calcCRC(data);
             
-            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+            // int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+            int type = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
             write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
         }
         
