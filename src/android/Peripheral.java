@@ -298,7 +298,8 @@ public class Peripheral extends BluetoothGattCallback {
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
             JSONObject response;
-            parseResponse(value);
+            // parseResponse(value);
+            writeCallback.success();
             // response = parseResponse(value);
             // if (value[0] == Helper.CommandCode.getSoftwareVersion || value[0] == Helper.CommandCode.activateVibrationResponse) {
             //   LOG.d(TAG, "in here??" + value[0]);
