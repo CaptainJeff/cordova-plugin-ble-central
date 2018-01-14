@@ -286,13 +286,14 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG, "onCharacteristicChanged " + characteristic);
 
         LOG.d(TAG, "characteristic.getValue() " + characteristic.getValue());
-        LOG.d(TAG, "characteristic.getValue() " + characteristic.getValue()[0].toString());
+        
 
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
 
         if (callback != null) {
 
             byte[] value = characteristic.getValue();
+            LOG.d(TAG, "value " + value[0]);
             PluginResult result = new PluginResult(PluginResult.Status.OK, value);
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
@@ -300,6 +301,7 @@ public class Peripheral extends BluetoothGattCallback {
 
             response = parseResponse(value);
             if (value[0] == Helper.CommandCode.getSoftwareVersion) {
+              LOG.d(TAG, "in here??" + value[0]);
               // response = getSoftwareVersion(value);
               // LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
             } else {
