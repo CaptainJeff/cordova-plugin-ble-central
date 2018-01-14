@@ -316,7 +316,7 @@ public class Peripheral extends BluetoothGattCallback {
     public JSONObject parseResponse(byte[] value) {
       JSONObject response = new JSONObject();
       
-
+      LOG.d(TAG, "parseResponse!parseResponse " + value[0]);
       if (value[0] == Helper.CommandCode.getSoftwareVersion) {
         response = getSoftwareVersion(value);
         LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
@@ -356,7 +356,7 @@ public class Peripheral extends BluetoothGattCallback {
 
         response = onSuccessCall(value);
         writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.activateVibrationResponse) {
+      } else if (value[0] == Helper.CommandCode.activateVibrationResponse || value[0] == Helper.CommandCode.activateVibration ) {
         LOG.d(TAG, "value!!! " + value[0]);
         // response = onSuccessCall();
         writeCallback.success();
