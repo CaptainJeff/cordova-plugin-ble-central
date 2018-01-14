@@ -398,7 +398,7 @@ public class Peripheral extends BluetoothGattCallback {
                 JSONArray list = new JSONArray();
                 JSONObject object = new JSONObject();
                 try {
-                    LOG.d(TAG, "exception 1" + dayActivity[0]);
+                    LOG.d(TAG, "exception 1");
                     // list = new JSONArray(dayActivity);
 
                     object.put("data", dayActivity);
