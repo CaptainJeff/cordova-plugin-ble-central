@@ -1,6 +1,7 @@
 package com.megster.cordova.ble.central;
 
-import org.apache.cordova.LOG;
+// import org.apache.cordova.LOG;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class SleepData {
     }
 
     public void print(){
-        LOG.d("SleepData", "Time: (" + time
-                + ") restfulness : (" + String.valueOf(restfulness)+")");
+        // LOG.d("SleepData", "Time: (" + time
+        //         + ") restfulness : (" + String.valueOf(restfulness)+")");
     }
 }
