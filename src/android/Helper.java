@@ -210,6 +210,7 @@ public class Helper {
         static final byte getSoftwareVersionError = (byte)0xA7;
 
         static final byte activateVibration = 0x36;
+        static final byte activateVibrationResponse = 0x54;
         static final byte activateVibrationError = (byte)0xB6;
 
         static final byte setTimeFormat = 0x37;
