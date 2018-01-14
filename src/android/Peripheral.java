@@ -297,7 +297,7 @@ public class Peripheral extends BluetoothGattCallback {
             PluginResult result = new PluginResult(PluginResult.Status.OK, value);
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
-            JSONObject response;
+            JSONObject response = new JSONObject();
             // parseResponse(value);
             
             // response = parseResponse(value);
@@ -311,7 +311,7 @@ public class Peripheral extends BluetoothGattCallback {
 
             try {
               LOG.d(TAG, "writeCallback.success()" + value[0]);
-              writeCallback.success();
+              writeCallback.success(response);
               //Some Code here
             } catch (NumberFormatException | NullPointerException ex) {
               LOG.d(TAG, "writeCallback.error() - 1" + value[0]);
