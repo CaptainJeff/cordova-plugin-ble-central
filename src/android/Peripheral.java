@@ -299,7 +299,7 @@ public class Peripheral extends BluetoothGattCallback {
             callback.sendPluginResult(result);
             JSONObject response;
             // parseResponse(value);
-            writeCallback.success();
+            
             // response = parseResponse(value);
             // if (value[0] == Helper.CommandCode.getSoftwareVersion || value[0] == Helper.CommandCode.activateVibrationResponse) {
             //   LOG.d(TAG, "in here??" + value[0]);
@@ -308,68 +308,82 @@ public class Peripheral extends BluetoothGattCallback {
             // } else {
             //   // writeCallback.success(response);
             // }
+
+            try {
+              LOG.d(TAG, "writeCallback.success()" + value[0]);
+              writeCallback.success();
+              //Some Code here
+            } catch (NumberFormatException | NullPointerException ex) {
+              LOG.d(TAG, "writeCallback.error() - 1" + value[0]);
+              writeCallback.error(1);
+                //Handle NumberFormat and NullPointer exceptions here    
+            } catch (Exception ex) {
+              LOG.d(TAG, "writeCallback.error() - 2" + value[0]);
+              writeCallback.error(1);
+                //Handle generic exception here
+            }
             
         }
         
         
     }
 
-    public JSONObject parseResponse(byte[] value) {
-      JSONObject response = new JSONObject();
+    // public JSONObject parseResponse(byte[] value) {
+    //   JSONObject response = new JSONObject();
       
-      LOG.d(TAG, "parseResponse!parseResponse " + value[0]);
-      if (value[0] == Helper.CommandCode.getSoftwareVersion) {
-        response = getSoftwareVersion(value);
-        LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
-      } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
+    //   LOG.d(TAG, "parseResponse!parseResponse " + value[0]);
+    //   if (value[0] == Helper.CommandCode.getSoftwareVersion) {
+    //     response = getSoftwareVersion(value);
+    //     LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+    //   } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getTargetSteps) {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.getTargetSteps) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getDeviceName) {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.getDeviceName) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getTimeFormat) {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.getTimeFormat) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getDeviceTime) {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.getDeviceTime) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getMode) {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.getMode) {
 
-        response = onSuccessCall(value);
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.activateVibrationResponse || value[0] == Helper.CommandCode.activateVibration ) {
-        LOG.d(TAG, "value!!! " + value[0]);
-        // response = onSuccessCall();
-        writeCallback.success();
-      }
-       else {
+    //     response = onSuccessCall(value);
+    //     writeCallback.success();
+    //   } else if (value[0] == Helper.CommandCode.activateVibrationResponse || value[0] == Helper.CommandCode.activateVibration ) {
+    //     LOG.d(TAG, "value!!! " + value[0]);
+    //     // response = onSuccessCall();
+    //     writeCallback.success();
+    //   }
+    //    else {
 
-        writeCallback.success();
-      }
-      LOG.d(TAG, "parseResponse! " + value[0]);
-      LOG.d(TAG, "parseResponse! " + response);
-      return response;
-    }
+    //     writeCallback.success();
+    //   }
+    //   LOG.d(TAG, "parseResponse! " + value[0]);
+    //   LOG.d(TAG, "parseResponse! " + response);
+    //   return response;
+    // }
     
 
     @Override
