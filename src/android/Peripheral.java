@@ -234,6 +234,13 @@ public class Peripheral extends BluetoothGattCallback {
 
     }
 
+    public void parseResponse(byte[] response) {
+      LOG.d(TAG, "response~~ " + response);
+      LOG.d(TAG, "response~~ " + response[0]);
+
+      writeCallback.success();
+    }
+
     @Override
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         super.onCharacteristicChanged(gatt, characteristic);
@@ -246,6 +253,8 @@ public class Peripheral extends BluetoothGattCallback {
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
         }
+
+        parseResponse(characteristic.getValue());
     }
 
     @Override
@@ -276,7 +285,7 @@ public class Peripheral extends BluetoothGattCallback {
         if (writeCallback != null) {
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                writeCallback.success();
+                
             } else {
                 writeCallback.error(status);
             }
