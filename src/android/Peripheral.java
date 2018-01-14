@@ -318,12 +318,40 @@ public class Peripheral extends BluetoothGattCallback {
         parseResponse(characteristic.getValue());
     }
 
-    private void dayActivityResponse(byte[] response) {
+    // public void getDaySummary(String day) {
+    //     try {
+    //       int dayIndex = dateToDayIndex(day);
+    //       state = ActivityState.SUMMARY;
+    //       summaryDay = day;
+    //       getDayActivity(dayIndex < 10 ? dayIndex : 29);
+    //     } catch (Exception ex) {
+    //     }
+    // }
 
+    // public void getDayActivity(String date) {
+    //     state = ActivityState.DAY;
+    //     getDayActivity(dateToDayIndex(date));
+    //     timeFromSync = 0;
+    //   }
+    
+    //   public void getDayActivity(final int day) {
+    //     dayActivity = new ArrayList<ActivityData>();
+    //     daySleep = new ArrayList<SleepData>();
+    //     byte[] message = new byte[16];
+    //     message[0] = getDetailedCurrentDayActivityData;
+    //     message[1] = (byte) day;
+    //     message[15] = calcCRC(message);
+    //     timeFromSync = 0;
+    //     btManager.writeData(message);
+    //   }
+
+    private void dayActivityResponse(byte[] response) {
+        state = ActivityState.DAY;
       LOG.d(TAG, "dayActivityResponse " + response);
       LOG.d(TAG, "dayActivityResponse - 0 " + response[0]);
       LOG.d(TAG, "dayActivityResponse - 6 " + response[6]);
       LOG.d(TAG, "dayActivityResponse - 1 " + response[1]);
+      LOG.d(TAG, "state - 1 " + state);
 
       LOG.d(TAG, "dayActivityArray - 1 " + String.valueOf(dayActivity));
       ArrayList<SleepData> lastSleepData;
@@ -341,23 +369,27 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG, "322 " + String.valueOf(dayActivity.size()));
         if (dayActivity.size() + daySleep.size() == 96) {
           LOG.d(TAG, "324 " + String.valueOf(dayActivity.size()));
-        //   LOG.d(TAG, "Error", String.valueOf(dayActivity.size() + daySleep.size()));
-        //   switch (state) {
-        //     case SUMMARY: {
-        //       int totalSteps = 0;
-        //       float totalCal = 0;
-        //       float totalDistanse = 0;
-        //       for (int i = 0; i < dayActivity.size(); i++) {
-        //         totalSteps += dayActivity.get(i).getSteps();
-        //         totalCal += dayActivity.get(i).calories;
-        //         totalDistanse += dayActivity.get(i).distance;
-        //       }
-        //       trackerAPICallback.onSummaryResponse(true, summaryDay, totalSteps, totalCal, totalDistanse);
-        //       break;
-        //     }
-        //     case DAY:
-        //       trackerAPICallback.onDailyActivityResponse(true, dayActivity.toArray(new ActivityData[dayActivity.size()]));
-        //       break;
+          LOG.d(TAG, "Error", String.valueOf(dayActivity.size() + daySleep.size()));
+          switch (state) {
+            case SUMMARY: {
+              int totalSteps = 0;
+              float totalCal = 0;
+              float totalDistanse = 0;
+              for (int i = 0; i < dayActivity.size(); i++) {
+                totalSteps += dayActivity.get(i).getSteps();
+                totalCal += dayActivity.get(i).calories;
+                totalDistanse += dayActivity.get(i).distance;
+              }
+
+              writeCallback.success();
+            //   trackerAPICallback.onSummaryResponse(true, summaryDay, totalSteps, totalCal, totalDistanse);
+              break;
+            }
+            case DAY:
+                LOG.d(TAG, "389 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
+            //   trackerAPICallback.onDailyActivityResponse(true, dayActivity.toArray(new ActivityData[dayActivity.size()]));
+              writeCallback(dayActivity.toArray(new ActivityData[dayActivity.size()]));
+              break;
         //     case LATEST: {
         //       int totalSteps = 0;
         //       float totalCal = 0;
@@ -397,7 +429,7 @@ public class Peripheral extends BluetoothGattCallback {
         //       calcSleepTime();
         //       break;
         //     }
-        //   }
+          }
         } else {
           LOG.d(TAG,"Error", String.valueOf(dayActivity.size() + daySleep.size()));
           LOG.d(TAG, "384 " + String.valueOf(dayActivity.size()));
