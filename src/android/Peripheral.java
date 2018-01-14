@@ -286,7 +286,7 @@ public class Peripheral extends BluetoothGattCallback {
         LOG.d(TAG, "onCharacteristicChanged " + characteristic);
 
         LOG.d(TAG, "characteristic.getValue() " + characteristic.getValue());
-        LOG.d(TAG, "characteristic.getValue() " + characteristic.getValue().toString());
+        LOG.d(TAG, "characteristic.getValue() " + characteristic.getValue()[0].toString());
 
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
 
@@ -307,6 +307,8 @@ public class Peripheral extends BluetoothGattCallback {
             }
             
         }
+        
+        commandCompleted();
     }
 
     public JSONObject parseResponse(byte[] value) {
@@ -388,7 +390,7 @@ public class Peripheral extends BluetoothGattCallback {
             writeCallback = null;
         }
 
-        commandCompleted();
+        
     }
 
     @Override
