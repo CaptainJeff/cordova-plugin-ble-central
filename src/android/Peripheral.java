@@ -298,15 +298,15 @@ public class Peripheral extends BluetoothGattCallback {
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
             JSONObject response;
-
-            response = parseResponse(value);
-            if (value[0] == Helper.CommandCode.getSoftwareVersion || value[0] == Helper.CommandCode.activateVibrationResponse) {
-              LOG.d(TAG, "in here??" + value[0]);
-              // response = getSoftwareVersion(value);
-              // LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
-            } else {
-              writeCallback.success(response);
-            }
+            parseResponse(value);
+            // response = parseResponse(value);
+            // if (value[0] == Helper.CommandCode.getSoftwareVersion || value[0] == Helper.CommandCode.activateVibrationResponse) {
+            //   LOG.d(TAG, "in here??" + value[0]);
+            //   // response = getSoftwareVersion(value);
+            //   // LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
+            // } else {
+            //   // writeCallback.success(response);
+            // }
             
         }
         
@@ -323,30 +323,39 @@ public class Peripheral extends BluetoothGattCallback {
       } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getTargetSteps) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getDeviceName) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getTimeFormat) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getDeviceTime) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.getMode) {
 
         response = onSuccessCall(value);
+        writeCallback.success();
       } else if (value[0] == Helper.CommandCode.activateVibrationResponse) {
         LOG.d(TAG, "value!!! " + value[0]);
         // response = onSuccessCall();
@@ -354,7 +363,7 @@ public class Peripheral extends BluetoothGattCallback {
       }
        else {
 
-        response = onSuccessCall(value);
+        writeCallback.success();
       }
       LOG.d(TAG, "parseResponse! " + value[0]);
       LOG.d(TAG, "parseResponse! " + response);
