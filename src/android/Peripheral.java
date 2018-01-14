@@ -314,7 +314,8 @@ public class Peripheral extends BluetoothGattCallback {
     }
 
     public JSONObject parseResponse(byte[] value) {
-      JSONObject response;
+      JSONObject response = new JSONObject();
+      
 
       if (value[0] == Helper.CommandCode.getSoftwareVersion) {
         response = getSoftwareVersion(value);
