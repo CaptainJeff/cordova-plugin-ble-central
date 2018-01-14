@@ -899,125 +899,125 @@ public class Peripheral extends BluetoothGattCallback {
 // ADD THIS TO A NEW FILE 
 
 
-public class ActivityData extends Object {
-  String time;
-  int index;
-  float calories;
-  int steps;
-  float distance;
+// public class ActivityData extends Object {
+//   String time;
+//   int index;
+//   float calories;
+//   int steps;
+//   float distance;
 
-  public ActivityData(byte[] data){
-      LOG.d(TAG, "ActivityData " + data);
-      time =  "20" ;
-      int year = Integer.valueOf(Integer.toString(data[2],16));
-      int month = Integer.valueOf(Integer.toString(data[3],16));
-      int day = Integer.valueOf(Integer.toString(data[4],16));
-      time += year < 10? "0" : "" + String.valueOf(year)+ "-";
-      time += month < 10? "0" : "";
-      time += String.valueOf(month) + "-";
-      time += day < 10? "0" : "";
-      time += String.valueOf(day);
-      index = data[5];
-      Date now = new Date();
-      time += "T" + new SimpleDateFormat("hh:mm:ss")
-              .format(new Date( data[5]*15*60000 -
-                      TimeZone.getDefault().getOffset(now.getTime())));
-      if( data[6] == 0x00 ){
-          calories = (float)( data[8] < 0 ? data[8] & 0xff : data[8]);
-          calories *= 256;
-          calories += (float)( data[7] < 0 ? data[7] & 0xff : data[7]);
-          calories = calories / 100;
+//   public ActivityData(byte[] data){
+//       LOG.d(TAG, "ActivityData " + data);
+//       time =  "20" ;
+//       int year = Integer.valueOf(Integer.toString(data[2],16));
+//       int month = Integer.valueOf(Integer.toString(data[3],16));
+//       int day = Integer.valueOf(Integer.toString(data[4],16));
+//       time += year < 10? "0" : "" + String.valueOf(year)+ "-";
+//       time += month < 10? "0" : "";
+//       time += String.valueOf(month) + "-";
+//       time += day < 10? "0" : "";
+//       time += String.valueOf(day);
+//       index = data[5];
+//       Date now = new Date();
+//       time += "T" + new SimpleDateFormat("hh:mm:ss")
+//               .format(new Date( data[5]*15*60000 -
+//                       TimeZone.getDefault().getOffset(now.getTime())));
+//       if( data[6] == 0x00 ){
+//           calories = (float)( data[8] < 0 ? data[8] & 0xff : data[8]);
+//           calories *= 256;
+//           calories += (float)( data[7] < 0 ? data[7] & 0xff : data[7]);
+//           calories = calories / 100;
 
-          steps = data[10] < 0 ? data[10] & 0xff : data[10];
-          steps *= 256;
-          steps += data[9] < 0 ? data[9] & 0xff : data[9];
+//           steps = data[10] < 0 ? data[10] & 0xff : data[10];
+//           steps *= 256;
+//           steps += data[9] < 0 ? data[9] & 0xff : data[9];
 
-          distance = (float)( data[12] < 0 ? data[12] & 0xff : data[12]);
-          distance *= 256;
-          distance += (float)( data[11] < 0 ? data[11] & 0xff : data[11]);
-      }
-  }
+//           distance = (float)( data[12] < 0 ? data[12] & 0xff : data[12]);
+//           distance *= 256;
+//           distance += (float)( data[11] < 0 ? data[11] & 0xff : data[11]);
+//       }
+//   }
 
-  public void print(){
-      LOG.d(TAG, "ActivityData", "Time: (" + time
-              + ") calories: (" + String.valueOf(calories)
-              + ") steps: (" + String.valueOf(steps)
-              + ") distance: (" + String.valueOf(distance)+")");
-  }
+//   public void print(){
+//       LOG.d(TAG, "ActivityData", "Time: (" + time
+//               + ") calories: (" + String.valueOf(calories)
+//               + ") steps: (" + String.valueOf(steps)
+//               + ") distance: (" + String.valueOf(distance)+")");
+//   }
 
-  public String getTime() {
-      return time;
-  }
+//   public String getTime() {
+//       return time;
+//   }
 
-  public int getIndex() {
-      return index;
-  }
+//   public int getIndex() {
+//       return index;
+//   }
 
-  public float getCalories() {
-      return calories;
-  }
+//   public float getCalories() {
+//       return calories;
+//   }
 
-  public int getSteps() {
-      return steps;
-  }
+//   public int getSteps() {
+//       return steps;
+//   }
 
-  public float getDistance() {
-      return distance;
-  }
+//   public float getDistance() {
+//       return distance;
+//   }
 
-}
+// }
 
 
 
 // ADD THIS TO A NEW FILE 
 
-public enum ActivityState {
-  DAY,
-  SUMMARY,
-  SUMMARY_SLEEP,
-  SLEEP_TIME,
-  SLEEP_YESTERDAY_TIME,
-  LATEST,
-  SLEEP
-}
+// public enum ActivityState {
+//   DAY,
+//   SUMMARY,
+//   SUMMARY_SLEEP,
+//   SLEEP_TIME,
+//   SLEEP_YESTERDAY_TIME,
+//   LATEST,
+//   SLEEP
+// }
 
-public class SleepData {
-  String time;
-  int index;
-  public int restfulness ;
+// public class SleepData {
+//   String time;
+//   int index;
+//   public int restfulness ;
 
-  public SleepData(byte[] data){
-      time =  "20" ;
-      int year = Integer.valueOf(Integer.toString(data[2],16));
-      int month = Integer.valueOf(Integer.toString(data[3],16));
-      int day = Integer.valueOf(Integer.toString(data[4],16));
-      time += year < 10? "0" : "" + String.valueOf(year)+ "-";
-      time += month < 10? "0" : "";
-      time += String.valueOf(month) + "-";
-      time += day < 10? "0" : "";
-      time += String.valueOf(day);
+//   public SleepData(byte[] data){
+//       time =  "20" ;
+//       int year = Integer.valueOf(Integer.toString(data[2],16));
+//       int month = Integer.valueOf(Integer.toString(data[3],16));
+//       int day = Integer.valueOf(Integer.toString(data[4],16));
+//       time += year < 10? "0" : "" + String.valueOf(year)+ "-";
+//       time += month < 10? "0" : "";
+//       time += String.valueOf(month) + "-";
+//       time += day < 10? "0" : "";
+//       time += String.valueOf(day);
 
-      Date now = new Date();
-      time += "T" + new SimpleDateFormat("hh:mm:ss")
-              .format(new Date( data[5]*15*60000
-                     - TimeZone.getDefault().getOffset(now.getTime())));
-      index = data[5];
-      if( data[6] != 0x00 ){
-          restfulness = 0;
-          int restfulCount = 0;
-          for(int i=0; i<8; i++){
-              if(data[i+7]!=0) {
-                  restfulCount++;
-                  int sleepData = (data[i + 7] < 0 ?  128 : data[i + 7]);
-                  restfulness += 100.0 - ((sleepData) / 1.28);
-              }
-          }
-          restfulness = restfulCount != 0 ? restfulness/restfulCount : 0;
-      }
-  }
+//       Date now = new Date();
+//       time += "T" + new SimpleDateFormat("hh:mm:ss")
+//               .format(new Date( data[5]*15*60000
+//                      - TimeZone.getDefault().getOffset(now.getTime())));
+//       index = data[5];
+//       if( data[6] != 0x00 ){
+//           restfulness = 0;
+//           int restfulCount = 0;
+//           for(int i=0; i<8; i++){
+//               if(data[i+7]!=0) {
+//                   restfulCount++;
+//                   int sleepData = (data[i + 7] < 0 ?  128 : data[i + 7]);
+//                   restfulness += 100.0 - ((sleepData) / 1.28);
+//               }
+//           }
+//           restfulness = restfulCount != 0 ? restfulness/restfulCount : 0;
+//       }
+//   }
 
-  public void print(){
-    LOG.d(TAG,"SleepData", "Time: (" + time
-              + ") restfulness : (" + String.valueOf(restfulness)+")");
-  }
-}
+//   public void print(){
+//     LOG.d(TAG,"SleepData", "Time: (" + time
+//               + ") restfulness : (" + String.valueOf(restfulness)+")");
+//   }
+// }
