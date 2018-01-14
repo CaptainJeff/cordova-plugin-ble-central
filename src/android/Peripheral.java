@@ -240,7 +240,7 @@ public class Peripheral extends BluetoothGattCallback {
       LOG.d(TAG, "response~~ " + response);
       LOG.d(TAG, "response~~ " + response[0]);
 
-      writeCallback.success();
+      
     }
 
     @Override
@@ -256,7 +256,8 @@ public class Peripheral extends BluetoothGattCallback {
             callback.sendPluginResult(result);
         }
 
-        parseResponse(characteristic.getValue());
+        writeCallback.sendPluginResult(result);
+        // parseResponse(characteristic.getValue());
     }
 
     @Override
