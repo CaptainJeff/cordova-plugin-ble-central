@@ -29,6 +29,10 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
  * Peripheral wraps the BluetoothDevice and provides methods to convert to JSON.
  */
@@ -46,6 +50,9 @@ public class Peripheral extends BluetoothGattCallback {
     private boolean connecting = false;
     private ConcurrentLinkedQueue<BLECommand> commandQueue = new ConcurrentLinkedQueue<BLECommand>();
     private boolean bleProcessing;
+
+    ArrayList<ActivityData> dayActivity;
+    ArrayList<SleepData> daySleep;
 
     BluetoothGatt gatt;
 
@@ -240,8 +247,6 @@ public class Peripheral extends BluetoothGattCallback {
       LOG.d(TAG, "response~~ " + value[0]);
       
       if (value[0] == Helper.CommandCode.getSoftwareVersion) {
-
-        LOG.d(TAG, "getSoftwareVersion: in " + value[0]);
         getSoftVersionResponse(value);
       } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
 
@@ -276,7 +281,6 @@ public class Peripheral extends BluetoothGattCallback {
         writeCallback.success();
       }
        else {
-
         writeCallback.success();
       }
       
@@ -298,6 +302,115 @@ public class Peripheral extends BluetoothGattCallback {
         }
         
         parseResponse(characteristic.getValue());
+    }
+
+    private void dayActivityResponse(byte[] response) {
+      LOG.d(TAG, "dayActivityResponse " + response);
+      LOG.d(TAG, "dayActivityResponse - 0 " + response[0]);
+      LOG.d(TAG, "dayActivityResponse - 6 " + response[6]);
+      LOG.d(TAG, "dayActivityResponse - 1 " + response[1]);
+      ArrayList<SleepData> lastSleepData;
+      if (response[6] != (byte) (0xff)) {
+        LOG.d(TAG, "if " + response[6]);
+        dayActivity.add(new ActivityData(response));
+      } else {
+        LOG.d(TAG, "else " + response[6]);
+        daySleep.add(new SleepData(response));
+      }
+      if (response[1] != (byte) 0xff) {
+        LOG.d(TAG, "321 " + String.valueOf(dayActivity));
+        LOG.d(TAG, "322 " + String.valueOf(dayActivity.size()));
+        if (dayActivity.size() + daySleep.size() == 96) {
+          LOG.d(TAG, "324 " + String.valueOf(dayActivity.size()));
+        //   LOG.d(TAG, "Error", String.valueOf(dayActivity.size() + daySleep.size()));
+        //   switch (state) {
+        //     case SUMMARY: {
+        //       int totalSteps = 0;
+        //       float totalCal = 0;
+        //       float totalDistanse = 0;
+        //       for (int i = 0; i < dayActivity.size(); i++) {
+        //         totalSteps += dayActivity.get(i).getSteps();
+        //         totalCal += dayActivity.get(i).calories;
+        //         totalDistanse += dayActivity.get(i).distance;
+        //       }
+        //       trackerAPICallback.onSummaryResponse(true, summaryDay, totalSteps, totalCal, totalDistanse);
+        //       break;
+        //     }
+        //     case DAY:
+        //       trackerAPICallback.onDailyActivityResponse(true, dayActivity.toArray(new ActivityData[dayActivity.size()]));
+        //       break;
+        //     case LATEST: {
+        //       int totalSteps = 0;
+        //       float totalCal = 0;
+        //       float totalDistanse = 0;
+        //       String date = "";
+        //       for (int i = 0; i < dayActivity.size(); i++) {
+        //         totalSteps += dayActivity.get(i).getSteps();
+        //         totalCal += dayActivity.get(i).calories;
+        //         totalDistanse += dayActivity.get(i).distance;
+        //         if (dayActivity.get(i).getSteps() != 0) {
+        //           date = dayActivity.get(i).getTime();
+        //         }
+        //       }
+        //       trackerAPICallback.onLatestActivityResponse(true, date, totalSteps, totalCal, totalDistanse);
+        //       break;
+        //     }
+        //     case SLEEP: {
+        //       trackerAPICallback.onLastSleepResponse(true, daySleep.toArray(new SleepData[daySleep.size()]));
+        //       lastSleepData = daySleep;
+        //       //calcSleepTime();
+        //       break;
+        //     }
+        //     case SUMMARY_SLEEP: {
+        //       lastSleepData = daySleep;
+        //       //calcSleepTime();
+        //       trackerAPICallback.onSummarySleepResponse(true, getSleepFrames(daySleep.toArray(new SleepData[daySleep.size()])));
+        //       break;
+        //     }
+        //     case SLEEP_TIME: {
+        //       LOG.d(TAG,"SLEEP_TIME", "");
+        //       lastSleepData = daySleep;
+        //       calcSleepTime();
+        //       break;
+        //     }
+        //     case SLEEP_YESTERDAY_TIME: {
+        //       lastSleepData = daySleep;
+        //       calcSleepTime();
+        //       break;
+        //     }
+        //   }
+        } else {
+          LOG.d(TAG,"Error", String.valueOf(dayActivity.size() + daySleep.size()));
+          LOG.d(TAG, "384 " + String.valueOf(dayActivity.size()));
+        }
+      } 
+      else {
+        LOG.d(TAG, "388 " + response[0]);
+        LOG.d(TAG, "389 " + String.valueOf(dayActivity.size()));
+        // switch (state) {
+        //   case SUMMARY:
+        //     trackerAPICallback.onSummaryResponse(true, summaryDay, 0, 0, 0);
+        //     break;
+        //   case DAY:
+        //     trackerAPICallback.onDailyActivityResponse(false, null);
+        //     break;
+        //   case LATEST:
+        //     trackerAPICallback.onDailyActivityResponse(false, null);
+        //     break;
+        //   case SLEEP:
+        //     trackerAPICallback.onLastSleepResponse(false, null);
+        //     break;
+        //   case SUMMARY_SLEEP:
+        //     trackerAPICallback.onSummarySleepResponse(false, null);
+        //     break;
+        //   case SLEEP_TIME:
+        //     trackerAPICallback.onSleepTime(false, 0, "");
+        //     break;
+        //   case SLEEP_YESTERDAY_TIME:
+        //     trackerAPICallback.onSleepTime(false, 0, "");
+        //     break;
+        // }
+      }
     }
 
     // public JSONObject getSoftwareVersion(byte[] bytes) {
@@ -777,4 +890,134 @@ public class Peripheral extends BluetoothGattCallback {
         return String.valueOf(serviceUUID) + "|" + characteristic.getUuid() + "|" + characteristic.getInstanceId();
     }
 
+}
+
+
+
+
+
+// ADD THIS TO A NEW FILE 
+
+
+public class ActivityData extends Object {
+  String time;
+  int index;
+  float calories;
+  int steps;
+  float distance;
+
+  public ActivityData(byte[] data){
+      LOG.d(TAG, "ActivityData " + data);
+      time =  "20" ;
+      int year = Integer.valueOf(Integer.toString(data[2],16));
+      int month = Integer.valueOf(Integer.toString(data[3],16));
+      int day = Integer.valueOf(Integer.toString(data[4],16));
+      time += year < 10? "0" : "" + String.valueOf(year)+ "-";
+      time += month < 10? "0" : "";
+      time += String.valueOf(month) + "-";
+      time += day < 10? "0" : "";
+      time += String.valueOf(day);
+      index = data[5];
+      Date now = new Date();
+      time += "T" + new SimpleDateFormat("hh:mm:ss")
+              .format(new Date( data[5]*15*60000 -
+                      TimeZone.getDefault().getOffset(now.getTime())));
+      if( data[6] == 0x00 ){
+          calories = (float)( data[8] < 0 ? data[8] & 0xff : data[8]);
+          calories *= 256;
+          calories += (float)( data[7] < 0 ? data[7] & 0xff : data[7]);
+          calories = calories / 100;
+
+          steps = data[10] < 0 ? data[10] & 0xff : data[10];
+          steps *= 256;
+          steps += data[9] < 0 ? data[9] & 0xff : data[9];
+
+          distance = (float)( data[12] < 0 ? data[12] & 0xff : data[12]);
+          distance *= 256;
+          distance += (float)( data[11] < 0 ? data[11] & 0xff : data[11]);
+      }
+  }
+
+  public void print(){
+      LOG.d(TAG, "ActivityData", "Time: (" + time
+              + ") calories: (" + String.valueOf(calories)
+              + ") steps: (" + String.valueOf(steps)
+              + ") distance: (" + String.valueOf(distance)+")");
+  }
+
+  public String getTime() {
+      return time;
+  }
+
+  public int getIndex() {
+      return index;
+  }
+
+  public float getCalories() {
+      return calories;
+  }
+
+  public int getSteps() {
+      return steps;
+  }
+
+  public float getDistance() {
+      return distance;
+  }
+
+}
+
+
+
+// ADD THIS TO A NEW FILE 
+
+public enum ActivityState {
+  DAY,
+  SUMMARY,
+  SUMMARY_SLEEP,
+  SLEEP_TIME,
+  SLEEP_YESTERDAY_TIME,
+  LATEST,
+  SLEEP
+}
+
+public class SleepData {
+  String time;
+  int index;
+  public int restfulness ;
+
+  public SleepData(byte[] data){
+      time =  "20" ;
+      int year = Integer.valueOf(Integer.toString(data[2],16));
+      int month = Integer.valueOf(Integer.toString(data[3],16));
+      int day = Integer.valueOf(Integer.toString(data[4],16));
+      time += year < 10? "0" : "" + String.valueOf(year)+ "-";
+      time += month < 10? "0" : "";
+      time += String.valueOf(month) + "-";
+      time += day < 10? "0" : "";
+      time += String.valueOf(day);
+
+      Date now = new Date();
+      time += "T" + new SimpleDateFormat("hh:mm:ss")
+              .format(new Date( data[5]*15*60000
+                     - TimeZone.getDefault().getOffset(now.getTime())));
+      index = data[5];
+      if( data[6] != 0x00 ){
+          restfulness = 0;
+          int restfulCount = 0;
+          for(int i=0; i<8; i++){
+              if(data[i+7]!=0) {
+                  restfulCount++;
+                  int sleepData = (data[i + 7] < 0 ?  128 : data[i + 7]);
+                  restfulness += 100.0 - ((sleepData) / 1.28);
+              }
+          }
+          restfulness = restfulCount != 0 ? restfulness/restfulCount : 0;
+      }
+  }
+
+  public void print(){
+    LOG.d(TAG,"SleepData", "Time: (" + time
+              + ") restfulness : (" + String.valueOf(restfulness)+")");
+  }
 }
