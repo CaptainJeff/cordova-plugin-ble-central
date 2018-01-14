@@ -19,8 +19,6 @@ import android.app.Activity;
 import android.bluetooth.*;
 import android.os.Build;
 import android.util.Base64;
-import jdk.nashorn.api.scripting.JSObject;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.LOG;
 import org.apache.cordova.PluginResult;
@@ -183,53 +181,10 @@ public class Peripheral extends BluetoothGattCallback {
 
     static JSONObject byteArrayToJSON(byte[] bytes) throws JSONException {
         JSONObject object = new JSONObject();
-        try {
-            LOG.e(TAG, "byteArrayToJSON" + bytes);
-            
-            object.put("CDVType", "ArrayBuffer");
-            object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
-            return object;
-        }
-        catch (JSONException e) { // TODO better error handling
-            LOG.e(TAG, "JSONException" + e);
-            e.printStackTrace();
-            throw new JSONException(e.toString());
-        }
+        object.put("CDVType", "ArrayBuffer");
+        object.put("data", Base64.encodeToString(bytes, Base64.NO_WRAP));
+        return object;
     }
-
-    static JSONObject onSuccessCall(byte[] bytes) {
-        LOG.e(TAG, "onSuccessCall 1:" + bytes);
-        JSONObject response = new JSONObject();
-        
-        return response;
-    }
-
-    public JSONObject getSoftwareVersion(byte[] bytes) {
-      JSONObject response = new JSONObject();
-      try {
-          byte[] version = new byte[14];
-          for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
-            version[i - 1] = bytes[i];
-          }
-          String versionNumber = "0.0.0";
-
-          try {
-            versionNumber = new String(version, "UTF-8").trim();
-          }
-          catch(Exception ex) {
-            versionNumber = "0.0.0";
-          }
-
-          response.put("version", versionNumber);
-      }
-      catch (JSONException e) { // this shouldn't happen
-          LOG.e(TAG, "onSuccessCall: JSONException" + e);
-          e.printStackTrace();
-      }
-
-      writeCallback.success(response);
-      return response;
-  }
 
     public boolean isConnected() {
         return connected;
@@ -278,113 +233,20 @@ public class Peripheral extends BluetoothGattCallback {
         }
 
     }
-    
 
     @Override
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         super.onCharacteristicChanged(gatt, characteristic);
         LOG.d(TAG, "onCharacteristicChanged " + characteristic);
 
-        LOG.d(TAG, "characteristic.getValue() " + characteristic.getValue());
-        
-
         CallbackContext callback = notificationCallbacks.get(generateHashKey(characteristic));
 
         if (callback != null) {
-
-            byte[] value = characteristic.getValue();
-            LOG.d(TAG, "value ~" + value[0]);
-            PluginResult result = new PluginResult(PluginResult.Status.OK, value);
+            PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
-            JSONObject response = new JSONObject();
-            // parseResponse(value);
-            
-            // response = parseResponse(value);
-            // if (value[0] == Helper.CommandCode.getSoftwareVersion || value[0] == Helper.CommandCode.activateVibrationResponse) {
-            //   LOG.d(TAG, "in here??" + value[0]);
-            //   // response = getSoftwareVersion(value);
-            //   // LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
-            // } else {
-            //   // writeCallback.success(response);
-            // }
-
-            try {
-              LOG.d(TAG, "writeCallback.success()" + value[0]);
-              writeCallback.success(response);
-              //Some Code here
-            } catch (NumberFormatException | NullPointerException ex) {
-              LOG.d(TAG, "writeCallback.error() - 1" + value[0]);
-              writeCallback.error(1);
-                //Handle NumberFormat and NullPointer exceptions here    
-            } catch (Exception ex) {
-              LOG.d(TAG, "writeCallback.error() - 2" + value[0]);
-              writeCallback.error(1);
-                //Handle generic exception here
-            }
-            
         }
-        
-        
     }
-
-    // public JSONObject parseResponse(byte[] value) {
-    //   JSONObject response = new JSONObject();
-      
-    //   LOG.d(TAG, "parseResponse!parseResponse " + value[0]);
-    //   if (value[0] == Helper.CommandCode.getSoftwareVersion) {
-    //     response = getSoftwareVersion(value);
-    //     LOG.d(TAG, "onCharacteristicChangedResponse: in " + response);
-    //   } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.getTargetSteps) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.getDeviceName) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.getTimeFormat) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.getDeviceTime) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.getMode) {
-
-    //     response = onSuccessCall(value);
-    //     writeCallback.success();
-    //   } else if (value[0] == Helper.CommandCode.activateVibrationResponse || value[0] == Helper.CommandCode.activateVibration ) {
-    //     LOG.d(TAG, "value!!! " + value[0]);
-    //     // response = onSuccessCall();
-    //     writeCallback.success();
-    //   }
-    //    else {
-
-    //     writeCallback.success();
-    //   }
-    //   LOG.d(TAG, "parseResponse! " + value[0]);
-    //   LOG.d(TAG, "parseResponse! " + response);
-    //   return response;
-    // }
-    
 
     @Override
     public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
@@ -414,7 +276,7 @@ public class Peripheral extends BluetoothGattCallback {
         if (writeCallback != null) {
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                // writeCallback.success();
+                writeCallback.success();
             } else {
                 writeCallback.error(status);
             }
@@ -808,28 +670,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
 
     }
-
-    // public void getUserPersonalInfoResponse(final byte[] response) {
-    //   String[] result = new String[5];
-    //   result[0] = "gender: " + (response[1] == 0x00 ? "female" : "male");
-    //   result[1] = "age: " + String.valueOf(response[5] < 0 ? response[5] & 0xff : response[5]);
-    //   result[2] = "height: " + String.valueOf(response[3] < 0 ? response[3] & 0xff : response[3]);
-    //   result[3] = "weight: " + String.valueOf(response[4] < 0 ? response[4] & 0xff : response[4]);
-    //   result[4] = "stride length: " + String.valueOf(response[5] < 0 ? response[5] & 0xff : response[5]);
-    //   try {
-    //     JSONArray array = new JSONArray();
-    //     array.put(result[0]);
-    //     array.put(result[1]);
-    //     array.put(result[2]);
-    //     array.put(result[3]);
-    //     array.put(result[4]);
-    //     return array;
-        
-    //   } catch (Exception ex) {
-    //   }
-
-
-    // }
 
     private String generateHashKey(BluetoothGattCharacteristic characteristic) {
         return generateHashKey(characteristic.getService().getUuid(), characteristic);
