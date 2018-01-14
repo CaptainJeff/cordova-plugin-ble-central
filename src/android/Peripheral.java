@@ -194,7 +194,7 @@ public class Peripheral extends BluetoothGattCallback {
         return object;
     }
 
-    static JSONObject activityDataToObject(ArrayList[] array) throws JSONException {
+    static JSONObject activityDataToObject(ArrayList<ActivityData> array) throws JSONException {
         JSONObject object = new JSONObject();
         object.put("data", array);
         return object;
