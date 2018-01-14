@@ -349,7 +349,7 @@ public class Peripheral extends BluetoothGattCallback {
       } else if (value[0] == Helper.CommandCode.activateVibrationResponse) {
         LOG.d(TAG, "value!!! " + value[0]);
         // response = onSuccessCall();
-        writeCallback.success(response);
+        writeCallback.success();
       }
        else {
 
