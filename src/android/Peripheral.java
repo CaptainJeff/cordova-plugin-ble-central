@@ -242,7 +242,7 @@ public class Peripheral extends BluetoothGattCallback {
       if (value[0] == Helper.CommandCode.getSoftwareVersion) {
 
         LOG.d(TAG, "getSoftwareVersion: in " + value[0]);
-        getSoftwareVersion(value);
+        getSoftVersionResponse(value);
       } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
 
         writeCallback.success();
