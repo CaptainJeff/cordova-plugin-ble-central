@@ -1,7 +1,7 @@
 package com.megster.cordova.ble.central;
 
-// import org.apache.cordova.LOG;
-import android.util.Log;
+import org.apache.cordova.LOG;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +15,7 @@ public class ActivityData extends Object {
   float distance;
 
   public ActivityData(byte[] data){
-    //   Log.d("ActivityData " + data);
+      LOG.d("ActivityData " + data);
       time =  "20" ;
       int year = Integer.valueOf(Integer.toString(data[2],16));
       int month = Integer.valueOf(Integer.toString(data[3],16));

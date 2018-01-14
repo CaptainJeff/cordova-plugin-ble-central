@@ -51,8 +51,8 @@ public class Peripheral extends BluetoothGattCallback {
     private ConcurrentLinkedQueue<BLECommand> commandQueue = new ConcurrentLinkedQueue<BLECommand>();
     private boolean bleProcessing;
 
-    ArrayList<ActivityData> dayActivity;
-    ArrayList<SleepData> daySleep;
+    ArrayList<ActivityData> dayActivity = new ArrayList<ActivityData>();
+    ArrayList<SleepData> daySleep = new ArrayList<SleepData>();
 
     BluetoothGatt gatt;
 
@@ -319,14 +319,18 @@ public class Peripheral extends BluetoothGattCallback {
     }
 
     private void dayActivityResponse(byte[] response) {
+
       LOG.d(TAG, "dayActivityResponse " + response);
       LOG.d(TAG, "dayActivityResponse - 0 " + response[0]);
       LOG.d(TAG, "dayActivityResponse - 6 " + response[6]);
       LOG.d(TAG, "dayActivityResponse - 1 " + response[1]);
+
+      LOG.d(TAG, "dayActivityArray - 1 " + String.valueOf(dayActivity));
       ArrayList<SleepData> lastSleepData;
       if (response[6] != (byte) (0xff)) {
         LOG.d(TAG, "if " + response[6]);
         dayActivity.add(new ActivityData(response));
+
         LOG.d(TAG, "dayActivity " + String.valueOf(dayActivity));
       } else {
         LOG.d(TAG, "else " + response[6]);
