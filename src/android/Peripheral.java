@@ -372,7 +372,7 @@ public class Peripheral extends BluetoothGattCallback {
           LOG.d(TAG, "324 " + String.valueOf(dayActivity.size()));
           LOG.d(TAG, "Error", String.valueOf(dayActivity.size() + daySleep.size()));
           switch (state) {
-            case ActivityState.SUMMARY: {
+            case SUMMARY: {
               int totalSteps = 0;
               float totalCal = 0;
               float totalDistanse = 0;
@@ -386,10 +386,11 @@ public class Peripheral extends BluetoothGattCallback {
             //   trackerAPICallback.onSummaryResponse(true, summaryDay, totalSteps, totalCal, totalDistanse);
               break;
             }
-            case ActivityState.DAY:
+            case DAY:
                 LOG.d(TAG, "389 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
             //   trackerAPICallback.onDailyActivityResponse(true, dayActivity.toArray(new ActivityData[dayActivity.size()]));
-              writeCallback(dayActivity.toArray(new ActivityData[dayActivity.size()]));
+
+              writeCallback.success(dayActivity.toArray(new ActivityData[dayActivity.size()]));
               break;
         //     case LATEST: {
         //       int totalSteps = 0;
