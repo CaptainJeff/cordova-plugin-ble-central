@@ -234,6 +234,7 @@ public class Peripheral extends BluetoothGattCallback {
 
     }
 
+    @Override
     public void parseResponse(byte[] response) {
       LOG.d(TAG, "response~~ " + response);
       LOG.d(TAG, "response~~ " + response[0]);
