@@ -260,48 +260,38 @@ public class Peripheral extends BluetoothGattCallback {
       } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
 
         writeCallback.success();
-        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getTargetSteps) {
 
         writeCallback.success();
-        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getDeviceName) {
 
         writeCallback.success();
-        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getTimeFormat) {
 
         writeCallback.success();
-        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getDeviceTime) {
 
         writeCallback.success();
-        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
 
         writeCallback.success();
-        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
         LOG.d(TAG, "dayActivityResponse " + value[0]);
         dayActivityResponse(value);
       } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
 
         writeCallback.success();
-        commandCompleted();
       } else if (value[0] == Helper.CommandCode.getMode) {
 
         writeCallback.success();
-        commandCompleted();
       } else if (value[0] == Helper.CommandCode.activateVibration ) {
         LOG.d(TAG, "value!!! " + value[0]);
         // response = onSuccessCall();
         writeCallback.success();
-        commandCompleted();
       }
        else {
         LOG.d(TAG, "elllllse!!! " + value[0]);
         writeCallback.success();
-        commandCompleted();
       }
       
     }
