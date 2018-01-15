@@ -388,8 +388,7 @@ public class Peripheral extends BluetoothGattCallback {
                 totalDistanse += dayActivity.get(i).distance;
               }
 
-              writeCallback.success();
-            //   trackerAPICallback.onSummaryResponse(true, summaryDay, totalSteps, totalCal, totalDistanse);
+              onSummaryResponse(true, summaryDay, totalSteps, totalCal, totalDistanse);
               break;
             }
             case DAY:
@@ -964,10 +963,249 @@ public class Peripheral extends BluetoothGattCallback {
             activityObj.put("distance", activity[i].distance);
             jsonArray.put(activityObj);
           }
-          writeCallback.success(jsonArray.toString());
+            writeCallback.success(jsonArray.toString());
         } catch (Exception ex) {
             writeCallback.error(ex.getMessage());
         }
       }
 
+      @Override
+      public void onSummaryResponse(boolean success, String date, int steps, float calories, float distance) {
+        if (success) {
+          try {
+            JSONArray summaryDays = new JSONArray();
+            if (steps != 0 || calories != 0 || distance != 0) {
+              JSONObject summary = new JSONObject();
+              summary.put("date", date);
+              summary.put("calories", String.valueOf(calories));
+              summary.put("steps", String.valueOf(steps));
+              summary.put("distance", String.valueOf(distance));
+              summaryDays.put(summary);
+            }
+            Log.d("SUMMARY DAYS: ", summaryDays.toString());
+            writeCallback.success(summaryDays);
+          } catch (Exception ex) {
+            writeCallback.error(ex.getMessage());
+          }
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onLatestActivityResponse(boolean success, String date, int steps, float calories, float distance) {
+        if (success) {
+          try {
+            JSONObject latest = new JSONObject();
+            latest.put("date", date);
+            latest.put("calories", String.valueOf(calories));
+            latest.put("steps", String.valueOf(steps));
+            latest.put("distance", String.valueOf(distance));
+            writeCallback.success(latest.toString());
+          } catch (Exception ex) {
+            writeCallback.error(ex.getMessage());
+          }
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onSetTargetSteps(boolean success) {
+        if (success) {
+            writeCallback.success("true");
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onGetTargetSteps(boolean success, int dailySteps) {
+        if (success) {
+          try {
+            JSONObject latest = new JSONObject();
+            latest.put("steps", String.valueOf(dailySteps));
+            writeCallback.success(latest.toString());
+          } catch (Exception ex) {
+            writeCallback.error(ex.getMessage());
+          }
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onVersionNumber(boolean success, String version) {
+        if (success) {
+          try {
+            writeCallback.success(version);
+          } catch (Exception ex) {
+            writeCallback.error(ex.getMessage());
+          }
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onVibration(boolean result) {
+        if (result) {
+            writeCallback.success("true");
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onSetDeviceName(boolean success) {
+        if (success) {
+            writeCallback.success("true");
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onGetDeviceName(boolean success, String name) {
+        if (success) {
+            writeCallback.success(name);
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onSetTimeFormat(boolean success) {
+        if (success) {
+            writeCallback.success("true");
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onGetTimeFormat(boolean success, String timeFormat) {
+        if (success) {
+            writeCallback.success(timeFormat);
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onSetTime(boolean success) {
+        if (success) {
+            writeCallback.success("true");
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onGetTime(boolean success, String time) {
+        if (success) {
+          PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, time);
+          pluginResult.setKeepCallback(true);
+          writeCallback.sendPluginResult(pluginResult);
+        } else {
+          Log.d("Time: ", "error");
+          writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onSetUserPersonalData(boolean success) {
+        if (success) {
+            writeCallback.success("true");
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onGetUserPersonalData(boolean success, String message) {
+        if (success) {
+            writeCallback.success(message);
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onSetMode(boolean success) {
+        if (success) {
+            writeCallback.success("true");
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onModeResponse(boolean success, String mode) {
+        if (success) {
+            writeCallback.success(mode);
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onSetDistanceUnitResponse(boolean success) {
+        if (success) {
+            writeCallback.success("true");
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+
+      @Override
+      public void onDistanceUnitResponse(boolean success, String unit) {
+        if (success) {
+            writeCallback.success(unit);
+        } else {
+            writeCallback.error("false");
+        }
+      }
+
+      @Override
+      public void onError(String error) {
+        writeCallback.error("");
+      }
+  
+
+  void dayActivityToJSON(ActivityData[] activity) {
+    JSONArray jsonArray = new JSONArray();
+    try {
+      for (int i = 0; i < activity.length; i++) {
+        JSONObject activityObj = new JSONObject();
+        activityObj.put("time", activity[i].time);
+        activityObj.put("calories", activity[i].calories);
+        activityObj.put("steps", activity[i].steps);
+        activityObj.put("distance", activity[i].distance);
+        jsonArray.put(activityObj);
+      }
+      writeCallback.success(jsonArray.toString());
+    } catch (Exception ex) {
+        writeCallback.error(ex.getMessage());
+    }
+  }
+
+  void sleepDataToJSON(SleepData[] sleepData) {
+    JSONArray jsonArray = new JSONArray();
+    try {
+      for (int i = 0; i < sleepData.length; i++) {
+        JSONObject activityObj = new JSONObject();
+        activityObj.put("time", sleepData[i].time);
+        activityObj.put("quality", String.valueOf(sleepData[i].restfulness));
+        jsonArray.put(activityObj);
+      }
+      writeCallback.success(jsonArray.toString());
+    } catch (Exception ex) {
+      writeCallback.error(ex.getMessage());
+    }
+  }
+
 }
+
+
