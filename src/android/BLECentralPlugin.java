@@ -553,21 +553,22 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         peripheral.queueReadRSSI(callbackContext);
     }
 
-    private void write(CallbackContext callbackContext, String MAC_ADDRESS, UUID serviceUUID, UUID characteristicUUID,
+    private void write(CallbackContext callbackContext, String macAddress, UUID serviceUUID, UUID characteristicUUID,
                        byte[] data, int writeType) {
 
-        Peripheral peripheral = peripherals.get(MAC_ADDRESS);
+        Peripheral peripheral = peripherals.get(macAddress);
 
         if (peripheral == null) {
-            callbackContext.error("Peripheral " + MAC_ADDRESS + " not found.");
+            callbackContext.error("Peripheral " + macAddress + " not found.");
             return;
         }
 
         if (!peripheral.isConnected()) {
-            callbackContext.error("Peripheral " + MAC_ADDRESS + " is not connected.");
+            callbackContext.error("Peripheral " + macAddress + " is not connected.");
             return;
         }
-
+        LOG.d(TAG, "macAddress " + macAddress);
+        LOG.d(TAG, "MAC_ADDRESS " + MAC_ADDRESS);
         //peripheral.writeCharacteristic(callbackContext, serviceUUID, characteristicUUID, data, writeType);
         peripheral.queueWrite(callbackContext, serviceUUID, characteristicUUID, data, writeType);
 
