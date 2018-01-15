@@ -251,12 +251,6 @@ public class Peripheral extends BluetoothGattCallback {
 
     // @Override
     public void parseResponse(byte[] value) {
-      LOG.d(TAG, "response~~ " + value);
-      LOG.d(TAG, "response~~ " + value[0]);
-      LOG.d(TAG, "Helper.CommandCode.getDetailedCurrentDayActivityData~~ " + Helper.CommandCode.getDetailedCurrentDayActivityData);
-      LOG.d(TAG, "Helper.CommandCode.getDetailedCurrentDayActivityData~~ " + Helper.CommandCode.getDetailedCurrentDayActivityDataResponse);
-      LOG.d(TAG, "Helper.CommandCode.getDetailedCurrentDayActivityData~~ " + Helper.CommandCode.getDetailedCurrentDayActivityDataResponseByte);
-      
       if (value[0] == Helper.CommandCode.getSoftwareVersion) {
         getSoftVersionResponse(value);
       } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
@@ -294,7 +288,7 @@ public class Peripheral extends BluetoothGattCallback {
 
         writeCallback.success();
         commandCompleted();
-      } else if (value[0] == Helper.CommandCode.activateVibrationResponse || value[0] == Helper.CommandCode.activateVibration ) {
+      } else if (value[0] == Helper.CommandCode.activateVibration ) {
         LOG.d(TAG, "value!!! " + value[0]);
         // response = onSuccessCall();
         writeCallback.success();
@@ -374,8 +368,6 @@ public class Peripheral extends BluetoothGattCallback {
         daySleep.add(new SleepData(response));
       }
       if (response[1] != (byte) 0xff) {
-        LOG.d(TAG, "321 " + String.valueOf(dayActivity));
-        LOG.d(TAG, "322 " + String.valueOf(dayActivity.size()));
         if (dayActivity.size() + daySleep.size() == 96) {
           LOG.d(TAG, "324 " + String.valueOf(dayActivity.size()));
           LOG.d(TAG, "Error", String.valueOf(dayActivity.size() + daySleep.size()));
@@ -396,48 +388,46 @@ public class Peripheral extends BluetoothGattCallback {
             case DAY:
                 LOG.d(TAG, "389 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
                 dayActivityToJSON(dayActivity.toArray(new ActivityData[dayActivity.size()]));
-                // LOG.d(TAG, "393 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
-                LOG.d(TAG, "399 dayActivityToJSON");
               break;
-        //     case LATEST: {
-        //       int totalSteps = 0;
-        //       float totalCal = 0;
-        //       float totalDistanse = 0;
-        //       String date = "";
-        //       for (int i = 0; i < dayActivity.size(); i++) {
-        //         totalSteps += dayActivity.get(i).getSteps();
-        //         totalCal += dayActivity.get(i).calories;
-        //         totalDistanse += dayActivity.get(i).distance;
-        //         if (dayActivity.get(i).getSteps() != 0) {
-        //           date = dayActivity.get(i).getTime();
-        //         }
-        //       }
-        //       trackerAPICallback.onLatestActivityResponse(true, date, totalSteps, totalCal, totalDistanse);
-        //       break;
-        //     }
-        //     case SLEEP: {
-        //       trackerAPICallback.onLastSleepResponse(true, daySleep.toArray(new SleepData[daySleep.size()]));
-        //       lastSleepData = daySleep;
-        //       //calcSleepTime();
-        //       break;
-        //     }
-        //     case SUMMARY_SLEEP: {
-        //       lastSleepData = daySleep;
-        //       //calcSleepTime();
-        //       trackerAPICallback.onSummarySleepResponse(true, getSleepFrames(daySleep.toArray(new SleepData[daySleep.size()])));
-        //       break;
-        //     }
-        //     case SLEEP_TIME: {
-        //       LOG.d(TAG,"SLEEP_TIME", "");
-        //       lastSleepData = daySleep;
-        //       calcSleepTime();
-        //       break;
-        //     }
-        //     case SLEEP_YESTERDAY_TIME: {
-        //       lastSleepData = daySleep;
-        //       calcSleepTime();
-        //       break;
-        //     }
+            case LATEST: {
+              int totalSteps = 0;
+              float totalCal = 0;
+              float totalDistanse = 0;
+              String date = "";
+              for (int i = 0; i < dayActivity.size(); i++) {
+                totalSteps += dayActivity.get(i).getSteps();
+                totalCal += dayActivity.get(i).calories;
+                totalDistanse += dayActivity.get(i).distance;
+                if (dayActivity.get(i).getSteps() != 0) {
+                  date = dayActivity.get(i).getTime();
+                }
+              }
+              onLatestActivityResponse(true, date, totalSteps, totalCal, totalDistanse);
+              break;
+            }
+            case SLEEP: {
+              onLastSleepResponse(true, daySleep.toArray(new SleepData[daySleep.size()]));
+              lastSleepData = daySleep;
+              //calcSleepTime();
+              break;
+            }
+            case SUMMARY_SLEEP: {
+              lastSleepData = daySleep;
+              //calcSleepTime();
+              trackerAPICallback.onSummarySleepResponse(true, getSleepFrames(daySleep.toArray(new SleepData[daySleep.size()])));
+              break;
+            }
+            case SLEEP_TIME: {
+              LOG.d(TAG,"SLEEP_TIME", "");
+              lastSleepData = daySleep;
+              calcSleepTime();
+              break;
+            }
+            case SLEEP_YESTERDAY_TIME: {
+              lastSleepData = daySleep;
+              calcSleepTime();
+              break;
+            }
           }
         } else {
           LOG.d(TAG,"Error", String.valueOf(dayActivity.size() + daySleep.size()));
@@ -445,32 +435,29 @@ public class Peripheral extends BluetoothGattCallback {
         }
       } 
       else {
-        LOG.d(TAG, "388 " + response[0]);
-        LOG.d(TAG, "389 " + String.valueOf(dayActivity.size()));
-        LOG.d(TAG, "390 " + String.valueOf(dayActivity));
-        // switch (state) {
-        //   case SUMMARY:
-        //     trackerAPICallback.onSummaryResponse(true, summaryDay, 0, 0, 0);
-        //     break;
-        //   case DAY:
-        //     trackerAPICallback.onDailyActivityResponse(false, null);
-        //     break;
-        //   case LATEST:
-        //     trackerAPICallback.onDailyActivityResponse(false, null);
-        //     break;
-        //   case SLEEP:
-        //     trackerAPICallback.onLastSleepResponse(false, null);
-        //     break;
-        //   case SUMMARY_SLEEP:
-        //     trackerAPICallback.onSummarySleepResponse(false, null);
-        //     break;
-        //   case SLEEP_TIME:
-        //     trackerAPICallback.onSleepTime(false, 0, "");
-        //     break;
-        //   case SLEEP_YESTERDAY_TIME:
-        //     trackerAPICallback.onSleepTime(false, 0, "");
-        //     break;
-        // }
+        switch (state) {
+          case SUMMARY:
+            onSummaryResponse(true, summaryDay, 0, 0, 0);
+            break;
+          case DAY:
+            onDailyActivityResponse(false, null);
+            break;
+          case LATEST:
+            onDailyActivityResponse(false, null);
+            break;
+          case SLEEP:
+            onLastSleepResponse(false, null);
+            break;
+          case SUMMARY_SLEEP:
+            onSummarySleepResponse(false, null);
+            break;
+          case SLEEP_TIME:
+            onSleepTime(false, 0, "");
+            break;
+          case SLEEP_YESTERDAY_TIME:
+            onSleepTime(false, 0, "");
+            break;
+        }
       }
       
     }
