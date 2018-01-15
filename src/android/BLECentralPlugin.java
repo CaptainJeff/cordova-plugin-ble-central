@@ -43,8 +43,6 @@ import java.util.*;
 
 public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.LeScanCallback {
     // actions
-
-    static TrackerAPI tracker;
     
     private static final String SCAN = "scan";
     private static final String START_SCAN = "startScan";
@@ -83,7 +81,6 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
     private String MAC_ADDRESS;
 
-    CordovaWebView cWebView;
 
 
     BluetoothAdapter bluetoothAdapter;
@@ -120,13 +117,13 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         removeStateListener();
     }
 
-    @Override
-    public void initialize(CordovaInterface cordova, final CordovaWebView webView) {
-        super.initialize(cordova, webView);
-        cWebView = webView;
-        // activity = cordova.getActivity();
-        // tracker = new TrackerAPI(activity);
-    }
+    // @Override
+    // public void initialize(CordovaInterface cordova, final CordovaWebView webView) {
+    //     super.initialize(cordova, webView);
+    //     cWebView = webView;
+    //     // activity = cordova.getActivity();
+    //     // tracker = new TrackerAPI(activity);
+    // }
 
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
@@ -285,9 +282,9 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             findLowEnergyDevices(callbackContext, serviceUUIDs, -1);
 
         } else if (action.equalsIgnoreCase("activateVibration")) {
-            vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
+            // vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
 
-            int duration = args.getString(0);
+            int duration = args.getInt(0);
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
             byte[] data = new byte[16];
