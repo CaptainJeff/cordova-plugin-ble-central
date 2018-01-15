@@ -71,6 +71,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private static final String START_STATE_NOTIFICATIONS = "startStateNotifications";
     private static final String STOP_STATE_NOTIFICATIONS = "stopStateNotifications";
 
+    public String MAC_ADDRESS;
+
 
     // callbacks
     CallbackContext discoverCallback;
@@ -497,6 +499,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
     private void connect(CallbackContext callbackContext, String macAddress) {
         Peripheral peripheral = peripherals.get(macAddress);
+        MAC_ADDRESS = macAddress;
         if (peripheral != null) {
             peripheral.connect(callbackContext, cordova.getActivity());
         } else {
@@ -550,18 +553,18 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         peripheral.queueReadRSSI(callbackContext);
     }
 
-    private void write(CallbackContext callbackContext, String macAddress, UUID serviceUUID, UUID characteristicUUID,
+    private void write(CallbackContext callbackContext, String MAC_ADDRESS, UUID serviceUUID, UUID characteristicUUID,
                        byte[] data, int writeType) {
 
-        Peripheral peripheral = peripherals.get(macAddress);
+        Peripheral peripheral = peripherals.get(MAC_ADDRESS);
 
         if (peripheral == null) {
-            callbackContext.error("Peripheral " + macAddress + " not found.");
+            callbackContext.error("Peripheral " + MAC_ADDRESS + " not found.");
             return;
         }
 
         if (!peripheral.isConnected()) {
-            callbackContext.error("Peripheral " + macAddress + " is not connected.");
+            callbackContext.error("Peripheral " + MAC_ADDRESS + " is not connected.");
             return;
         }
 

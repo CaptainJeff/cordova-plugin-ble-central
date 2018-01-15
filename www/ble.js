@@ -47,22 +47,7 @@ function convertToNativeJS(object) {
     });
 }
 
-exports.activateVibration = function (device_id, duration, success, error) {
-    console.log('activateVibration1', device_id, duration);
-    exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
-};
-
-      // activateVibration: function (device_id, duration, success, failure) {
-    //     cordova.exec(success, failure, 'BLE', 'activateVibration', [device_id, duration]);
-    // },
-
 module.exports = {
-
-    activateVibration: function (device_id, duration, success, error) {
-        console.log('activateVibration2', device_id, duration);
-        cordova.exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
-    },
-
 
     scan: function (services, seconds, success, failure) {
         var successWrapper = function(peripheral) {
@@ -180,149 +165,145 @@ module.exports = {
         cordova.exec(success, error, 'BLE', 'setDeviceTime', [device_id, date]);
     },
       
-    // getDeviceTime:function (success, error) {
-    //     console.log('getDeviceTime')
-    //     cordova.exec(success, error, 'BLE', 'getDeviceTime');
-    // },
+    getDeviceTime:function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getDeviceTime');
+    },
       
-    //   /*
-    //    * @param {info} object
-    //    * @example {
-    //    *   gender : string (male|female)
-    //    *   age : int (years)
-    //    *   height : int (cm)
-    //    *   weight : int (kg)
-    //    *   strideLength : int (cm)
-    //    * }
-    //    */
-    // setUserPersonalInfo: function (info, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'setUserPersonalInfo', [info]);
-    // },
+      /*
+       * @param {info} object
+       * @example {
+       *   gender : string (male|female)
+       *   age : int (years)
+       *   height : int (cm)
+       *   weight : int (kg)
+       *   strideLength : int (cm)
+       * }
+       */
+    setUserPersonalInfo: function (info, success, error) {
+        cordova.exec(success, error, 'BLE', 'setUserPersonalInfo', [info]);
+    },
       
-    // getUserPersonalInfo: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getUserPersonalInfo');
-    // },
+    getUserPersonalInfo: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getUserPersonalInfo');
+    },
       
     getDetailedDayActivity: function (device_id, date, success, error) {
         cordova.exec(success, error, 'BLE', 'getDetailedDayActivity', [device_id, date]);
     },
       
-    //   /*
-    //    * @param {info} object
-    //    * @example {
-    //    *   date : {date} string yyyy-MM-dd
-    //    *   deviceDate : {date} string "yyyy-MM-dd'T'HH:mm:ss"
-    //    * }
-    //    */
-    // getSummaryDaySleep: function (info, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getSummaryDaySleep', [info]);
-    // },
+      /*
+       * @param {info} object
+       * @example {
+       *   date : {date} string yyyy-MM-dd
+       *   deviceDate : {date} string "yyyy-MM-dd'T'HH:mm:ss"
+       * }
+       */
+    getSummaryDaySleep: function (info, success, error) {
+        cordova.exec(success, error, 'BLE', 'getSummaryDaySleep', [info]);
+    },
       
-    //   /*
-    //    * @param {info} object
-    //    * @example {
-    //    *   date : {date} string yyyy-MM-dd
-    //    *   deviceDate : {date} string "yyyy-MM-dd'T'HH:mm:ss"
-    //    * }
-    //    */
-    // getSummaryDayActivity: function (info, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getSummaryDayActivity', [info]);
-    // },
+      /*
+       * @param {info} object
+       * @example {
+       *   date : {date} string yyyy-MM-dd
+       *   deviceDate : {date} string "yyyy-MM-dd'T'HH:mm:ss"
+       * }
+       */
+    getSummaryDayActivity: function (info, success, error) {
+        cordova.exec(success, error, 'BLE', 'getSummaryDayActivity', [info]);
+    },
       
       
-    // getLastActivity: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getLastActivity');
-    // },
+    getLastActivity: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getLastActivity');
+    },
       
-    // getLastSleepActivity: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getLastSleepActivity');
-    // },
+    getLastSleepActivity: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getLastSleepActivity');
+    },
       
-    //   /*
-    //    * @param {dailySteps} int
-    //    */
-    // setTargetSteps: function (dailySteps, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'setTargetSteps', [dailySteps]);
-    // },
+      /*
+       * @param {dailySteps} int
+       */
+    setTargetSteps: function (dailySteps, success, error) {
+        cordova.exec(success, error, 'BLE', 'setTargetSteps', [dailySteps]);
+    },
       
-    // getTargetSteps: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getTargetSteps');
-    // },
+    getTargetSteps: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getTargetSteps');
+    },
       
-    //   /*
-    //    * @param {unit} string (mile|km)
-    //    */
-    // setDistanceUnit: function (unit, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'setDistanceUnit', [unit]);
-    // },
+      /*
+       * @param {unit} string (mile|km)
+       */
+    setDistanceUnit: function (unit, success, error) {
+        cordova.exec(success, error, 'BLE', 'setDistanceUnit', [unit]);
+    },
       
-    // getDistanceUnit: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getDistanceUnit');
-    // },
+    getDistanceUnit: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getDistanceUnit');
+    },
       
-    // getDevicesBatteryStatus: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getDevicesBatteryStatus');
-    // },
+    getDevicesBatteryStatus: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getDevicesBatteryStatus');
+    },
       
     getSoftwareVersion: function (device_id, success, error) {
         cordova.exec(success, error, 'BLE', 'getSoftwareVersion', [device_id]);
     },
       
-    //   /*
-    //    * @param {duration} int (1-10)
-    //    */
-    // activateVibration: function (device_id, duration, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
-    // },
+      /*
+       * @param {duration} int (1-10)
+       */
 
-    // activateVibration: function (device_id, duration, success, failure) {
-    //     cordova.exec(success, failure, 'BLE', 'activateVibration', [device_id, duration]);
-    // },
+    activateVibration: function (device_id, duration, success, failure) {
+        cordova.exec(success, failure, 'BLE', 'activateVibration', [device_id, duration]);
+    },
 
       
-    //   /*
-    //    * @param {format} string (12|24)
-    //    */
+      /*
+       * @param {format} string (12|24)
+       */
     setTimeFormat: function (device_id, data, success, error) {
         cordova.exec(success, error, 'BLE', 'setTimeFormat', [device_id, data]);
     },
       
-    // getTimeFormat: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getTimeFormat');
-    // },
+    getTimeFormat: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getTimeFormat');
+    },
       
-    //   /*
-    //    * @param {name} string
-    //    */
-    // setDeviceName: function (name, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'setDeviceName', [name]);
-    // },
+      /*
+       * @param {name} string
+       */
+    setDeviceName: function (name, success, error) {
+        cordova.exec(success, error, 'BLE', 'setDeviceName', [name]);
+    },
       
-    // getDeviceName: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getDeviceName');
-    // },
+    getDeviceName: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getDeviceName');
+    },
       
-    //   /*
-    //    * @param {message} string
-    //    */
-    // showMessage = function (message, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'showMessage', [message]);
-    // },
+      /*
+       * @param {message} string
+       */
+    showMessage = function (message, success, error) {
+        cordova.exec(success, error, 'BLE', 'showMessage', [message]);
+    },
       
-    //   /*
-    //    * @param {mode} string (activity|sleep)
-    //    */
+      /*
+       * @param {mode} string (activity|sleep)
+       */
     setMode: function (device_id, mode, success, error) {
         cordova.exec(success, error, 'BLE', 'setMode', [device_id, mode]);
     },
       
-    // getMode: function (success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getMode');
-    // },
+    getMode: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getMode');
+    },
       
-    // getDataFromScales: function (deviceId, userProfile, success, error) {
-    //     cordova.exec(success, error, 'BLE', 'getDataFromScales', [deviceId, userProfile]);
-    // },
+    getDataFromScales: function (deviceId, userProfile, success, error) {
+        cordova.exec(success, error, 'BLE', 'getDataFromScales', [deviceId, userProfile]);
+    },
       
     //   /*
     //    * @param {info} object
@@ -350,222 +331,3 @@ module.exports = {
 
 };
 
-module.exports.withPromises = {
-    scan: module.exports.scan,
-    startScan: module.exports.startScan,
-    startScanWithOptions: module.exports.startScanWithOptions,
-    connect: module.exports.connect,
-    startNotification: module.exports.startNotification,
-    startStateNotifications: module.exports.startStateNotifications,
-
-    stopScan: function() {
-        return new Promise(function(resolve, reject) {
-            module.exports.stopScan(resolve, reject);
-        });
-    },
-
-    disconnect: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.disconnect(device_id, resolve, reject);
-        });
-    },
-
-    read: function(device_id, service_uuid, characteristic_uuid) {
-        return new Promise(function(resolve, reject) {
-            module.exports.read(device_id, service_uuid, characteristic_uuid, resolve, reject);
-        });
-    },
-
-    write: function(device_id, service_uuid, characteristic_uuid, value) {
-        return new Promise(function(resolve, reject) {
-            module.exports.write(device_id, service_uuid, characteristic_uuid, value, resolve, reject);
-        });
-    },
-
-    writeWithoutResponse: function (device_id, service_uuid, characteristic_uuid, value) {
-        return new Promise(function(resolve, reject) {
-            module.exports.writeWithoutResponse(device_id, service_uuid, characteristic_uuid, value, resolve, reject);
-        });
-    },
-
-    stopNotification: function (device_id, service_uuid, characteristic_uuid) {
-        return new Promise(function(resolve, reject) {
-            module.exports.stopNotification(device_id, service_uuid, characteristic_uuid, resolve, reject);
-        });
-    },
-
-    isConnected: function (device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.isConnected(device_id, resolve, reject);
-        });
-    },
-
-    isEnabled: function () {
-        return new Promise(function(resolve, reject) {
-            module.exports.isEnabled(resolve, reject);
-        });
-    },
-
-    enable: function () {
-        return new Promise(function(resolve, reject) {
-            module.exports.enable(resolve, reject);
-        });
-    },
-
-    showBluetoothSettings: function () {
-        return new Promise(function(resolve, reject) {
-            module.exports.showBluetoothSettings(resolve, reject);
-        });
-    },
-
-    stopStateNotifications: function () {
-        return new Promise(function(resolve, reject) {
-            module.exports.stopStateNotifications(resolve, reject);
-        });
-    },
-
-    readRSSI: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.readRSSI(device_id, resolve, reject);
-        });
-    }, 
-
-    setDeviceTime: function(device_id, date) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setDeviceTime(device_id, date, resolve, reject);
-        });
-    },
-
-    // getDeviceTime: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getDeviceTime(device_id, resolve, reject);
-    //     });
-    // },
-
-    // setUserPersonalInfo: function(device_id, info) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.setUserPersonalInfo(device_id, resolve, reject);
-    //     });
-    // },
-
-    // getUserPersonalInfo: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.setDeviceTime(device_id, resolve, reject);
-    //     });
-    // },
-
-    getDetailedDayActivity: function(device_id, date) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getDetailedDayActivity(device_id, date, resolve, reject);
-        });
-    },
-
-    // getSummaryDaySleep: function(device_id, info) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getSummaryDaySleep(device_id, info, resolve, reject);
-    //     });
-    // },
-
-    // getSummaryDayActivity: function(device_id, info) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getSummaryDayActivity(device_id, resolve, reject);
-    //     });
-    // },
-
-    // getLastActivity: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getLastActivity(device_id, resolve, reject);
-    //     });
-    // },
-
-    // getLastSleepActivity: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getLastSleepActivity(device_id, resolve, reject);
-    //     });
-    // },
-
-    // setTargetSteps: function(device_id, data) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.setDeviceTime(device_id, data, resolve, reject);
-    //     });
-    // },
-
-    // setDistanceUnit: function(device_id, data) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.setDistanceUnit(device_id, data, resolve, reject);
-    //     });
-    // },
-
-    // getDistanceUnit: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getDistanceUnit(device_id, resolve, reject);
-    //     });
-    // },
-
-    // getDevicesBatteryStatus: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getDevicesBatteryStatus(device_id, resolve, reject);
-    //     });
-    // },
-
-    getSoftwareVersion: function(device_id) {
-        return new Promise(function(resolve, reject) {
-            module.exports.getSoftwareVersion(device_id, resolve, reject);
-        });
-    },
-
-    // activateVibration: function(device_id, duration) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.activateVibration(device_id, duration, resolve, reject);
-    //     });
-    // },
-
-    setTimeFormat: function(device_id, format) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setTimeFormat(device_id, format, resolve, reject);
-        });
-    },
-
-    // showMessage: function(device_id, data) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.showMessage(device_id, data, resolve, reject);
-    //     });
-    // },
-
-    setMode: function(device_id, mode) {
-        return new Promise(function(resolve, reject) {
-            module.exports.setMode(device_id, mode, resolve, reject);
-        });
-    },
-
-    // getMode: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getMode(device_id, resolve, reject);
-    //     });
-    // },
-
-    // getDataFromScales: function(device_id, data) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getDataFromScales(device_id, data, resolve, reject);
-    //     });
-    // },
-
-    // setUserProfileToScales: function(device_id, info) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.setUserProfileToScales(device_id, info, resolve, reject);
-    //     });
-    // },
-
-    // setStopScales: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.setStopScales(device_id, resolve, reject);
-    //     });
-    // },
-
-    // getLastSleepTime: function(device_id) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.getLastSleepTime(device_id, resolve, reject);
-    //     });
-    // },
-
-};
