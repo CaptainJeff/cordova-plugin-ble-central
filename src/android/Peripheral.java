@@ -414,7 +414,7 @@ public class Peripheral extends BluetoothGattCallback {
             case SUMMARY_SLEEP: {
               lastSleepData = daySleep;
               //calcSleepTime();
-              trackerAPICallback.onSummarySleepResponse(true, getSleepFrames(daySleep.toArray(new SleepData[daySleep.size()])));
+              onSummarySleepResponse(true, getSleepFrames(daySleep.toArray(new SleepData[daySleep.size()])));
               break;
             }
             case SLEEP_TIME: {
@@ -1155,6 +1155,107 @@ public class Peripheral extends BluetoothGattCallback {
     }
   }
 
+  public void onLastSleepResponse(boolean success, SleepData[] sleepData) {
+    if (success) {
+      sleepDataToJSON(sleepData);
+    } else {
+        writeCallback.error("false");
+    }
+  }
+
+  public JSONArray getSleepFrames(SleepData[] sleep) {
+    JSONArray sleepData = new JSONArray();
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+      long prevTime = sdf.parse(sleep[0].time.replace("T", " ")).getTime() / 60000;
+      JSONArray sleepFrame = new JSONArray();
+      for (int i = 0; i < sleep.length; i++) {
+        long curTime = sdf.parse(sleep[i].time.replace("T", " ")).getTime() / 60000;
+        if (curTime - prevTime <= 15) {
+          JSONObject sleepInterval = new JSONObject();
+          sleepInterval.put("time", sleep[i].time);
+          sleepInterval.put("quality", String.valueOf(sleep[i].restfulness));
+          sleepFrame.put(sleepInterval);
+        } else {
+          sleepData.put(sleepFrame);
+          sleepFrame = new JSONArray();
+          JSONObject sleepInterval = new JSONObject();
+          sleepInterval.put("time", sleep[i].time);
+          sleepInterval.put("quality", String.valueOf(sleep[i].restfulness));
+          sleepFrame.put(sleepInterval);
+        }
+        if (i == sleep.length - 1) {
+          sleepData.put(sleepFrame);
+        }
+        prevTime = curTime;
+      }
+      LOG.d("SLEEP: ", sleepData.toString());
+    } catch (Exception ex) {
+        LOG.d("Sleep: ", ex.getMessage());
+    }
+    return sleepData;
+  }
+
+  private void calcSleepTime() {
+    ArrayList<SleepData> lastSleepData;
+    lastSleepData = daySleep;
+    Collections.reverse(lastSleepData);
+    int i = 1;
+    if (lastSleepData.size() > 1) {
+      lastSleepTime += 15;
+      while (lastSleepData.get(i).index + 1 == lastSleepData.get(i - 1).index  && i <= lastSleepData.size()) {
+        lastSleepTime += 15;
+        i++;
+      }
+      if (lastSleepData.get(i).index == 0 && state == ActivityState.SLEEP_TIME) {
+        state = ActivityState.SLEEP_YESTERDAY_TIME;
+        LOG.d("SLEEP", String.valueOf(lastSleepTime * 60));
+        getDayActivity(1);
+      } else {
+        onSleepTime(true, lastSleepTime * 60, lastSleepData.get(i).time);
+      }
+      LOG.d("SLEEP", String.valueOf(lastSleepTime * 60));
+    }
+  }
+
+  public void onDailyActivityResponse(boolean success, ActivityData[] activity) {
+    if (success) {
+      dayActivityToJSON(activity);
+    } else {
+        writeCallback.error("false");
+    }
+  }
+
+  public void onSummarySleepResponse(boolean success, JSONArray sleepData) {
+    if (success) {
+        writeCallback.success(sleepData);
+    } else {
+        writeCallback.success(new JSONArray());
+    }
+  }
+
+  public void onSleepTime(boolean success, int time, String from){
+    if(success) {
+      try {
+        JSONObject sleepTime = new JSONObject();
+        sleepTime.put("status", "true");
+        sleepTime.put("seconds", time);
+        sleepTime.put("from", from);
+        writeCallback.success(sleepTime.toString());
+      } catch (Exception ex){
+        writeCallback.error("");
+      }} else {
+      try {
+        JSONObject sleepTime = new JSONObject();
+        sleepTime.put("status", "false");
+        sleepTime.put("seconds", time);
+        sleepTime.put("from", from);
+        writeCallback.success(sleepTime.toString());
+      } catch (Exception ex){
+        writeCallback.error("");
+      }
+    }
+  }
 }
 
 
