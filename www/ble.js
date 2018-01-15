@@ -515,11 +515,12 @@ module.exports.withPromises = {
         });
     },
 
-    // activateVibration: function(device_id, duration) {
-    //     return new Promise(function(resolve, reject) {
-    //         module.exports.activateVibration(device_id, duration, resolve, reject);
-    //     });
-    // },
+    activateVibration: function(device_id, duration) {
+        console.log('activate vibratation 4')
+        return new Promise(function(resolve, reject) {
+            module.exports.activateVibration(device_id, duration, resolve, reject);
+        });
+    },
 
     setTimeFormat: function(device_id, format) {
         return new Promise(function(resolve, reject) {
