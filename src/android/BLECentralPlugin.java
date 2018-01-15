@@ -301,7 +301,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             timeFromSync = 0;
             byte[] data = new byte[16];
             data[0] = Helper.CommandCode.getSoftwareVersion;
-            data[15] = calcCRC(data);
+            data[15] = Helper.calcCRC(data);
 
             write(callbackContext, MAC_ADDRESS, data, type);
           }
