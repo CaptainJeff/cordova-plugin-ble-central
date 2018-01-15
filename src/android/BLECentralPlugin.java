@@ -81,6 +81,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private static final String TAG = "BLEPlugin";
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
+    private String MAC_ADDRESS;
+
     CordovaWebView cWebView;
 
 
@@ -170,9 +172,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             listKnownDevices(callbackContext);
 
         } else if (action.equals(CONNECT)) {
-
-            String macAddress = args.getString(0);
-            connect(callbackContext, macAddress);
+            MAC_ADDRESS = args.getString(0);
+            connect(callbackContext, MAC_ADDRESS);
 
         } else if (action.equals(DISCONNECT)) {
 
@@ -286,7 +287,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         } else if (action.equalsIgnoreCase("activateVibration")) {
             vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
 
-            String macAddress = args.getString(0);
+            int duration = args.getString(0);
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
             byte[] data = new byte[16];
@@ -294,11 +295,10 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             data[1] = (byte) (duration > 10 ? 10 : duration);
             data[15] = Helper.calcCRC(data);
 
-            write(callbackContext, macAddress, data, type);
+            write(callbackContext, MAC_ADDRESS, data, type);
           } else if (action.equalsIgnoreCase("getSoftwareVersion")) {
             vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
 
-            String macAddress = args.getString(0);
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
             timeFromSync = 0;
@@ -306,7 +306,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             message[0] = Helper.CommandCode.getSoftwareVersion;
             message[15] = calcCRC(message);
 
-            write(callbackContext, macAddress, data, type);
+            write(callbackContext, MAC_ADDRESS, data, type);
           }
 
         

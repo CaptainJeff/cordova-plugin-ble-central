@@ -266,8 +266,8 @@ module.exports = {
     //     cordova.exec(success, error, 'BLE', 'getDevicesBatteryStatus');
     // },
       
-    getSoftwareVersion: function (device_id, success, error) {
-        cordova.exec(success, error, 'BLE', 'getSoftwareVersion', [device_id]);
+    getSoftwareVersion: function (success, error) {
+        cordova.exec(success, error, 'BLE', 'getSoftwareVersion');
     },
       
     //   /*
@@ -277,9 +277,9 @@ module.exports = {
     //     cordova.exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
     // },
 
-    activateVibration: function (device_id, duration, success, failure) {
+    activateVibration: function (duration, success, failure) {
         console.log('ativate vibration 3')
-        cordova.exec(success, failure, 'BLE', 'activateVibration', [device_id, duration]);
+        cordova.exec(success, failure, 'BLE', 'activateVibration', [duration]);
     },
 
       
@@ -512,15 +512,16 @@ module.exports.withPromises = {
     // },
 
     getSoftwareVersion: function(device_id) {
+        console.log('getSoftwareVersion')
         return new Promise(function(resolve, reject) {
-            module.exports.getSoftwareVersion(device_id, resolve, reject);
+            module.exports.getSoftwareVersion(resolve, reject);
         });
     },
 
     activateVibration: function(device_id, duration) {
         console.log('activate vibratation 4')
         return new Promise(function(resolve, reject) {
-            module.exports.activateVibration(device_id, duration, resolve, reject);
+            module.exports.activateVibration(duration, resolve, reject);
         });
     },
 
