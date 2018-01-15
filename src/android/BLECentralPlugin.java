@@ -299,9 +299,9 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
             timeFromSync = 0;
-            byte[] message = new byte[16];
-            message[0] = Helper.CommandCode.getSoftwareVersion;
-            message[15] = calcCRC(message);
+            byte[] data = new byte[16];
+            data[0] = Helper.CommandCode.getSoftwareVersion;
+            data[15] = calcCRC(data);
 
             write(callbackContext, MAC_ADDRESS, data, type);
           }
@@ -445,7 +445,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         }
 
         //peripheral.writeCharacteristic(callbackContext, serviceUUID, characteristicUUID, data, writeType);
-        peripheral.queueWrite(callbackContext, "fff0", "fff6", data, writeType);
+        peripheral.queueWrite(callbackContext, uuidFromString("fff0"), uuidFromString("fff6"), data, writeType);
 
     }
 
