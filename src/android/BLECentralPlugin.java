@@ -294,11 +294,11 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
             write(callbackContext, MAC_ADDRESS, data, type);
           } else if (action.equalsIgnoreCase("getSoftwareVersion")) {
-            vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
+            // vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
 
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
-            timeFromSync = 0;
+            // timeFromSync = 0;
             byte[] data = new byte[16];
             data[0] = Helper.CommandCode.getSoftwareVersion;
             data[15] = Helper.calcCRC(data);
