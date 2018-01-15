@@ -62,6 +62,9 @@ public class Peripheral extends BluetoothGattCallback {
     private CallbackContext readCallback;
     private CallbackContext writeCallback;
 
+    int timeFromSync = 0;
+    int lastSleepTime = 0;
+
     private Map<String, CallbackContext> notificationCallbacks = new HashMap<String, CallbackContext>();
 
     public Peripheral(BluetoothDevice device, int advertisingRSSI, byte[] scanRecord) {
@@ -321,32 +324,32 @@ public class Peripheral extends BluetoothGattCallback {
         commandCompleted();
     }
 
-    // public void getDaySummary(String day) {
-    //     try {
-    //       int dayIndex = dateToDayIndex(day);
-    //       state = ActivityState.SUMMARY;
-    //       summaryDay = day;
-    //       getDayActivity(dayIndex < 10 ? dayIndex : 29);
-    //     } catch (Exception ex) {
-    //     }
-    // }
+    public void getDaySummary(String day) {
+        try {
+          int dayIndex = dateToDayIndex(day);
+          state = ActivityState.SUMMARY;
+          summaryDay = day;
+          getDayActivity(dayIndex < 10 ? dayIndex : 29);
+        } catch (Exception ex) {
+        }
+    }
 
-    // public void getDayActivity(String date) {
-    //     state = ActivityState.DAY;
-    //     getDayActivity(dateToDayIndex(date));
-    //     timeFromSync = 0;
-    //   }
+    public void getDayActivity(String date) {
+        state = ActivityState.DAY;
+        getDayActivity(dateToDayIndex(date));
+        timeFromSync = 0;
+      }
     
-    //   public void getDayActivity(final int day) {
-    //     dayActivity = new ArrayList<ActivityData>();
-    //     daySleep = new ArrayList<SleepData>();
-    //     byte[] message = new byte[16];
-    //     message[0] = getDetailedCurrentDayActivityData;
-    //     message[1] = (byte) day;
-    //     message[15] = calcCRC(message);
-    //     timeFromSync = 0;
-    //     btManager.writeData(message);
-    //   }
+      public void getDayActivity(final int day) {
+        dayActivity = new ArrayList<ActivityData>();
+        daySleep = new ArrayList<SleepData>();
+        byte[] message = new byte[16];
+        // message[0] = getDetailedCurrentDayActivityData;
+        // message[1] = (byte) day;
+        // message[15] = calcCRC(message);
+        // timeFromSync = 0;
+        // btManager.writeData(message);
+      }
 
     private void dayActivityResponse(byte[] response) {
         state = ActivityState.DAY;
