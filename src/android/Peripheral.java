@@ -351,6 +351,19 @@ public class Peripheral extends BluetoothGattCallback {
         // btManager.writeData(message);
       }
 
+      int dateToDayIndex(String day) {
+        try {
+          timeFromSync = 0;
+          Date currentDay = new Date();
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+          long timeDiff = currentDay.getTime() - sdf.parse(day).getTime();
+          return (int) (TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS));
+        } catch (Exception ex) {
+          return 0;
+    
+        }
+      }
+
     private void dayActivityResponse(byte[] response) {
         state = ActivityState.DAY;
       LOG.d(TAG, "dayActivityResponse " + response);
