@@ -96,7 +96,6 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private CallbackContext permissionCallback;
     private UUID[] serviceUUIDs;
     private int scanSeconds;
-    private MAC_ADDRESS string;
     
 
     // Bluetooth state notification
