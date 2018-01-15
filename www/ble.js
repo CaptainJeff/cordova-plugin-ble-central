@@ -48,6 +48,7 @@ function convertToNativeJS(object) {
 }
 
 exports.activateVibration = function (device_id, duration, success, error) {
+    console.log('activateVibration1', device_id, duration);
     exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
 };
 
@@ -56,6 +57,12 @@ exports.activateVibration = function (device_id, duration, success, error) {
     // },
 
 module.exports = {
+
+    activateVibration: function (device_id, duration, success, error) {
+        console.log('activateVibration2', device_id, duration);
+        exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
+    },
+
 
     scan: function (services, seconds, success, failure) {
         var successWrapper = function(peripheral) {
