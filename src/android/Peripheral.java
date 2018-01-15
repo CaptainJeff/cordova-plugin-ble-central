@@ -969,7 +969,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onSummaryResponse(boolean success, String date, int steps, float calories, float distance) {
         if (success) {
           try {
@@ -992,7 +991,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onLatestActivityResponse(boolean success, String date, int steps, float calories, float distance) {
         if (success) {
           try {
@@ -1010,7 +1008,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onSetTargetSteps(boolean success) {
         if (success) {
             writeCallback.success("true");
@@ -1019,7 +1016,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onGetTargetSteps(boolean success, int dailySteps) {
         if (success) {
           try {
@@ -1034,7 +1030,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onVersionNumber(boolean success, String version) {
         if (success) {
           try {
@@ -1047,7 +1042,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onVibration(boolean result) {
         if (result) {
             writeCallback.success("true");
@@ -1056,7 +1050,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onSetDeviceName(boolean success) {
         if (success) {
             writeCallback.success("true");
@@ -1065,7 +1058,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onGetDeviceName(boolean success, String name) {
         if (success) {
             writeCallback.success(name);
@@ -1074,7 +1066,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onSetTimeFormat(boolean success) {
         if (success) {
             writeCallback.success("true");
@@ -1083,7 +1074,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onGetTimeFormat(boolean success, String timeFormat) {
         if (success) {
             writeCallback.success(timeFormat);
@@ -1092,7 +1082,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onSetTime(boolean success) {
         if (success) {
             writeCallback.success("true");
@@ -1101,7 +1090,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onGetTime(boolean success, String time) {
         if (success) {
           PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, time);
@@ -1113,7 +1101,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onSetUserPersonalData(boolean success) {
         if (success) {
             writeCallback.success("true");
@@ -1122,7 +1109,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onGetUserPersonalData(boolean success, String message) {
         if (success) {
             writeCallback.success(message);
@@ -1131,7 +1117,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onSetMode(boolean success) {
         if (success) {
             writeCallback.success("true");
@@ -1140,7 +1125,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onModeResponse(boolean success, String mode) {
         if (success) {
             writeCallback.success(mode);
@@ -1149,7 +1133,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onSetDistanceUnitResponse(boolean success) {
         if (success) {
             writeCallback.success("true");
@@ -1159,7 +1142,6 @@ public class Peripheral extends BluetoothGattCallback {
       }
 
 
-      @Override
       public void onDistanceUnitResponse(boolean success, String unit) {
         if (success) {
             writeCallback.success(unit);
@@ -1168,7 +1150,6 @@ public class Peripheral extends BluetoothGattCallback {
         }
       }
 
-      @Override
       public void onError(String error) {
         writeCallback.error("");
       }
