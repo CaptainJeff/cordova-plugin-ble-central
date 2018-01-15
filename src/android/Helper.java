@@ -248,6 +248,7 @@ public class Helper {
         static final byte measurementResponse = (byte)0xff;
 
     //=============== Other ==============
+        static final String trackerCharacteristicReadUuid = "fff7";    
         static final String trackerCharacteristicWriteUuid = "fff6";
         static final String trackerServiceUuid = "fff0";
     }

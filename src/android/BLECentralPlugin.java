@@ -120,6 +120,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         LOG.d(TAG, "action = " + action);
 
+        
         String macAddress = args.getString(0);
         UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
         UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
@@ -193,8 +194,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
 
         } else if (action.equals(START_NOTIFICATION)) {
-
-            characteristicUUID = uuidFromString(args.getString(2));
+            characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicReadUuid);
             registerNotifyCallback(callbackContext, macAddress, serviceUUID, characteristicUUID);
 
         } else if (action.equals(STOP_NOTIFICATION)) {
