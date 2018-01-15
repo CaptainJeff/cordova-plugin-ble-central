@@ -284,7 +284,7 @@ public class Peripheral extends BluetoothGattCallback {
       } else if (value[0] == Helper.CommandCode.getMode) {
 
         writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.activateVibration ) {
+      } else if (value[0] == Helper.CommandCode.activateVibration || value[0] == Helper.CommandCode.activateVibrationResponse) {
         LOG.d(TAG, "value!!! " + value[0]);
         // response = onSuccessCall();
         writeCallback.success();
@@ -505,6 +505,7 @@ public class Peripheral extends BluetoothGattCallback {
         String versionNumber = "0.0.0";
         versionNumber = new String(version, "UTF-8").trim();
 
+        LOG.d(TAG, "getSoftVersionResponse " + versionNumber);
         writeCallback.success(versionNumber);
 
       } catch (Exception ex) {
