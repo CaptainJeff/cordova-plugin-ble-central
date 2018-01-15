@@ -1152,22 +1152,6 @@ public class Peripheral extends BluetoothGattCallback {
       }
   
 
-  void dayActivityToJSON(ActivityData[] activity) {
-    JSONArray jsonArray = new JSONArray();
-    try {
-      for (int i = 0; i < activity.length; i++) {
-        JSONObject activityObj = new JSONObject();
-        activityObj.put("time", activity[i].time);
-        activityObj.put("calories", activity[i].calories);
-        activityObj.put("steps", activity[i].steps);
-        activityObj.put("distance", activity[i].distance);
-        jsonArray.put(activityObj);
-      }
-      writeCallback.success(jsonArray.toString());
-    } catch (Exception ex) {
-        writeCallback.error(ex.getMessage());
-    }
-  }
 
   void sleepDataToJSON(SleepData[] sleepData) {
     JSONArray jsonArray = new JSONArray();
