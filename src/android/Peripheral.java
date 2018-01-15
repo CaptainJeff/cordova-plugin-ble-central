@@ -56,6 +56,7 @@ public class Peripheral extends BluetoothGattCallback {
     ArrayList<SleepData> daySleep = new ArrayList<SleepData>();
 
     BluetoothGatt gatt;
+    String summaryDay = "";
 
     private CallbackContext connectCallback;
     private CallbackContext readCallback;
@@ -323,6 +324,7 @@ public class Peripheral extends BluetoothGattCallback {
         }
         
         parseResponse(characteristic.getValue());
+        commandCompleted();
     }
 
     // public void getDaySummary(String day) {
@@ -510,12 +512,7 @@ public class Peripheral extends BluetoothGattCallback {
         versionNumber = new String(version, "UTF-8").trim();
 
         writeCallback.success(versionNumber);
-        commandCompleted();
-        // timeFromSync = 0;
-        // Log.wtf("=======SOFT VERSION=======", new String(version, "UTF-8").trim());
-        // trackerAPICallback.onConnect(true);
-        // isConnected = true;
-        // trackerAPICallback.onVersionNumber(true, new String(version, "UTF-8").trim());
+
       } catch (Exception ex) {
       }
     }
@@ -981,7 +978,7 @@ public class Peripheral extends BluetoothGattCallback {
               summary.put("distance", String.valueOf(distance));
               summaryDays.put(summary);
             }
-            Log.d("SUMMARY DAYS: ", summaryDays.toString());
+            LOG.d("SUMMARY DAYS: ", summaryDays.toString());
             writeCallback.success(summaryDays);
           } catch (Exception ex) {
             writeCallback.error(ex.getMessage());
@@ -1096,7 +1093,7 @@ public class Peripheral extends BluetoothGattCallback {
           pluginResult.setKeepCallback(true);
           writeCallback.sendPluginResult(pluginResult);
         } else {
-          Log.d("Time: ", "error");
+          LOG.d("Time: ", "error");
           writeCallback.error("false");
         }
       }
