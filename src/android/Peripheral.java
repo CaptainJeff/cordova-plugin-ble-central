@@ -29,11 +29,6 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
-
 /**
  * Peripheral wraps the BluetoothDevice and provides methods to convert to JSON.
  */
@@ -51,20 +46,12 @@ public class Peripheral extends BluetoothGattCallback {
     private boolean connecting = false;
     private ConcurrentLinkedQueue<BLECommand> commandQueue = new ConcurrentLinkedQueue<BLECommand>();
     private boolean bleProcessing;
-    ActivityState state = ActivityState.DAY;
-
-    ArrayList<ActivityData> dayActivity = new ArrayList<ActivityData>();
-    ArrayList<SleepData> daySleep = new ArrayList<SleepData>();
 
     BluetoothGatt gatt;
-    String summaryDay = "";
 
     private CallbackContext connectCallback;
     private CallbackContext readCallback;
     private CallbackContext writeCallback;
-
-    int timeFromSync = 0;
-    int lastSleepTime = 0;
 
     private Map<String, CallbackContext> notificationCallbacks = new HashMap<String, CallbackContext>();
 
@@ -199,12 +186,6 @@ public class Peripheral extends BluetoothGattCallback {
         return object;
     }
 
-    static JSONObject activityDataToObject(ArrayList<ActivityData> array) throws JSONException {
-        JSONObject object = new JSONObject();
-        object.put("data", array);
-        return object;
-    }
-
     public boolean isConnected() {
         return connected;
     }
@@ -253,47 +234,36 @@ public class Peripheral extends BluetoothGattCallback {
 
     }
 
-    // @Override
+    void getSoftVersionResponse(byte[] response) {
+        try {
+          byte[] version = new byte[14];
+          for (int i = 1; response[i] != 0x00 && i < 6; i++) {
+            version[i - 1] = response[i];
+          }
+          String versionNumber = "0.0.0";
+          versionNumber = new String(version, "UTF-8").trim();
+          LOG.d(TAG, "versionNumber!!! " + versionNumber);
+          writeCallback.success(versionNumber);
+          commandCompleted();
+        } catch (Exception ex) {
+        }
+      }
+
     public void parseResponse(byte[] value) {
-      if (value[0] == Helper.CommandCode.getSoftwareVersion) {
-        getSoftVersionResponse(value);
-      } else if (value[0] == Helper.CommandCode.getDevicesBatteryStatus) {
-
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getTargetSteps) {
-
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getDeviceName) {
-
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getTimeFormat) {
-
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getDeviceTime) {
-
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getUserPersonalInfo) {
-
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getDetailedCurrentDayActivityData) {
-        LOG.d(TAG, "dayActivityResponse " + value[0]);
-        dayActivityResponse(value);
-      } else if (value[0] == Helper.CommandCode.getDistanceUnit) {
-
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.getMode) {
-
-        writeCallback.success();
-      } else if (value[0] == Helper.CommandCode.activateVibration || value[0] == Helper.CommandCode.activateVibrationResponse) {
         LOG.d(TAG, "value!!! " + value[0]);
-        // response = onSuccessCall();
-        writeCallback.success();
-      }
-       else {
-        LOG.d(TAG, "elllllse!!! " + value[0]);
-        writeCallback.success();
-      }
-      
+        if (value[0] == Helper.CommandCode.getSoftwareVersion) {
+            LOG.d(TAG, "getSoftwareVersion!!! " + value[0]);
+            getSoftVersionResponse(value);
+        }  else if (value[0] == Helper.CommandCode.activateVibration ) {
+            LOG.d(TAG, "activateVibration!!! " + value[0]);
+            // response = onSuccessCall();
+            writeCallback.success();
+            commandCompleted();
+          } else {
+            LOG.d(TAG, "else!!! " + value[0]);
+            writeCallback.success();
+            commandCompleted();
+        }
     }
 
     @Override
@@ -307,210 +277,10 @@ public class Peripheral extends BluetoothGattCallback {
             PluginResult result = new PluginResult(PluginResult.Status.OK, characteristic.getValue());
             result.setKeepCallback(true);
             callback.sendPluginResult(result);
-            // writeCallback.sendPluginResult(result);
-            // writeCallback.success();
         }
-        
+
         parseResponse(characteristic.getValue());
-        commandCompleted();
-    }
 
-    // public void getDaySummary(String day) {
-    //     try {
-    //       int dayIndex = dateToDayIndex(day);
-    //       state = ActivityState.SUMMARY;
-    //       summaryDay = day;
-    //       getDayActivity(dayIndex < 10 ? dayIndex : 29);
-    //     } catch (Exception ex) {
-    //     }
-    // }
-
-    // public void getDayActivity(String date) {
-    //     state = ActivityState.DAY;
-    //     getDayActivity(dateToDayIndex(date));
-    //     timeFromSync = 0;
-    //   }
-    
-    //   public void getDayActivity(final int day) {
-    //     dayActivity = new ArrayList<ActivityData>();
-    //     daySleep = new ArrayList<SleepData>();
-    //     byte[] message = new byte[16];
-    //     // message[0] = getDetailedCurrentDayActivityData;
-    //     // message[1] = (byte) day;
-    //     // message[15] = calcCRC(message);
-    //     // timeFromSync = 0;
-    //     // btManager.writeData(message);
-    //   }
-
-    //   int dateToDayIndex(String day) {
-    //     try {
-    //       timeFromSync = 0;
-    //       Date currentDay = new Date();
-    //       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    //       long timeDiff = currentDay.getTime() - sdf.parse(day).getTime();
-    //       return (int) (TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS));
-    //     } catch (Exception ex) {
-    //       return 0;
-    
-    //     }
-    //   }
-
-    private void dayActivityResponse(byte[] response) {
-        state = ActivityState.DAY;
-        writeCallback.success();
-    //   LOG.d(TAG, "dayActivityResponse " + response);
-    //   LOG.d(TAG, "dayActivityResponse - 0 " + response[0]);
-    //   LOG.d(TAG, "dayActivityResponse - 6 " + response[6]);
-    //   LOG.d(TAG, "dayActivityResponse - 1 " + response[1]);
-    //   LOG.d(TAG, "state - 1 " + state);
-
-    //   LOG.d(TAG, "dayActivityArray - 1 " + String.valueOf(dayActivity));
-    //   ArrayList<SleepData> lastSleepData;
-    //   if (response[6] != (byte) (0xff)) {
-    //     LOG.d(TAG, "if " + response[6]);
-    //     dayActivity.add(new ActivityData(response));
-
-    //     LOG.d(TAG, "dayActivity " + String.valueOf(dayActivity));
-    //   } else {
-    //     LOG.d(TAG, "else " + response[6]);
-    //     daySleep.add(new SleepData(response));
-    //   }
-    //   if (response[1] != (byte) 0xff) {
-    //     if (dayActivity.size() + daySleep.size() == 96) {
-    //       LOG.d(TAG, "324 " + String.valueOf(dayActivity.size()));
-    //       LOG.d(TAG, "Error", String.valueOf(dayActivity.size() + daySleep.size()));
-    //       switch (state) {
-    //         case SUMMARY: {
-    //           int totalSteps = 0;
-    //           float totalCal = 0;
-    //           float totalDistanse = 0;
-    //           for (int i = 0; i < dayActivity.size(); i++) {
-    //             totalSteps += dayActivity.get(i).getSteps();
-    //             totalCal += dayActivity.get(i).calories;
-    //             totalDistanse += dayActivity.get(i).distance;
-    //           }
-
-    //           onSummaryResponse(true, summaryDay, totalSteps, totalCal, totalDistanse);
-    //           break;
-    //         }
-    //         case DAY:
-    //             LOG.d(TAG, "389 " + dayActivity.toArray(new ActivityData[dayActivity.size()]));
-    //             dayActivityToJSON(dayActivity.toArray(new ActivityData[dayActivity.size()]));
-    //           break;
-    //         case LATEST: {
-    //           int totalSteps = 0;
-    //           float totalCal = 0;
-    //           float totalDistanse = 0;
-    //           String date = "";
-    //           for (int i = 0; i < dayActivity.size(); i++) {
-    //             totalSteps += dayActivity.get(i).getSteps();
-    //             totalCal += dayActivity.get(i).calories;
-    //             totalDistanse += dayActivity.get(i).distance;
-    //             if (dayActivity.get(i).getSteps() != 0) {
-    //               date = dayActivity.get(i).getTime();
-    //             }
-    //           }
-    //           onLatestActivityResponse(true, date, totalSteps, totalCal, totalDistanse);
-    //           break;
-    //         }
-    //         case SLEEP: {
-    //           onLastSleepResponse(true, daySleep.toArray(new SleepData[daySleep.size()]));
-    //           lastSleepData = daySleep;
-    //           //calcSleepTime();
-    //           break;
-    //         }
-    //         case SUMMARY_SLEEP: {
-    //           lastSleepData = daySleep;
-    //           //calcSleepTime();
-    //           onSummarySleepResponse(true, getSleepFrames(daySleep.toArray(new SleepData[daySleep.size()])));
-    //           break;
-    //         }
-    //         case SLEEP_TIME: {
-    //           LOG.d(TAG,"SLEEP_TIME", "");
-    //           lastSleepData = daySleep;
-    //           calcSleepTime();
-    //           break;
-    //         }
-    //         case SLEEP_YESTERDAY_TIME: {
-    //           lastSleepData = daySleep;
-    //           calcSleepTime();
-    //           break;
-    //         }
-    //       }
-    //     } else {
-    //       LOG.d(TAG,"Error", String.valueOf(dayActivity.size() + daySleep.size()));
-    //       LOG.d(TAG, "384 " + String.valueOf(dayActivity.size()));
-    //     }
-    //   } 
-    //   else {
-    //     switch (state) {
-    //       case SUMMARY:
-    //         onSummaryResponse(true, summaryDay, 0, 0, 0);
-    //         break;
-    //       case DAY:
-    //         onDailyActivityResponse(false, null);
-    //         break;
-    //       case LATEST:
-    //         onDailyActivityResponse(false, null);
-    //         break;
-    //       case SLEEP:
-    //         onLastSleepResponse(false, null);
-    //         break;
-    //       case SUMMARY_SLEEP:
-    //         onSummarySleepResponse(false, null);
-    //         break;
-    //       case SLEEP_TIME:
-    //         onSleepTime(false, 0, "");
-    //         break;
-    //       case SLEEP_YESTERDAY_TIME:
-    //         onSleepTime(false, 0, "");
-    //         break;
-    //     }
-    //   }
-      
-    }
-
-    // public JSONObject getSoftwareVersion(byte[] bytes) {
-    //   JSONObject response = new JSONObject();
-    //   try {
-    //       byte[] version = new byte[14];
-    //       for (int i = 1; bytes[i] != 0x00 && i < 6; i++) {
-    //         version[i - 1] = bytes[i];
-    //       }
-    //       String versionNumber = "0.0.0";
-
-    //       try {
-    //         versionNumber = new String(version, "UTF-8").trim();
-    //       }
-    //       catch(Exception ex) {
-    //         versionNumber = "0.0.0";
-    //       }
-
-    //       response.put("version", versionNumber);
-    //   }
-    //   catch (JSONException e) { // this shouldn't happen
-    //       LOG.e(TAG, "onSuccessCall: JSONException" + e);
-    //       e.printStackTrace();
-    //   }
-
-    //   writeCallback.success(response);
-    //   return response;
-    // }
-
-    void getSoftVersionResponse(byte[] response) {
-      try {
-        byte[] version = new byte[14];
-        for (int i = 1; response[i] != 0x00 && i < 6; i++) {
-          version[i - 1] = response[i];
-        }
-        String versionNumber = "0.0.0";
-        versionNumber = new String(version, "UTF-8").trim();
-
-        LOG.d(TAG, "getSoftVersionResponse " + versionNumber);
-        writeCallback.success(versionNumber);
-
-      } catch (Exception ex) {
-      }
     }
 
     @Override
@@ -526,7 +296,6 @@ public class Peripheral extends BluetoothGattCallback {
                 readCallback.error("Error reading " + characteristic.getUuid() + " status=" + status);
             }
 
-            LOG.d(TAG, "readCallback = null " + characteristic);
             readCallback = null;
 
         }
@@ -539,18 +308,18 @@ public class Peripheral extends BluetoothGattCallback {
         super.onCharacteristicWrite(gatt, characteristic, status);
         LOG.d(TAG, "onCharacteristicWrite " + characteristic);
 
-        // if (writeCallback != null) {
+        if (writeCallback != null) {
 
-        //     if (status == BluetoothGatt.GATT_SUCCESS) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
                 
-        //     } else {
-        //         writeCallback.error(status);
-        //     }
+            } else {
+                writeCallback.error(status);
+            }
 
-        //     writeCallback = null;
-        // }
+            writeCallback = null;
+        }
 
-        // commandCompleted();
+        
     }
 
     @Override
@@ -945,326 +714,4 @@ public class Peripheral extends BluetoothGattCallback {
         return String.valueOf(serviceUUID) + "|" + characteristic.getUuid() + "|" + characteristic.getInstanceId();
     }
 
-//     void dayActivityToJSON(ActivityData[] activity) {
-//         JSONArray jsonArray = new JSONArray();
-//         try {
-//           for (int i = 0; i < activity.length; i++) {
-//             JSONObject activityObj = new JSONObject();
-//             activityObj.put("time", activity[i].time);
-//             activityObj.put("calories", activity[i].calories);
-//             activityObj.put("steps", activity[i].steps);
-//             activityObj.put("distance", activity[i].distance);
-//             jsonArray.put(activityObj);
-//           }
-//             writeCallback.success(jsonArray.toString());
-//         } catch (Exception ex) {
-//             writeCallback.error(ex.getMessage());
-//         }
-//       }
-
-//       public void onSummaryResponse(boolean success, String date, int steps, float calories, float distance) {
-//         if (success) {
-//           try {
-//             JSONArray summaryDays = new JSONArray();
-//             if (steps != 0 || calories != 0 || distance != 0) {
-//               JSONObject summary = new JSONObject();
-//               summary.put("date", date);
-//               summary.put("calories", String.valueOf(calories));
-//               summary.put("steps", String.valueOf(steps));
-//               summary.put("distance", String.valueOf(distance));
-//               summaryDays.put(summary);
-//             }
-//             LOG.d("SUMMARY DAYS: ", summaryDays.toString());
-//             writeCallback.success(summaryDays);
-//           } catch (Exception ex) {
-//             writeCallback.error(ex.getMessage());
-//           }
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onLatestActivityResponse(boolean success, String date, int steps, float calories, float distance) {
-//         if (success) {
-//           try {
-//             JSONObject latest = new JSONObject();
-//             latest.put("date", date);
-//             latest.put("calories", String.valueOf(calories));
-//             latest.put("steps", String.valueOf(steps));
-//             latest.put("distance", String.valueOf(distance));
-//             writeCallback.success(latest.toString());
-//           } catch (Exception ex) {
-//             writeCallback.error(ex.getMessage());
-//           }
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onSetTargetSteps(boolean success) {
-//         if (success) {
-//             writeCallback.success("true");
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onGetTargetSteps(boolean success, int dailySteps) {
-//         if (success) {
-//           try {
-//             JSONObject latest = new JSONObject();
-//             latest.put("steps", String.valueOf(dailySteps));
-//             writeCallback.success(latest.toString());
-//           } catch (Exception ex) {
-//             writeCallback.error(ex.getMessage());
-//           }
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onVersionNumber(boolean success, String version) {
-//         if (success) {
-//           try {
-//             writeCallback.success(version);
-//           } catch (Exception ex) {
-//             writeCallback.error(ex.getMessage());
-//           }
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onVibration(boolean result) {
-//         if (result) {
-//             writeCallback.success("true");
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onSetDeviceName(boolean success) {
-//         if (success) {
-//             writeCallback.success("true");
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onGetDeviceName(boolean success, String name) {
-//         if (success) {
-//             writeCallback.success(name);
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onSetTimeFormat(boolean success) {
-//         if (success) {
-//             writeCallback.success("true");
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onGetTimeFormat(boolean success, String timeFormat) {
-//         if (success) {
-//             writeCallback.success(timeFormat);
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onSetTime(boolean success) {
-//         if (success) {
-//             writeCallback.success("true");
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onGetTime(boolean success, String time) {
-//         if (success) {
-//           PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, time);
-//           pluginResult.setKeepCallback(true);
-//           writeCallback.sendPluginResult(pluginResult);
-//         } else {
-//           LOG.d("Time: ", "error");
-//           writeCallback.error("false");
-//         }
-//       }
-
-//       public void onSetUserPersonalData(boolean success) {
-//         if (success) {
-//             writeCallback.success("true");
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onGetUserPersonalData(boolean success, String message) {
-//         if (success) {
-//             writeCallback.success(message);
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onSetMode(boolean success) {
-//         if (success) {
-//             writeCallback.success("true");
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onModeResponse(boolean success, String mode) {
-//         if (success) {
-//             writeCallback.success(mode);
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onSetDistanceUnitResponse(boolean success) {
-//         if (success) {
-//             writeCallback.success("true");
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-
-//       public void onDistanceUnitResponse(boolean success, String unit) {
-//         if (success) {
-//             writeCallback.success(unit);
-//         } else {
-//             writeCallback.error("false");
-//         }
-//       }
-
-//       public void onError(String error) {
-//         writeCallback.error("");
-//       }
-  
-
-
-//   void sleepDataToJSON(SleepData[] sleepData) {
-//     JSONArray jsonArray = new JSONArray();
-//     try {
-//       for (int i = 0; i < sleepData.length; i++) {
-//         JSONObject activityObj = new JSONObject();
-//         activityObj.put("time", sleepData[i].time);
-//         activityObj.put("quality", String.valueOf(sleepData[i].restfulness));
-//         jsonArray.put(activityObj);
-//       }
-//       writeCallback.success(jsonArray.toString());
-//     } catch (Exception ex) {
-//       writeCallback.error(ex.getMessage());
-//     }
-//   }
-
-//   public void onLastSleepResponse(boolean success, SleepData[] sleepData) {
-//     if (success) {
-//       sleepDataToJSON(sleepData);
-//     } else {
-//         writeCallback.error("false");
-//     }
-//   }
-
-//   public JSONArray getSleepFrames(SleepData[] sleep) {
-//     JSONArray sleepData = new JSONArray();
-//     try {
-//       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//       long prevTime = sdf.parse(sleep[0].time.replace("T", " ")).getTime() / 60000;
-//       JSONArray sleepFrame = new JSONArray();
-//       for (int i = 0; i < sleep.length; i++) {
-//         long curTime = sdf.parse(sleep[i].time.replace("T", " ")).getTime() / 60000;
-//         if (curTime - prevTime <= 15) {
-//           JSONObject sleepInterval = new JSONObject();
-//           sleepInterval.put("time", sleep[i].time);
-//           sleepInterval.put("quality", String.valueOf(sleep[i].restfulness));
-//           sleepFrame.put(sleepInterval);
-//         } else {
-//           sleepData.put(sleepFrame);
-//           sleepFrame = new JSONArray();
-//           JSONObject sleepInterval = new JSONObject();
-//           sleepInterval.put("time", sleep[i].time);
-//           sleepInterval.put("quality", String.valueOf(sleep[i].restfulness));
-//           sleepFrame.put(sleepInterval);
-//         }
-//         if (i == sleep.length - 1) {
-//           sleepData.put(sleepFrame);
-//         }
-//         prevTime = curTime;
-//       }
-//       LOG.d("SLEEP: ", sleepData.toString());
-//     } catch (Exception ex) {
-//         LOG.d("Sleep: ", ex.getMessage());
-//     }
-//     return sleepData;
-//   }
-
-//   private void calcSleepTime() {
-//     ArrayList<SleepData> lastSleepData;
-//     lastSleepData = daySleep;
-//     Collections.reverse(lastSleepData);
-//     int i = 1;
-//     if (lastSleepData.size() > 1) {
-//       lastSleepTime += 15;
-//       while (lastSleepData.get(i).index + 1 == lastSleepData.get(i - 1).index  && i <= lastSleepData.size()) {
-//         lastSleepTime += 15;
-//         i++;
-//       }
-//       if (lastSleepData.get(i).index == 0 && state == ActivityState.SLEEP_TIME) {
-//         state = ActivityState.SLEEP_YESTERDAY_TIME;
-//         LOG.d("SLEEP", String.valueOf(lastSleepTime * 60));
-//         getDayActivity(1);
-//       } else {
-//         onSleepTime(true, lastSleepTime * 60, lastSleepData.get(i).time);
-//       }
-//       LOG.d("SLEEP", String.valueOf(lastSleepTime * 60));
-//     }
-//   }
-
-//   public void onDailyActivityResponse(boolean success, ActivityData[] activity) {
-//     if (success) {
-//       dayActivityToJSON(activity);
-//     } else {
-//         writeCallback.error("false");
-//     }
-//   }
-
-//   public void onSummarySleepResponse(boolean success, JSONArray sleepData) {
-//     if (success) {
-//         writeCallback.success(sleepData);
-//     } else {
-//         writeCallback.success(new JSONArray());
-//     }
-//   }
-
-//   public void onSleepTime(boolean success, int time, String from){
-//     if(success) {
-//       try {
-//         JSONObject sleepTime = new JSONObject();
-//         sleepTime.put("status", "true");
-//         sleepTime.put("seconds", time);
-//         sleepTime.put("from", from);
-//         writeCallback.success(sleepTime.toString());
-//       } catch (Exception ex){
-//         writeCallback.error("");
-//       }} else {
-//       try {
-//         JSONObject sleepTime = new JSONObject();
-//         sleepTime.put("status", "false");
-//         sleepTime.put("seconds", time);
-//         sleepTime.put("from", from);
-//         writeCallback.success(sleepTime.toString());
-//       } catch (Exception ex){
-//         writeCallback.error("");
-//       }
-//     }
-//   }
 }
-
-

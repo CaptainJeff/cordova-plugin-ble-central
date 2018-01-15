@@ -56,6 +56,8 @@ exports.activateVibration = function (device_id, duration, success, error) {
     //     cordova.exec(success, failure, 'BLE', 'activateVibration', [device_id, duration]);
     // },
 
+
+    
 module.exports = {
 
     activateVibration: function (device_id, duration, success, error) {

@@ -43,6 +43,9 @@ import java.util.*;
 
 public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.LeScanCallback {
     // actions
+
+    static TrackerAPI tracker;
+    
     private static final String SCAN = "scan";
     private static final String START_SCAN = "startScan";
     private static final String STOP_SCAN = "stopScan";
@@ -71,13 +74,15 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private static final String START_STATE_NOTIFICATIONS = "startStateNotifications";
     private static final String STOP_STATE_NOTIFICATIONS = "stopStateNotifications";
 
-
     // callbacks
     CallbackContext discoverCallback;
     private CallbackContext enableBluetoothCallback;
 
-    private static final String TAG = "BLECoachCare";
+    private static final String TAG = "BLEPlugin";
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
+
+    CordovaWebView cWebView;
+
 
     BluetoothAdapter bluetoothAdapter;
 
@@ -94,7 +99,6 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private CallbackContext permissionCallback;
     private UUID[] serviceUUIDs;
     private int scanSeconds;
-    
 
     // Bluetooth state notification
     CallbackContext stateCallback;
@@ -115,12 +119,16 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     }
 
     @Override
+    public void initialize(CordovaInterface cordova, final CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        cWebView = webView;
+        // activity = cordova.getActivity();
+        // tracker = new TrackerAPI(activity);
+    }
+
+    @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         LOG.d(TAG, "action = " + action);
-
-        // String macAddress = args.getString(0);
-        // UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
-        // UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
 
         if (bluetoothAdapter == null) {
             Activity activity = cordova.getActivity();
@@ -190,7 +198,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             UUID characteristicUUID = uuidFromString(args.getString(2));
             byte[] data = args.getArrayBuffer(3);
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, macAddress, data, type);
 
         } else if (action.equals(WRITE_WITHOUT_RESPONSE)) {
 
@@ -199,7 +207,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             UUID characteristicUUID = uuidFromString(args.getString(2));
             byte[] data = args.getArrayBuffer(3);
             int type = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, macAddress, data, type);
 
         } else if (action.equals(START_NOTIFICATION)) {
 
@@ -275,195 +283,32 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             this.reportDuplicates = options.optBoolean("reportDuplicates", false);
             findLowEnergyDevices(callbackContext, serviceUUIDs, -1);
 
-        } else if (action.equals("activateVibration")) {
-            String macAddress = args.getString(0);
+        } else if (action.equalsIgnoreCase("activateVibration")) {
+            vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
 
-            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
-            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
-            int duration = args.getInt(1);
+            String macAddress = args.getString(0);
+            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
             byte[] data = new byte[16];
             data[0] = Helper.CommandCode.activateVibration;;
             data[1] = (byte) (duration > 10 ? 10 : duration);
             data[15] = Helper.calcCRC(data);
-            
-            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
-        } else if (action.equals("setTimeFormat")) {
+
+            write(callbackContext, macAddress, data, type);
+          } else if (action.equalsIgnoreCase("getSoftwareVersion")) {
+            vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
+
             String macAddress = args.getString(0);
-            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
-            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
-            String timeFormat = args.getString(1);
-
-            byte[] data = new byte[16];
-            data[0] = Helper.CommandCode.setTimeFormat;
-            data[1] = (byte) (timeFormat == "12" ? 0x00 : 0x01);
-            data[15] = Helper.calcCRC(data);
-            
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
-        } else if (action.equals("setMode")) {
-            String macAddress = args.getString(0);
-            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
-            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
-            String mode = args.getString(1);
 
-            final byte[] data = new byte[16];
-            data[0] = Helper.CommandCode.setMode;
-            data[1] = (mode.equalsIgnoreCase("sleep") ? (byte) 0x01 : (byte) 0x02);
-            data[15] = Helper.calcCRC(data);
-            
-            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
-        } else if (action.equals("setDeviceTime")) {
-            String macAddress = args.getString(0);
-            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
-            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
-            String timeStamp = args.getString(1);
-    
-            final byte[] data = new byte[16];
-            data[0] = Helper.CommandCode.setDeviceTime;
-            data[1] = Byte.parseByte(timeStamp.substring(2,4), 16);
-            data[2] = Byte.parseByte(timeStamp.substring(5,7), 16);
-            data[3] = Byte.parseByte(timeStamp.substring(8,10), 16);
-            data[4] = Byte.parseByte(timeStamp.substring(11,13), 16);
-            data[5] = Byte.parseByte(timeStamp.substring(14,16), 16);
-            data[6] = Byte.parseByte(timeStamp.substring(17,18), 16);
-            data[15] = Helper.calcCRC(data);
-            
-            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
-        } else if (action.equals("getSoftwareVersion")) {
-            String macAddress = args.getString(0);
-            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
-            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
+            timeFromSync = 0;
+            byte[] message = new byte[16];
+            message[0] = Helper.CommandCode.getSoftwareVersion;
+            message[15] = calcCRC(message);
 
-            byte[] data = new byte[16];
-            data[0] = Helper.CommandCode.getSoftwareVersion;
-            data[15] = Helper.calcCRC(data);
-            
-            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
-        } else if (action.equals("getDetailedDayActivity")) {
-            String macAddress = args.getString(0);
-            UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
-            UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
+            write(callbackContext, macAddress, data, type);
+          }
 
-            byte[] data = new byte[16];
-            data[0] = Helper.CommandCode.getDetailedCurrentDayActivityData;
-            data[1] = (byte) 1;
-            data[15] = Helper.calcCRC(data);
-            
-            int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
-        } 
-        
-        // else if (action.equalsIgnoreCase("getSummaryDaySleep")) {
-        //     getSleepData = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     JSONObject info = args.getJSONObject(0);
-        //     String date = info.getString("date");
-        //     String deviceDate = info.getString("deviceDate");
-
-
-        //     tracker.getSleepSummary(deviceDate != null ? deviceDate : new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        //   } else if (action.equalsIgnoreCase("getLastSleepActivity")) {
-        //     getSleepData = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.getSleepData();
-        //   } else if (action.equalsIgnoreCase("disconnect")) {
-        //     diconnectCallBack = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     String id = args.getString(0);
-        //     tracker.disconnect(id);
-        //     scale.disconnect(id);
-        //   } else if (action.equalsIgnoreCase("startSession")) {
-        //     startSessionCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.startSession();
-        //   } else if (action.equalsIgnoreCase("scanAll")) {
-
-        //   } else if (action.equalsIgnoreCase("setDeviceTime")) {
-        //     timeCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.setDateTime(args.getString(0));
-        //   } else if (action.equalsIgnoreCase("getDeviceTime")) {
-        //     timeCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.getCurrentTime();
-        //   } else if (action.equalsIgnoreCase("setUserPersonalInfo")) {
-        //     userInfoCallback = callbackContext;
-        //     JSONObject request = args.getJSONObject(0);
-        //     tracker.setUserPersonalInfo(request.getString("gender"),
-        //       request.getInt("age"),
-        //       request.getInt("height"),
-        //       request.getInt("weight"),
-        //       request.getInt("strideLength"));
-        //   } else if (action.equalsIgnoreCase("getUserPersonalInfo")) {
-        //     userInfoCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.getUsetPersonalInfo();
-        //   } else if (action.equalsIgnoreCase("getDetailedDayActivity")) {
-        //     dailyActivityCallback = callbackContext;
-        //     tracker.getDayActivity(args.getJSONObject(0).getString("date"));
-        //   } else if (action.equalsIgnoreCase("getSummaryDayActivity")) {
-        //     summaryCallback = callbackContext;
-        //     JSONObject info = args.getJSONObject(0);
-        //     String date = info.getString("date");
-        //     String deviceDate = info.getString("deviceDate");
-        //     tracker.getDaySummary(deviceDate != null ? deviceDate : new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        //   } else if (action.equalsIgnoreCase("getLastActivity")) {
-        //     latestActivityCallback = callbackContext;
-        //     tracker.getLatestActivity();
-        //   } else if (action.equalsIgnoreCase("setTargetSteps")) {
-        //     tracker.setTargetSteps(args.getInt(0));
-        //   } else if (action.equalsIgnoreCase("getTargetSteps")) {
-        //     targetStepsCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.getTargetSteps();
-        //   } else if (action.equalsIgnoreCase("setDistanceUnit")) {
-        //     distanceUnitCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.setDistanceUnit(args.getString(0));
-        //   } else if (action.equalsIgnoreCase("getDistanceUnit")) {
-        //     distanceUnitCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.getDistanceUnit();
-        //   } else if (action.equalsIgnoreCase("getDevicesBatteryStatus")) {
-        //     batteryCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.getBatteryStatus();
-        //   } else if (action.equalsIgnoreCase("getSoftwareVersion")) {
-        //     versionCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.getSoftVersion();
-        //   } else if (action.equalsIgnoreCase("activateVibration")) {
-        //     vibrateCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.vibrate(args.getInt(0));
-        //   } else if (action.equalsIgnoreCase("setTimeFormat")) {
-        //     tracker.setTimeFormat(args.getString(0));
-        //   } else if (action.equalsIgnoreCase("getTimeFormat")) {
-        //     tracker.getTimeFormat();
-        //   } else if (action.equalsIgnoreCase("setDeviceName")) {
-        //     tracker.setDeviceName(args.getString(0));
-        //   } else if (action.equalsIgnoreCase("getDeviceName")) {
-        //     tracker.getDeviceName();
-        //   } else if (action.equalsIgnoreCase("showMessage")) {
-        //   } else if (action.equalsIgnoreCase("setMode")) {
-        //     modeCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     final String mode = args.getString(0);
-        //     tracker.switchTOActivityOrSleepMode(mode);
-        //   } else if (action.equalsIgnoreCase("getMode")) {
-        //     modeCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     tracker.getActivityOrSleepMode();
-        //   } else if (action.equalsIgnoreCase("getDataFromScales")) {
-        //     scaleCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //     scaleResponse = false;
-        //     JSONObject userProfile = args.getJSONObject(1);
-        //     gender = userProfile.getString("gender");
-        //     age = userProfile.getInt("age");
-        //     height = userProfile.getInt("height");
-        //     weight = userProfile.getDouble("weight");
-        //     strideLength = userProfile.getDouble("strideLength");
-        //     scale.syncScales("");
-        //   } else if (action.equalsIgnoreCase("stopScan")) {
-        //     tracker.stopScan();
-        //     scale.stopScan();
-        //     callbackContext.success();
-        //   } else if (action.equalsIgnoreCase("StartLogging")) {
-        //     logCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //   } else if (action.equalsIgnoreCase("getLastTime")) {
-        //     lastSleepTimeCallback = new CallbackContext(callbackContext.getCallbackId(), cWebView);
-        //   }
         
         else {
 
@@ -587,7 +432,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         peripheral.queueReadRSSI(callbackContext);
     }
 
-    private void write(CallbackContext callbackContext, String macAddress, UUID serviceUUID, UUID characteristicUUID,
+    private void write(CallbackContext callbackContext, String macAddress,
                        byte[] data, int writeType) {
 
         Peripheral peripheral = peripherals.get(macAddress);
@@ -603,7 +448,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
         }
 
         //peripheral.writeCharacteristic(callbackContext, serviceUUID, characteristicUUID, data, writeType);
-        peripheral.queueWrite(callbackContext, serviceUUID, characteristicUUID, data, writeType);
+        peripheral.queueWrite(callbackContext, "fff0", "fff6", data, writeType);
 
     }
 
@@ -649,17 +494,14 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     }
 
     private void findLowEnergyDevices(CallbackContext callbackContext, UUID[] serviceUUIDs, int scanSeconds) {
-        LOG.d(TAG, "findLowEnergyDevices ");
+
         if(!PermissionHelper.hasPermission(this, ACCESS_COARSE_LOCATION)) {
             // save info so we can call this method again after permissions are granted
-            LOG.d(TAG, "no permission ");
             permissionCallback = callbackContext;
             this.serviceUUIDs = serviceUUIDs;
             this.scanSeconds = scanSeconds;
             PermissionHelper.requestPermission(this, REQUEST_ACCESS_COARSE_LOCATION, ACCESS_COARSE_LOCATION);
             return;
-        } else {
-            LOG.d(TAG, "has permission ");
         }
 
         // ignore if currently scanning, alternately could return an error
@@ -800,9 +642,5 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private void resetScanOptions() {
         this.reportDuplicates = false;
     }
-
-    // private Byte commandLists(String data) {
-    //     return Helper.CommandCode.data;
-    // }
 
 }
