@@ -60,7 +60,7 @@ module.exports = {
 
     activateVibration: function (device_id, duration, success, error) {
         console.log('activateVibration2', device_id, duration);
-        exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
+        cordova.exec(success, error, 'BLE', 'activateVibration', [device_id, duration]);
     },
 
 
