@@ -96,6 +96,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     private CallbackContext permissionCallback;
     private UUID[] serviceUUIDs;
     private int scanSeconds;
+    private MAC_ADDRESS string;
     
 
     // Bluetooth state notification
@@ -120,8 +121,8 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         LOG.d(TAG, "action = " + action);
 
-        
-        String macAddress = args.getString(0);
+
+        // String macAddress = args.getString(0);
         UUID serviceUUID = uuidFromString(Helper.CommandCode.trackerServiceUuid);
         UUID characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicWriteUuid);
 
@@ -165,42 +166,42 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             listKnownDevices(callbackContext);
 
         } else if (action.equals(CONNECT)) {
-
-            connect(callbackContext, macAddress);
+            MAC_ADDRESS = args.getString(0);
+            connect(callbackContext, MAC_ADDRESS);
 
         } else if (action.equals(DISCONNECT)) {
 
-            disconnect(callbackContext, macAddress);
+            disconnect(callbackContext, MAC_ADDRESS);
 
         } else if (action.equals(READ)) {
 
             characteristicUUID = uuidFromString(args.getString(2));
-            read(callbackContext, macAddress, serviceUUID, characteristicUUID);
+            read(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID);
 
         } else if (action.equals(READ_RSSI)) {
 
-            readRSSI(callbackContext, macAddress);
+            readRSSI(callbackContext, MAC_ADDRESS);
 
         } else if (action.equals(WRITE)) {
 
             byte[] data = args.getArrayBuffer(3);
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
 
         } else if (action.equals(WRITE_WITHOUT_RESPONSE)) {
 
             byte[] data = args.getArrayBuffer(3);
             int type = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
 
         } else if (action.equals(START_NOTIFICATION)) {
             characteristicUUID = uuidFromString(Helper.CommandCode.trackerCharacteristicReadUuid);
-            registerNotifyCallback(callbackContext, macAddress, serviceUUID, characteristicUUID);
+            registerNotifyCallback(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID);
 
         } else if (action.equals(STOP_NOTIFICATION)) {
 
             characteristicUUID = uuidFromString(args.getString(2));
-            removeNotifyCallback(callbackContext, macAddress, serviceUUID, characteristicUUID);
+            removeNotifyCallback(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID);
 
         } else if (action.equals(IS_ENABLED)) {
 
@@ -212,7 +213,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
         } else if (action.equals(IS_CONNECTED)) {
 
-            if (peripherals.containsKey(macAddress) && peripherals.get(macAddress).isConnected()) {
+            if (peripherals.containsKey(MAC_ADDRESS) && peripherals.get(MAC_ADDRESS).isConnected()) {
                 callbackContext.success();
             } else {
                 callbackContext.error("Not connected.");
@@ -261,7 +262,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             findLowEnergyDevices(callbackContext, serviceUUIDs, -1);
 
         } else if (action.equals("activateVibration")) {
-            int duration = args.getInt(1);
+            int duration = args.getInt(0);
 
             byte[] data = new byte[16];
             data[0] = Helper.CommandCode.activateVibration;;
@@ -269,7 +270,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             data[15] = Helper.calcCRC(data);
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
         } else if (action.equals("setTimeFormat")) {
             String timeFormat = args.getString(1);
 
@@ -279,7 +280,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             data[15] = Helper.calcCRC(data);
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
         } else if (action.equals("setMode")) {
             String mode = args.getString(1);
 
@@ -289,7 +290,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             data[15] = Helper.calcCRC(data);
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
         } else if (action.equals("setDeviceTime")) {
             String timeStamp = args.getString(1);
     
@@ -304,14 +305,14 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             data[15] = Helper.calcCRC(data);
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
         } else if (action.equals("getSoftwareVersion")) {
             byte[] data = new byte[16];
             data[0] = Helper.CommandCode.getSoftwareVersion;
             data[15] = Helper.calcCRC(data);
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
         } else if (action.equals("getDetailedDayActivity")) {
 
             byte[] data = new byte[16];
@@ -321,7 +322,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             
             int type = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
             
-            write(callbackContext, macAddress, serviceUUID, characteristicUUID, data, type);
+            write(callbackContext, MAC_ADDRESS, serviceUUID, characteristicUUID, data, type);
         } 
         
         // else if (action.equalsIgnoreCase("getSummaryDaySleep")) {
@@ -499,7 +500,7 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
     private void connect(CallbackContext callbackContext, String macAddress) {
         Peripheral peripheral = peripherals.get(macAddress);
-        MAC_ADDRESS = macAddress;
+        // MAC_ADDRESS = macAddress;
         if (peripheral != null) {
             peripheral.connect(callbackContext, cordova.getActivity());
         } else {
