@@ -281,29 +281,29 @@ module.exports = {
       
     getDeviceName: function (success, error) {
         cordova.exec(success, error, 'BLE', 'getDeviceName');
-    },
+    }
       
       /*
        * @param {message} string
        */
-    showMessage = function (message, success, error) {
-        cordova.exec(success, error, 'BLE', 'showMessage', [message]);
-    },
+    // showMessage = function (message, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'showMessage', [message]);
+    // },
       
       /*
        * @param {mode} string (activity|sleep)
        */
-    setMode: function (device_id, mode, success, error) {
-        cordova.exec(success, error, 'BLE', 'setMode', [device_id, mode]);
-    },
+    // setMode: function (device_id, mode, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'setMode', [device_id, mode]);
+    // },
       
-    getMode: function (success, error) {
-        cordova.exec(success, error, 'BLE', 'getMode');
-    },
+    // getMode: function (success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getMode');
+    // },
       
-    getDataFromScales: function (deviceId, userProfile, success, error) {
-        cordova.exec(success, error, 'BLE', 'getDataFromScales', [deviceId, userProfile]);
-    },
+    // getDataFromScales: function (deviceId, userProfile, success, error) {
+    //     cordova.exec(success, error, 'BLE', 'getDataFromScales', [deviceId, userProfile]);
+    // }
       
     //   /*
     //    * @param {info} object
